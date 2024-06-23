@@ -22,7 +22,7 @@ function ResultInput() {
     },
   ]);
   return (
-    <div className="font-rubik flex items-center justify-around h-[180px] m-2 from-yellow-300 via-yellow-400 to-orange-400 bg-gradient-to-bl border-[7px] border-yellow-300 shadow-lime-700 shadow-lg rounded-xl py-2">
+    <div className="font-rubik flex items-center justify-around h-[180px] p-4 space-x-8 from-yellow-300 via-yellow-400 to-orange-400 bg-gradient-to-bl border-[7px] border-yellow-300 shadow-lime-700 shadow-lg rounded-xl py-2">
       {resultData.map((r) => {
         return <ResultList key={r.colorId} r={r} />;
       })}

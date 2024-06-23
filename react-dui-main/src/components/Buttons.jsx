@@ -5,9 +5,9 @@ function Buttons() {
     <div className="font-rubik font-bold ">
       <div>
         <div className="">
-          <button className="w-full bg-gradient-to-t from-yellow-500 via-yellow-400 to-yellow-200 border-[7px] border-yellow-300 text-lime-700 shadow-inner shadow-orange-700 text-[32px] rounded-xl py-2 ">
+          {/* <button className="w-full bg-gradient-to-t from-yellow-500 via-yellow-400 to-yellow-200 border-[7px] border-yellow-300 text-lime-700 shadow-inner shadow-orange-700 text-[32px] rounded-xl py-2 ">
             NEW RESULT
-          </button>
+          </button> */}
         </div>
         {/* <div className="grid grid-cols-3 gap-2 my-2">
           <div className="shadow-inner shadow-black bg-gradient-to-t text-2xl from-green-400 to-green-300 fill-current border-8 border-orange-300 flex justify-center rounded-xl text-gray-700">
