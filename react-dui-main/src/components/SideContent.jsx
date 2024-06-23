@@ -1,12 +1,12 @@
 import React from "react";
-import TimerSection from "./TimerSection";
 import Buttons from "./Buttons";
+import SettingsSections from "./SettingsSections";
 
 function SideContent() {
   return (
     <div className="m-3">
-      <TimerSection />
-      <Buttons />
+  
+      <SettingsSections />
     </div>
   );
 }

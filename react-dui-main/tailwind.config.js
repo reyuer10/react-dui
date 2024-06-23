@@ -5,6 +5,10 @@ export default {
     extend: {
       fontFamily: {
         "noto-sans": ["Noto Sans", "sans-serif"],
+        "rubik": ["Rubik", "sans-serif"],
+      },
+      colors: {
+        "button-bg": "#fddd4b",
       },
     },
   },

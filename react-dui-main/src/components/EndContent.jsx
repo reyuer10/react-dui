@@ -1,9 +1,12 @@
-import React from 'react'
+import React from "react";
+import Buttons from "./Buttons";
 
 function EndContent() {
   return (
-    <div>EndContent</div>
-  )
+    <div>
+      <Buttons />
+    </div>
+  );
 }
 
-export default EndContent
+export default EndContent;
