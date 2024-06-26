@@ -6,7 +6,7 @@ export default {
       fontFamily: {
         "noto-sans": ["Noto Sans", "sans-serif"],
         rubik: ["Rubik", "sans-serif"],
-        modak: ["Modak", "system-ui"],
+        "concert-one": ["Concert One", "sans-serif"],
       },
       colors: {
         "button-bg": "#fddd4b",

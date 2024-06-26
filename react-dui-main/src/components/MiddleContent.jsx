@@ -6,10 +6,14 @@ import colorGameLogo from "../assets/pictures/color-game-logo.png";
 
 function MiddleContent() {
   return (
-    <div className="flex flex-col justify-around">
-      <img src={colorGameLogo} alt="casinoLogo" className="w-[40%] m-auto" />
+    <div className="flex flex-col justify-between h-full items-center ">
+      <div>
+        <img src={colorGameLogo} alt="casinoLogo" className="w-[400px] my-8" />
+      </div>
       {/* <ResultInput /> */}
-      <TimerSection />
+      <div>
+        <TimerSection />
+      </div>
     </div>
   );
 }

@@ -15,7 +15,7 @@ function ColorResultList({ rd }) {
               }`}
             >
               <div
-                className={`${colors.firstColor} shadow-black shadow-lg h-[80px] w-[80px] rounded-2xl`}
+                className={`${colors.firstColor} shadow-black ring-4 ring-black shadow-lg h-[80px] w-[80px] rounded-2xl`}
               >
                 {rd.timesThree ? (
                   <>
@@ -26,10 +26,10 @@ function ColorResultList({ rd }) {
                 ) : null}
               </div>
               <div
-                className={`${colors.secondColor} shadow-black shadow-lg h-[80px] w-[80px] rounded-2xl`}
+                className={`${colors.secondColor} shadow-black ring-4 ring-black shadow-lg h-[80px] w-[80px] rounded-2xl`}
               ></div>
               <div
-                className={`${colors.thirdColor} shadow-black shadow-lg h-[80px] w-[80px] rounded-2xl`}
+                className={`${colors.thirdColor} shadow-black ring-4 ring-black shadow-lg h-[80px] w-[80px] rounded-2xl`}
               ></div>
             </div>
           );

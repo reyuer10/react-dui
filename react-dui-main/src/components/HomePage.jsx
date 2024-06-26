@@ -29,17 +29,23 @@ function HomePage() {
   // header div = col-span-3
   return (
     <div>
-      <div className="min-h-screen  bg-gradient-to-t from-red-700 via-orange-500 to-yellow-400">
+      <div className="min-h-screen bg-gradient-to-t from-red-700 via-orange-500 to-yellow-400">
         <div className="">
           <Header />
         </div>
-        <div className="flex">
-          <div className="flex relative">
-            <SideContent />
-            <ColorPicked />
+        <div className="flex justify-between">
+          <div className=" flex items-center relative">
+            <div>
+              <SideContent />
+            </div>
+            <div>
+              <ColorPicked />
+            </div>
           </div>
-          <div className="">
+          <div className="mx-24 w-[500px]">
             <MiddleContent />
+          </div>
+          <div>
             <EndContent />
           </div>
         </div>
