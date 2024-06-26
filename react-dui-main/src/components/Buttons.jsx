@@ -4,7 +4,7 @@ function Buttons() {
   return (
     <div className="font-rubik font-bold ">
       <div>
-        <div className="">
+        <div className=" h-[60px] w-[60px] bg-red-500">
           {/* <button className="w-full bg-gradient-to-t from-yellow-500 via-yellow-400 to-yellow-200 border-[7px] border-yellow-300 text-lime-700 shadow-inner shadow-orange-700 text-[32px] rounded-xl py-2 ">
             NEW RESULT
           </button> */}

@@ -5,10 +5,12 @@ export default {
     extend: {
       fontFamily: {
         "noto-sans": ["Noto Sans", "sans-serif"],
-        "rubik": ["Rubik", "sans-serif"],
+        rubik: ["Rubik", "sans-serif"],
+        modak: ["Modak", "system-ui"],
       },
       colors: {
         "button-bg": "#fddd4b",
+        "golden-yellow": "#FFDF00",
       },
     },
   },

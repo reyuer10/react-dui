@@ -8,12 +8,10 @@ function ColorsResults() {
   console.log(resultsData);
 
   return (
-    <div className="">
-      <div>
-        {resultsData.map((rd) => {
-          return <ColorResultList rd={rd} key={rd.colorId} />;
-        })}
-      </div>
+    <div className="relative flex flex-col items-center">
+      {resultsData.map((rd) => {
+        return <ColorResultList rd={rd} key={rd.colorId} />;
+      })}
     </div>
   );
 }

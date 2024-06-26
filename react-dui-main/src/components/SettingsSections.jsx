@@ -2,9 +2,9 @@ import React from "react";
 
 function SettingsSections() {
   return (
-    <div className="grid grid-cols-2 fill-current font-rubik gap-2">
+    <div className="grid grid-cols-2 fill-current font-rubik gap-2 mx-2">
       <div className="flex justify-center">
-        <button className="flex font-bold items-center justify-center space-x-2 border-4 border-red-600 shadow-inner shadow-yellow-300 text-lime-700 rounded-md w-full py-2">
+        <button className="flex font-bold items-center justify-center space-x-2 border-4 border-red-600 shadow shadow-black  rounded-md w-full py-2">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             id="Layer_1"
@@ -20,7 +20,7 @@ function SettingsSections() {
         </button>
       </div>
       <div className="flex justify-center">
-        <button className="flex font-bold items-center justify-center space-x-2 border-4 border-red-600 shadow-inner shadow-yellow-300 text-lime-700 rounded-md w-full py-2">
+        <button className="flex font-bold items-center justify-center space-x-2 border-4 border-red-600 shadow shadow-black  rounded-md w-full py-2">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             id="Isolation_Mode"

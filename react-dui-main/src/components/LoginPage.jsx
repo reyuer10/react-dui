@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import casinoLogo from "../assets/pictures/casino-logo.png";
+import colorGameLogo from "../assets/pictures/color-game-logo.png";
 import { data } from "../data/data";
 
 function LoginPage() {
@@ -16,10 +17,10 @@ function LoginPage() {
   };
   console.log(tableData);
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-t from-gray-700 via-amber-600 to-amber-400">
       <div className="p-4 space-y-14 w-[500px]">
         <div className="flex justify-center">
-          <img src={casinoLogo} alt="casino-logo" className="h-[100px] " />
+          <img src={colorGameLogo} alt="casino-logo" className="w-[80%]" />
         </div>
         <div className="flex flex-col space-y-4">
           <input
@@ -29,7 +30,7 @@ function LoginPage() {
             type="text"
             className="w-full px-4 py-2 rounded-full 
             ring-2 ring-orange-400
-            focus-within:ring-2 focus-within:outline-none focus-within:ring-yellow-500 text-center font-noto-sans font-semibold transition-colors duration-150"
+            focus-within:ring-2 focus-within:outline-none focus-within:ring-yellow-500 text-center font-rubik font-bold transition-colors duration-150"
           />
           <button
             onClick={handleSubmit}
