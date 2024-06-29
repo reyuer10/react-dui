@@ -10,3 +10,7 @@
 .color-count-border {
     -webkit-text-stroke: 2px black
 } */
+
+.jp-title-border{
+    -webkit-text-stroke: 3px black
+}

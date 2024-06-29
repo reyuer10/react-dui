@@ -34,7 +34,7 @@ function HomePage() {
           <Header />
         </div>
         <div className="flex justify-between">
-          <div className=" flex items-center relative">
+          <div className=" flex items-center relative w-[500px]">
             <div>
               <SideContent />
             </div>
@@ -42,10 +42,11 @@ function HomePage() {
               <ColorPicked />
             </div>
           </div>
-          <div className="mx-24 w-[500px]">
+          {/* mx-24 */}
+          <div className="w-[500px]">
             <MiddleContent />
           </div>
-          <div>
+          <div className="w-[500px]">
             <EndContent />
           </div>
         </div>

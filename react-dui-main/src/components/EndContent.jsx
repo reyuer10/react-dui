@@ -4,9 +4,9 @@ import PrizesSection from "./PrizesSection";
 
 function EndContent() {
   return (
-    <div>
+    <div className="">
       <PrizesSection />
-      <Buttons />
+      {/* <Buttons /> */}
     </div>
   );
 }

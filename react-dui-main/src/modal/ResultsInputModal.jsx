@@ -7,8 +7,8 @@ function ResultsInputModal({ isModalOpen }) {
   const [color, setColor] = useState(colorData);
   if (!isModalOpen) return false;
   return (
-    <div className="absolute inset-0 flex justify-center items-center">
-      <div className=" bg-white p-6 rounded-lg shadow-lg shadow-green-900 flex flex-col items-center">
+    <div className="absolute inset-0 flex justify-center items-center ">
+      <div className=" bg-slate-600 p-6 rounded-lg shadow-lg shadow-green-900 flex flex-col items-center ring-8 ring-black">
         <div className=" font-rubik text-[28px] font-bold text-lime-500">
           <p className=" text-center">SELECT COLOR</p>
         </div>

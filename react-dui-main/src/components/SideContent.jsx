@@ -1,6 +1,4 @@
 import React from "react";
-import Buttons from "./Buttons";
-import SettingsSections from "./SettingsSections";
 import ColorsResults from "./ColorsResults";
 
 function SideContent() {
@@ -9,9 +7,6 @@ function SideContent() {
       <div className="bg-zinc-700 h-full overflow-hidden m-4 p-3 rounded-xl ring-8 ring-black">
         <ColorsResults />
       </div>
-      {/* <div>
-        <SettingsSections />
-      </div> */}
     </div>
   );
 }
