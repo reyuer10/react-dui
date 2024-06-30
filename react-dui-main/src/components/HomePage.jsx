@@ -42,7 +42,6 @@ function HomePage() {
               <ColorPicked />
             </div>
           </div>
-          {/* mx-24 */}
           <div className="w-[500px]">
             <MiddleContent />
           </div>
