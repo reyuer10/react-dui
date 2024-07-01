@@ -15,31 +15,40 @@
   -webkit-text-stroke: 3px black;
 }
 
+.jp-title {
+  text-shadow: 3px 3px 7px rgb(0, 0, 0);
+  -webkit-text-stroke: 1px #ff8400;
+}
+
 .text-gradient-grand-jackpot {
   background: -webkit-linear-gradient(#ffffff, #ddff00, rgb(0, 0, 0));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  -webkit-text-stroke: 2px rgb(107, 37, 0);
+  -webkit-text-stroke-color: black;
 }
 
 .text-gradient-title-grand-jackpot {
   background: -webkit-linear-gradient(#000000, #ddff00, rgb(0, 0, 0));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  -webkit-text-stroke: 1px rgb(249, 255, 80);
 }
 
 .text-gradient-title-major-jackpot {
   background: -webkit-linear-gradient(#000000, #d3d3d3, rgb(0, 0, 0));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  -webkit-text-stroke: 1px rgb(249, 255, 80);
+  
 }
 
-
 .text-gradient-title-minor-jackpot {
-    background: -webkit-linear-gradient(#000000, 	#CD7F32, rgb(0, 0, 0));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    -webkit-text-stroke: 1px rgb(249, 255, 80);
-  }
+  background: -webkit-linear-gradient(#000000, #cd7f32, rgb(0, 0, 0));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -webkit-text-stroke: 1px #ff8400;
+}
+
+.text-gradient-color-picked {
+  background: -webkit-linear-gradient(#000000, #2e2e2e);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}

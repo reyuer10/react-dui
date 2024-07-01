@@ -13,32 +13,18 @@ function PrizesSection() {
           <div
             key={j.jpId}
             className={`
-${
-  j.jpName === "GRAND JACKPOT" &&
-  "from-amber-600 via-golden-yellow to-amber-600 ring-amber-600"
-}
-${j.jpName === "MAJOR JACKPOT" && "from-red-800 via-golden-yellow to-red-800 ring-red-600"}
-${
-  j.jpName === "MINOR JACKPOT" &&
-  "from-emerald-800 via-golden-yellow to-emerald-800 ring-emerald-600"
-}
-text-center my-6  ring-4  rounded-xl shadow-black shadow-lg  bg-gradient-to-r border-[7px] border-yellow-300 `}
+${j.jpName === "GRAND JACKPOT" && ""}
+${j.jpName === "MAJOR JACKPOT" && ""}
+${j.jpName === "MINOR JACKPOT" && ""}
+text-center my-6  ring-4  rounded-xl shadow-inner shadow-black ring-black border-[7px] border-golden-yellow bg-[#910723] `}
           >
             <p
               className={`text-[36px]  ${
-                j.jpName === "GRAND JACKPOT"
-                  ? "text-gradient-title-grand-jackpot animate-pulse"
-                  : "text-white"
+                j.jpName === "GRAND JACKPOT" && "text-golden-yellow jp-title"
               }
-              ${
-                j.jpName === "MAJOR JACKPOT" &&
-                "text-gradient-title-major-jackpot animate-pulse"
-              }
+              ${j.jpName === "MAJOR JACKPOT" && "text-golden-yellow jp-title"}
 
-              ${
-                j.jpName === "MINOR JACKPOT" &&
-                "text-gradient-title-minor-jackpot animate-pulse"
-              }
+              ${j.jpName === "MINOR JACKPOT" && "text-golden-yellow jp-title"}
               `}
             >
               {j.jpName}

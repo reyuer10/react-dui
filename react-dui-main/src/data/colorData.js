@@ -1,33 +1,40 @@
+// bg-[#d92426] = red
+// bg-[#62b346] = green
+// bg-[#ef5f93] = pink
+// bg-[#1795d2] = blue
+// bg-white = white
+// bg-[#fccc0a] = yellow
+
 export const colorData = [
   {
     colorId: 1,
     colorName: "Yellow",
-    colorBackground: "bg-gradient-to-t from-yellow-700 via-yellow-400 to-white",
+    colorBackground: "bg-[#fccc0a]",
   },
   {
     colorId: 2,
     colorName: "White",
-    colorBackground: "bg-gradient-to-t from-zinc-400 from-gray-300 to-white",
+    colorBackground: "bg-white",
   },
   {
     colorId: 3,
     colorName: "Pink",
-    colorBackground: "bg-gradient-to-t from-pink-700 via-pink-400 to-pink-300",
+    colorBackground: "bg-[#ef5f93]",
   },
   {
     colorId: 4,
     colorName: "Blue",
-    colorBackground: "bg-gradient-to-t from-blue-700 via-blue-400 to-blue-300",
+    colorBackground: "bg-blue-500",
   },
   {
     colorId: 5,
     colorName: "Red",
-    colorBackground: "bg-gradient-to-t from-red-700 via-red-400 to-red-300",
+    colorBackground: "bg-[#d92426]",
   },
   {
     colorId: 6,
     colorName: "Green",
     colorBackground:
-      "bg-gradient-to-t from-green-700 via-green-400 to-green-200 border-lime-600",
+      "bg-[#62b346]",
   },
 ];

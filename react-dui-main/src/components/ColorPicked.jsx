@@ -15,11 +15,16 @@ function ColorPicked() {
           <>
             <div
               key={m.colorId}
-              className={`shadow-black ring-4 ring-black flex justify-center items-center shadow-lg h-[60px] w-[60px] rounded-2xl ${m.colorBackground} my-2`}
+              className={`shadow-black shadow-lg ring-[2px] ring-gray-800 flex justify-center items-center  h-[60px] w-[60px] rounded-[20px] bg-white my-2`}
             >
-              <span className="text-[22px] text-black color-count-border font-concert-one font-bold  rounded px-1">
-                {mostCountFormat}%
-              </span>
+              <div
+                key={m.colorId}
+                className={` flex justify-center items-center shadow-inner shadow-zinc-500 h-[57px] w-[57px] rounded-full ${m.colorBackground} my-2`}
+              >
+                <span className="text-[22px] text-gradient-color-picked color-count-border font-concert-one font-bold  rounded px-1">
+                  {mostCountFormat}%
+                </span>
+              </div>
             </div>
           </>
         );

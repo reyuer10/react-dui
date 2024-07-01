@@ -1,11 +1,19 @@
+// bg-[#d92426] = red
+// bg-[#62b346] = green
+// bg-[#ef5f93] = pink
+// bg-[#1795d2] = blue
+// bg-white = white
+// bg-[#fccc0a] = yellow
+
 export const colorResultsData = [
   {
     colorId: 1,
     colorResults: [
       {
-        firstColor: "bg-gradient-to-t from-zinc-400 via-zinc-200 to-white",
-        secondColor: "bg-gradient-to-t from-red-700 via-red-400 to-white",
-        thirdColor: "bg-gradient-to-t from-green-700 via-green-400 to-white",
+        firstColor: "bg-gradient-to-t from-zinc-400 from-gray-200 to-white",
+        secondColor: "bg-gradient-to-t from-red-600 via-red-500 to-red-300", // red
+        thirdColor:
+          "bg-gradient-to-t from-green-600 via-green-500 to-green-200 border-lime-600", // green
       },
     ],
   },
@@ -13,9 +21,9 @@ export const colorResultsData = [
     colorId: 2,
     colorResults: [
       {
-        firstColor: "bg-gradient-to-t from-pink-700 via-pink-400 to-white",
-        secondColor: "bg-gradient-to-t from-yellow-700 via-yellow-400 to-white",
-        thirdColor: "bg-gradient-to-t from-zinc-400 from-gray-300 to-white",
+        firstColor: "bg-gradient-to-t from-pink-600 via-pink-500 to-pink-300",
+        secondColor: "bg-gradient-to-t from-yellow-600 via-yellow-500 to-white",
+        thirdColor: "bg-gradient-to-t from-zinc-400 from-gray-200 to-white",
       },
     ],
   },
@@ -23,9 +31,9 @@ export const colorResultsData = [
     colorId: 3,
     colorResults: [
       {
-        firstColor: "bg-gradient-to-t from-blue-700 via-blue-400 to-white",
-        secondColor: "bg-gradient-to-t from-pink-700 via-pink-400 to-white",
-        thirdColor: "bg-gradient-to-t from-yellow-700 via-yellow-400 to-white",
+        firstColor: "bg-gradient-to-t from-blue-600 via-blue-500 to-blue-300",
+        secondColor: "bg-gradient-to-t from-pink-600 via-pink-500 to-pink-300",
+        thirdColor: "bg-gradient-to-t from-yellow-600 via-yellow-500 to-white",
       },
     ],
   },
@@ -33,9 +41,9 @@ export const colorResultsData = [
     colorId: 4,
     colorResults: [
       {
-        firstColor: "bg-gradient-to-t from-pink-700 via-pink-400 to-white",
-        secondColor: "bg-gradient-to-t from-pink-700 via-pink-400 to-white",
-        thirdColor: "bg-gradient-to-t from-pink-700 via-pink-400 to-white",
+        firstColor: "bg-gradient-to-t from-pink-600 via-pink-500 to-pink-300",
+        secondColor: "bg-gradient-to-t from-pink-600 via-pink-500 to-pink-300",
+        thirdColor: "bg-gradient-to-t from-pink-600 via-pink-500 to-pink-300",
       },
     ],
     timesThree: true,
