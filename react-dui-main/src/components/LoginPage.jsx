@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import casinoLogo from "../assets/pictures/casino-logo.png";
 import colorGameLogo from "../assets/pictures/color-game-logo.png";
 import { data } from "../data/data";
 
@@ -15,7 +14,6 @@ function LoginPage() {
       console.log(isLoggedIn);
     }
   };
-  console.log(tableData);
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-t from-gray-700 via-amber-600 to-amber-400">
       <div className="p-4 space-y-14 w-[500px]">
@@ -34,7 +32,7 @@ function LoginPage() {
           />
           <button
             onClick={handleSubmit}
-            className=" bg-yellow-300 shadow-md shadow-gray-300 border-orange-400 rounded-full py-2 font-bold text-[18px] text-orange-700 transition-colors hover:bg-yellow-200"
+            className=" bg-yellow-300 shadow-md shadow-black border-6 rounded-full py-2 font-bold text-[18px] text-orange-700 transition-colors hover:bg-yellow-200"
           >
             LOGIN
           </button>

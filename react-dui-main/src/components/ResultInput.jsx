@@ -7,18 +7,18 @@ function ResultInput() {
       colorId: 1,
       colorName: "Blue",
       colorBackground:
-        "bg-gradient-to-t from-blue-700 via-blue-400 to-blue-300",
+        "bg-gradient-to-t from-blue-600 via-blue-500 to-blue-300",
     },
     {
       colorId: 2,
       colorName: "Red",
-      colorBackground: "bg-gradient-to-t from-red-700 via-red-400 to-red-300",
+      colorBackground: "bg-gradient-to-t from-red-600 via-red-500 to-red-300",
     },
     {
       colorId: 3,
       colorName: "Yellow",
       colorBackground:
-        "bg-gradient-to-t from-yellow-700 via-yellow-400 to-yellow-200 border-lime-600",
+        "bg-gradient-to-t from-yellow-600 via-yellow-500 to-white",
     },
   ]);
   return (

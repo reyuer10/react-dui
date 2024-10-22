@@ -6,15 +6,17 @@ import Header from "./Header";
 import ResultsInputModal from "../modal/ResultsInputModal";
 import ResultInput from "./ResultInput";
 import ColorPicked from "./ColorPicked";
-//  bg-gradient-to-t from-zinc-900 via-zinc-800 to-yellow-700
 function HomePage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     const handleKeyDown = (e) => {
-      if (e.key === "Enter") {
+      if (e.key === "Enter" && !isModalOpen) {
         console.log("You press enter");
         setIsModalOpen(true);
+      } else if (e.key === "Enter" && isModalOpen) {
+        console.log("You press enter");
+        setIsModalOpen(false);
       }
     };
 
@@ -23,10 +25,9 @@ function HomePage() {
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
     };
-  }, []);
-  // className="h-screen bg-gradient-to-t from-red-700 via-orange-500 to-yellow-400"
-  // grid grid-cols-3
-  // header div = col-span-3
+  }, [isModalOpen]);
+
+  
   return (
     <div>
       <div className="min-h-screen bg-gradient-to-t from-red-700 via-orange-500 to-yellow-400">
