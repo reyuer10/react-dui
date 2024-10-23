@@ -5,13 +5,16 @@ function SettingsSections() {
   const navigate = useNavigate();
 
   const handleRouteLogout = () => {
-    navigate("/")
-  }
+    navigate("/");
+  };
 
   return (
     <div className="grid grid-cols-2 fill-current font-rubik gap-2 mx-2">
       <div className="flex font-black justify-center">
-        <button onClick={handleRouteLogout} className="flex items-center justify-center space-x-2 rounded-md w-full text-lime-700">
+        <button
+          onClick={handleRouteLogout}
+          className="flex items-center justify-center space-x-2 rounded-md w-full text-lime-700"
+        >
           LOGOUT
         </button>
       </div>

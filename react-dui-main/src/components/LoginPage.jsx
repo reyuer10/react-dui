@@ -9,7 +9,7 @@ function LoginPage() {
   const [tableInput, setTableInput] = useState("");
 
   const handleLogin = () => {
-    navigate("/color-game/select-view");
+    navigate("/color-game/select-table");
   };
 
   useEffect(() => {
@@ -18,7 +18,6 @@ function LoginPage() {
     }
   }, []);
 
-  
   return (
     <div className="min-h-screen font-rubik flex flex-col items-center justify-center bg-gradient-to-t from-gray-700 via-amber-600 to-amber-400">
       <div className="p-4 space-y-14 w-[500px]">
