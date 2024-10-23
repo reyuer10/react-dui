@@ -1,15 +1,21 @@
 import React from "react";
-import SettingsSections from "./SettingsSections";
+import { useNavigate } from "react-router-dom";
 
 function Header() {
+  const navigate = useNavigate();
+
+  const handleRouteSelectView = () => {
+    navigate("/color-game/select-view");
+  };
+
   return (
-    <div className="flex justify-between items-center font-noto-sans  shadow-md bg-yellow-400 shadow-orange-400">
-      <div>
-        <p className=" text-lime-700 font-rubik font-bold">COLOR GAME</p>
-      </div>
-      <div>
-        <SettingsSections />
-      </div>
+    <div className="flex font-noto-sans  shadow-md bg-yellow-400 shadow-orange-400">
+      <button
+        onClick={handleRouteSelectView}
+        className="flex items-center space-x-2"
+      >
+        <p className=" text-lime-700 font-rubik font-bold">BACK</p>
+      </button>
     </div>
   );
 }

@@ -9,14 +9,14 @@ function App() {
   return (
     <>
       <Routes>
-        <Route path="color-game/page/login" element={<LoginPage />} />
-        <Route path="color-game/page/select-view" element={<SelectView />} />
+        <Route path="/" element={<LoginPage />} />
+        <Route path="color-game/select-view" element={<SelectView />} />
         <Route
-          path="color-game/page/mode/trend-display"
+          path="color-game/mode/trend-display"
           element={<HomePage />}
         />
         <Route
-          path="color-game/page/mode/dealer-side"
+          path="color-game/mode/dealer-side"
           element={<DealerPage />}
         />
       </Routes>
