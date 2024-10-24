@@ -15,6 +15,10 @@
   -webkit-text-stroke: 3px black;
 }
 
+.primary-drop-shadow {
+  text-shadow: 3px 3px 7px rgb(0, 0, 0);
+}
+
 .jp-title {
   text-shadow: 3px 3px 7px rgb(0, 0, 0);
   -webkit-text-stroke: 1px #ff8400;
