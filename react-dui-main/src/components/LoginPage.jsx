@@ -1,27 +1,55 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import colorGameLogo from "../assets/pictures/color-game-logo.png";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 
 function LoginPage() {
   const navigate = useNavigate();
+  const inputRef = useRef(null);
   const {
     register,
     handleSubmit,
     formState: { errors },
-    getValues,
+    setError,
   } = useForm();
 
-  const [tableInput, setTableInput] = useState("");
+  const [userPassword, setUserPassword] = useState("");
+  const [isInputFocus, setIsInputFocus] = useState(false);
 
   const handleLogin = () => {
-    const { userPassword } = getValues();
+    if (!userPassword) {
+      setError("userPassword", {
+        type: "manual",
+        message: "Password is required.",
+      });
+
+      return;
+    } else if (userPassword !== "ITD@casin0!") {
+      setError("userPassword", {
+        type: "manual",
+        message: "Incorrect password, please try again.",
+      });
+
+      return;
+    }
+
     navigate("/color-game/select-table");
-    console.log(userPassword);
+  };
+
+  const handleFocusInput = () => {
+    setIsInputFocus(true);
+    inputRef.current.focus();
+  };
+
+  const handleBlur = () => {
+    if (userPassword.length === 0) {
+      return setIsInputFocus(false);
+    }
   };
 
   return (
     <form
+      onClick={handleBlur}
       onSubmit={handleSubmit(handleLogin)}
       className="min-h-screen font-rubik flex flex-col items-center justify-center bg-gradient-to-t from-gray-700 via-amber-600 to-amber-400"
     >
@@ -29,28 +57,47 @@ function LoginPage() {
         <div className="flex justify-center">
           <img src={colorGameLogo} alt="casino-logo" className="w-[80%]" />
         </div>
-        <div className="flex flex-col space-y-4">
-          <input
-            // ref={inputRef}
-            {...register("userPassword", { required: true })}
-            value={tableInput}
-            onChange={(e) => setTableInput(e.target.value)}
-            placeholder="Enter your password"
-            type="password"
-            autoComplete="off"
-            className="w-full px-4 py-2 rounded-full 
-            ring-2 ring-orange-400
-            focus-within:ring-2 focus-within:outline-none focus-within:ring-yellow-500 text-center font-bold transition-colors duration-150"
-          />
-          <button
-            type="submit"
-            className=" bg-yellow-300 shadow-md font-black shadow-black border-6 rounded-full py-2 text-[18px] text-orange-700 transition-colors hover:bg-yellow-200"
-          >
-            LOGIN
-          </button>
-          {errors.userPassword?.type === "required" && (
-            <p className="text-center">password is required.</p>
+        <div
+          onClick={(e) => {
+            e.stopPropagation();
+          }}
+          className=" text-center"
+        >
+          <div className=" transition-all duration-70 relative px-4 py-2 rounded-full ring-2 ring-orange-400 focus-within:ring-2 focus-within:outline-none focus-within:ring-yellow-500 font-bold duration-150">
+            <input
+              {...register("userPassword")}
+              onClick={handleFocusInput}
+              ref={inputRef}
+              value={userPassword}
+              onChange={(e) => setUserPassword(e.target.value)}
+              className={`w-full text-sm bg-transparent border-none outline-none text-center`}
+              type="password"
+              autoComplete="off"
+            />
+            <label
+              htmlFor="userPassword"
+              onClick={handleFocusInput}
+              id="userPassword"
+              className={`${
+                isInputFocus
+                  ? "scale-75 -translate-y-[21px] bg-amber-300"
+                  : "opacity-80"
+              } left-0 right-0 transition-transform absolute max-w-[190px]   cursor-text px-2 rounded-md`}
+            >
+              Enter your password
+            </label>
+          </div>
+          {errors.userPassword && (
+            <p className="text-sm mt-2">{errors.userPassword.message}</p>
           )}
+          <div>
+            <button
+              type="submit"
+              className="w-full my-4 bg-yellow-300 shadow-md font-black shadow-black border-6 rounded-full py-2 text-[18px] text-orange-700 transition-colors hover:bg-yellow-200"
+            >
+              LOGIN
+            </button>
+          </div>
         </div>
       </div>
     </form>

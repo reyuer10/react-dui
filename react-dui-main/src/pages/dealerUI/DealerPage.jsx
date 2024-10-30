@@ -49,7 +49,7 @@ function DealerPage() {
           <button onClick={handleRouteSelectView}>BACK</button>
           <SettingsSections />
         </div>
-        <div className="flex justify-between">
+        <div className="flex justify-between h-[calc(99vh-20px)] ">
           <LeftSection handleOpenRound={handleOpenRound} />
           <MiddleSection />
           <RightSection />

@@ -51,7 +51,7 @@ function TableList() {
           Select Table
         </p>
       </div>
-      <div className="border-[6px] border-zinc-700 rounded-2xl w-[60%]">
+      <div className="border-[6px] border-zinc-700 rounded-2xl w-[60%] bg-zinc-600">
         <table className="w-full ">
           <thead className="">
             <tr>

@@ -3,27 +3,8 @@ import SideContent from "./SideContent";
 import MiddleContent from "./MiddleContent";
 import EndContent from "./EndContent";
 import Header from "./Header";
-// import ResultsInputModal from "../modal/ResultsInputModal";
-// import ResultInput from "./ResultInput";
 import ColorPicked from "./ColorPicked";
 function HomePage() {
-  // useEffect(() => {
-  //   const handleKeyDown = (e) => {
-  //     if (e.key === "Enter" && !isModalOpen) {
-  //       console.log("You press enter");
-  //     } else if (e.key === "Enter" && isModalOpen) {
-  //       console.log("You press enter");
-  //       setIsModalOpen(false);
-  //     }
-  //   };
-
-  //   document.addEventListener("keydown", handleKeyDown);
-
-  //   return () => {
-  //     document.removeEventListener("keydown", handleKeyDown);
-  //   };
-  // }, [isModalOpen]);
-
   return (
     <div>
       <div className="min-h-screen bg-gradient-to-t from-red-700 via-orange-500 to-yellow-400">

@@ -16,21 +16,27 @@ function SelectView() {
     navigate("/color-game/mode/dealer-side");
   };
 
+  const handleLogout = () => {
+    navigate("/")
+  }
+
   return (
     <div className="min-h-screen box-border flex flex-col font-rubik items-center justify-center bg-gradient-to-t from-gray-700 via-amber-600 to-amber-400">
-      <div className="absolute left-0 top-0 p-5">
+      <div className="absolute left-0 top-0 p-5 flex flex-col items-start space-y-4">
         <button
           onClick={handleChangeTable}
           className="font-bold text-orange-700"
         >
           QUIT TABLE
         </button>
+
+        <button onClick={handleLogout} className="font-bold text-orange-700">LOGOUT</button>
       </div>
       <div className="p-4 space-y-14 w-[500px]">
         <div className="flex justify-center">
           <img src={colorGameLogo} alt="casino-logo" className="w-[80%]" />
         </div>
-        <div className="text-center flex items-center p-2 justify-evenly text-3xl font-black text-black border-4 border-yellow-300 ring-4 ring-black shadow shadow-black rounded-full">
+        <div className="text-center flex items-center p-2 justify-evenly text-3xl font-black text-black  border-2 border-yellow-300  ring-4 ring-black shadow-inner shadow-orange-300 rounded-full">
           <p className="text-white primary-drop-shadow">Table Name:</p>
           <p className="bg-black rounded-full px-5 py-1 text-white">CJ01</p>
         </div>

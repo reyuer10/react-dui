@@ -1,7 +1,12 @@
 import React from "react";
+import EndContent from "../../../components/EndContent";
 
 function RightSection() {
-  return <div>RightSection</div>;
+  return (
+    <div>
+      <EndContent />
+    </div>
+  );
 }
 
 export default RightSection;
