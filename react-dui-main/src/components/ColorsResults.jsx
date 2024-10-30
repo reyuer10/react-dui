@@ -5,8 +5,6 @@ import ColorResultList from "./ColorResultList";
 function ColorsResults() {
   const [resultsData, setResultsData] = useState(colorResultsData);
 
-  console.log(resultsData);
-
   return (
     <div className="relative flex flex-col items-center">
       {resultsData.map((rd) => {

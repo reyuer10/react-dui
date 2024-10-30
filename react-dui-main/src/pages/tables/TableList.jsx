@@ -55,7 +55,9 @@ function TableList() {
         <table className="w-full ">
           <thead className="">
             <tr>
-              <th className="px-4 bg-zinc-700 border-b border-black text-white">Name</th>
+              <th className="px-4 bg-zinc-700 border-b border-black text-white">
+                Name
+              </th>
               <th className="px-4 bg-zinc-700 border-b border-l border-black text-white">
                 Date Created
               </th>

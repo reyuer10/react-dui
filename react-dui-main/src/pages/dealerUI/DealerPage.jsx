@@ -8,6 +8,7 @@ import ModalConfirmation from "../../modal/ModalConfirmation";
 import LeftSection from "./section/LeftSection";
 import MiddleSection from "./section/MiddleSection";
 import RightSection from "./section/RightSection";
+import { useColorInput } from "../../hooks/useColorInput";
 
 export const dealerContext = createContext();
 
@@ -33,10 +34,21 @@ function DealerPage() {
     OpenModalTo(<BetAmount />);
   };
 
+  const { colorBet, handleGetColorBet, handleDeleteColorGet } = useColorInput();
+  const [isColorBetEmpty, setIsColorBetEmpty] = useState(false);
+  const [isBetAmountEmpty, setIsBetAmountEmpty] = useState(false);
+
   return (
     <dealerContext.Provider
       value={{
         amount,
+        colorBet,
+        isColorBetEmpty,
+        setIsColorBetEmpty,
+        isBetAmountEmpty,
+        setIsBetAmountEmpty,
+        handleGetColorBet,
+        handleDeleteColorGet,
         setAmount,
         OpenModalTo,
         closeModal,

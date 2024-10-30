@@ -26,8 +26,9 @@ text-center my-6  ring-4  rounded-xl shadow-inner shadow-black ring-black border
             >
               {j.jpName}
             </p>
+            {/* text-center text-6xl  */}
             <p
-              className={` text-[46px] text-zinc-700 rounded-b-lg text-gradient-grand-jackpot`}
+              className={` text-[46px] rounded-b-lg bg-gradient-to-r from-yellow-300 via-amber-400 to-amber-200 bg-clip-text text-transparent animate-gradient bg-[length:200%_100%] `}
             >
               ₱ {j.jpAmount}
             </p>

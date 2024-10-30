@@ -1,11 +1,12 @@
 import React, { useContext, useEffect, useState } from "react";
 import { colorData } from "../../data/colorData";
-import { useColorInput } from "../../hooks/useColorInput";
 import ColorResultsConfirmation from "./ColorResultsConfirmation";
 import { dealerContext } from "../dealerUI/DealerPage";
+import { useColorBetInput } from "../../hooks/useColorBetInput";
 
 function InputResults() {
-  const { colorResults, handleAddColor, handleDeleteColor } = useColorInput();
+  const { colorResults, handleAddColor, handleDeleteColor } =
+    useColorBetInput();
   const [savedColors, setSavedColors] = useState([]);
   const [resultsError, setResultsError] = useState(null);
   const { closeModal, closeModalConfirmaton, OpenModalConfirmationTo } =

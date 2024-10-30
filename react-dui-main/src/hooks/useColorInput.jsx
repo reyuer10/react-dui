@@ -1,25 +1,23 @@
 import { useState } from "react";
 
 export const useColorInput = () => {
-  const [colorResults, setColorResults] = useState([]);
+  const [colorBet, setColorBet] = useState([]);
 
-  const handleAddColor = (cID, cName, cBackground) => {
-    const newColor = {
-      newColorID: cID,
-      newColorName: cName,
-      newColorBackground: cBackground,
+  const handleGetColorBet = (colorBetId, colorBetName, colorBetBackground) => {
+    const newColorBet = {
+      colorBetId: colorBetId,
+      colorBetName: colorBetName,
+      colorBetBackground: colorBetBackground,
     };
+    const getColor = [...colorBet, newColorBet];
 
-    const newColors = [...colorResults, newColor];
-    localStorage.setItem("color", JSON.stringify(newColors));
-    setColorResults(newColors);
+    return setColorBet(getColor);
   };
 
-  const handleDeleteColor = (id) => {
-    const results = colorResults.filter((c, index) => index !== id);
-    localStorage.removeItem(`${id}`);
-    setColorResults(results);
+  const handleDeleteColorGet = (id) => {
+    const getColorId = colorBet.filter((c) => c.colorBetId !== id);
+    setColorBet(getColorId);
   };
 
-  return { colorResults, handleAddColor, handleDeleteColor };
+  return { handleGetColorBet, handleDeleteColorGet, colorBet };
 };

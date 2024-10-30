@@ -6,6 +6,19 @@
 @tailwind components;
 @tailwind utilities;
 
+@keyframes move {
+  0% {
+    background-position: -100% 0%;
+  }
+  100% {
+    background-position: 100% 0%;
+  }
+}
+
+.animate-gradient {
+  animation: move 3s ease infinite;
+}
+
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;
@@ -18,6 +31,10 @@ input::-webkit-inner-spin-button {
 
 .primary-drop-shadow {
   text-shadow: 3px 3px 7px rgb(0, 0, 0);
+}
+
+.text-drop-shadow {
+  text-shadow: 2px 2px 1px rgb(0, 0, 0);
 }
 
 .chips-drop-shadow {

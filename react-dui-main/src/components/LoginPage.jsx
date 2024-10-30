@@ -80,15 +80,15 @@ function LoginPage() {
               id="userPassword"
               className={`${
                 isInputFocus
-                  ? "scale-75 -translate-y-[21px] bg-amber-300"
+                  ? "scale-75 -translate-y-[21px] bg-amber-300 px-2"
                   : "opacity-80"
-              } left-0 right-0 transition-transform absolute max-w-[190px]   cursor-text px-2 rounded-md`}
+              } left-0 right-0 transition-transform absolute max-w-[190px] cursor-text px-2 rounded-md`}
             >
               Enter your password
             </label>
           </div>
           {errors.userPassword && (
-            <p className="text-sm mt-2">{errors.userPassword.message}</p>
+            <p className="text-sm mt-2 font-medium opacity-80">{errors.userPassword.message}</p>
           )}
           <div>
             <button
