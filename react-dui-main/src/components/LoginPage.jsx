@@ -74,17 +74,18 @@ function LoginPage() {
               type="password"
               autoComplete="off"
             />
+            
             <label
               htmlFor="userPassword"
               onClick={handleFocusInput}
               id="userPassword"
               className={`${
                 isInputFocus
-                  ? "scale-75 -translate-y-[21px] bg-amber-300 px-2"
+                  ? "scale-75 -translate-y-[21px] bg-amber-300 mx-3"
                   : "opacity-80"
-              } left-0 right-0 transition-transform absolute max-w-[190px] cursor-text px-2 rounded-md`}
+              } left-0 right-0 transition-transform absolute max-w-[120px] cursor-text mx-3 rounded-md`}
             >
-              Enter your password
+              Password
             </label>
           </div>
           {errors.userPassword && (

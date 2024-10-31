@@ -9,6 +9,7 @@ import LeftSection from "./section/LeftSection";
 import MiddleSection from "./section/MiddleSection";
 import RightSection from "./section/RightSection";
 import { useColorInput } from "../../hooks/useColorInput";
+import { useColorBetInput } from "../../hooks/useColorBetInput";
 
 export const dealerContext = createContext();
 
@@ -35,8 +36,25 @@ function DealerPage() {
   };
 
   const { colorBet, handleGetColorBet, handleDeleteColorGet } = useColorInput();
+  const {
+    totalAmount,
+    newColorData,
+    chipsCurrentID,
+    currentChipsBet,
+    colorBetAmountID,
+    isResetAmountEnable,
+    handleSelectBetAmount,
+    setChipsCurrentID,
+    handleIncrementBetAmount,
+    handleOpenEnableColorBetAmount,
+    handleRemoveSelectBetAmount,
+    handleResetColorBetAmount,
+  } = useColorBetInput();
+
   const [isColorBetEmpty, setIsColorBetEmpty] = useState(false);
   const [isBetAmountEmpty, setIsBetAmountEmpty] = useState(false);
+
+  console.log(colorBetAmountID);
 
   return (
     <dealerContext.Provider
@@ -54,6 +72,18 @@ function DealerPage() {
         closeModal,
         OpenModalConfirmationTo,
         closeModalConfirmaton,
+        currentChipsBet,
+        handleSelectBetAmount,
+        chipsCurrentID,
+        setChipsCurrentID,
+        handleIncrementBetAmount,
+        totalAmount,
+        newColorData,
+        handleOpenEnableColorBetAmount,
+        colorBetAmountID,
+        isResetAmountEnable,
+        handleRemoveSelectBetAmount,
+        handleResetColorBetAmount,
       }}
     >
       <div className="min-h-screen font-rubik bg-gradient-to-t from-gray-700 via-amber-600 to-amber-400">
