@@ -1,9 +1,9 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import InputResults from "./InputResults";
 import { dealerContext } from "../dealerUI/DealerPage";
 
 function BetConfirmation() {
-  const { amount, OpenModalTo, closeModalConfirmaton } =
+  const { totalAmount, OpenModalTo, closeModalConfirmaton } =
     useContext(dealerContext);
 
   const handleSubmitBetAmount = () => {
@@ -15,8 +15,8 @@ function BetConfirmation() {
     <div className="fixed font-rubik inset-0 flex justify-center items-center flex-col">
       <div className="bg-zinc-700 text-white space-y-8 p-4 rounded-2xl shadow-inner shadow-black border-[5px] border-zinc-700 ring-4 ring-black">
         <div className="text-center font-black chips-drop-shadow space-y-6">
-          <p className="text-2xl ">Bet amount:</p>
-          <p className="text-[42px] text-yellow-400">{amount}</p>
+          <p className="text-2xl">Bet amount:</p>
+          <p className="text-[42px] text-yellow-400">{totalAmount}</p>
         </div>
         <div>
           <p className=" px-4 font-normal text-lg  text-slate-300">

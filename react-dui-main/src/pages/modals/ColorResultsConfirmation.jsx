@@ -1,21 +1,21 @@
-import React from "react";
-
 function ColorResultsConfirmation({
   handleCancelSubmitColorResults,
   handleSubmitColorResults,
-  colorResults,
+  colorBet,
 }) {
+
+  
   return (
     <div className="fixed inset-0 flex justify-center items-center ">
       <div className="flex flex-col bg-zinc-700 text-center p-4 rounded-xl space-y-6 shadow-md shadow-black">
         <div className="flex justify-center border-2 border-black rounded-xl shadow-black shadow-inner p-4">
-          {colorResults.map((c, index) => {
+          {colorBet.map((c, index) => {
             return (
               <ul key={index}>
                 <li
                   className={` text-yellow-300 px-2 rounded-lg font-bold text-2xl`}
                 >
-                  {c.newColorName}
+                  {c.colorBetName}
                 </li>
               </ul>
             );

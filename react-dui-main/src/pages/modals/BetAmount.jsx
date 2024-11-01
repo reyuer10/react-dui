@@ -8,13 +8,10 @@ import PrimaryLabel from "../../assets/cssCustom/PrimaryLabel";
 
 function BetAmount() {
   const {
-    amount,
-    colorBet,
     totalAmount,
     OpenModalConfirmationTo,
     isResetAmountEnable,
     isBetAmountEmpty,
-    setIsColorBetEmpty,
     setIsBetAmountEmpty,
     chipsCurrentID,
     handleResetColorBetAmount,
@@ -22,11 +19,8 @@ function BetAmount() {
   } = useContext(dealerContext);
 
   const handleSubmitAmount = () => {
-    if (amount === 0) {
+    if (totalAmount === 0) {
       setIsBetAmountEmpty(true);
-      return;
-    } else if (colorBet.length === 0) {
-      setIsColorBetEmpty(true);
       return;
     }
     OpenModalConfirmationTo(<BetConfirmation />);
@@ -53,7 +47,7 @@ function BetAmount() {
             onClick={handleSubmitAmount}
             className=" shadow-inner shadow-black border-[5px] border-red-600 ring-4 ring-zinc-700 w-full bg-red-600 rounded-xl py-2"
           >
-            <PrimaryLabel>Bet</PrimaryLabel>
+            <PrimaryLabel>BET</PrimaryLabel>
           </button>
           <button
             onClick={handleRemoveSelectBetAmount}

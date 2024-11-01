@@ -1,4 +1,4 @@
-import React, { createContext, useEffect, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import SettingsSections from "../../components/SettingsSections";
 import { useNavigate } from "react-router-dom";
 import { useModal } from "../../hooks/useModal";
@@ -10,6 +10,9 @@ import MiddleSection from "./section/MiddleSection";
 import RightSection from "./section/RightSection";
 import { useColorInput } from "../../hooks/useColorInput";
 import { useColorBetInput } from "../../hooks/useColorBetInput";
+import { colorData } from "../../data/colorData";
+import { useTrendInput } from "../../hooks/useTrendInput";
+import { colorGameContext } from "../../App";
 
 export const dealerContext = createContext();
 
@@ -31,12 +34,10 @@ function DealerPage() {
     navigate("/color-game/select-view");
   };
 
-  const handleOpenRound = () => {
-    OpenModalTo(<BetAmount />);
-  };
-
-  const { colorBet, handleGetColorBet, handleDeleteColorGet } = useColorInput();
+  const { colorBet, handleGetColorBet, handleDeleteColorBet } = useColorInput();
+  const { handleIncrementRound } = useContext(colorGameContext);
   const {
+    round,
     totalAmount,
     newColorData,
     chipsCurrentID,
@@ -54,36 +55,42 @@ function DealerPage() {
   const [isColorBetEmpty, setIsColorBetEmpty] = useState(false);
   const [isBetAmountEmpty, setIsBetAmountEmpty] = useState(false);
 
-  console.log(colorBetAmountID);
+  const handleOpenRound = () => {
+    OpenModalTo(<BetAmount />);
+    handleIncrementRound();
+  };
 
   return (
     <dealerContext.Provider
       value={{
+        round,
         amount,
         colorBet,
+        colorData,
+        currentChipsBet,
         isColorBetEmpty,
-        setIsColorBetEmpty,
         isBetAmountEmpty,
+        totalAmount,
+        colorBetAmountID,
+        isResetAmountEnable,
+        newColorData,
+        chipsCurrentID,
+        setIsColorBetEmpty,
         setIsBetAmountEmpty,
         handleGetColorBet,
-        handleDeleteColorGet,
+        handleDeleteColorBet,
         setAmount,
         OpenModalTo,
         closeModal,
         OpenModalConfirmationTo,
         closeModalConfirmaton,
-        currentChipsBet,
         handleSelectBetAmount,
-        chipsCurrentID,
         setChipsCurrentID,
         handleIncrementBetAmount,
-        totalAmount,
-        newColorData,
         handleOpenEnableColorBetAmount,
-        colorBetAmountID,
-        isResetAmountEnable,
         handleRemoveSelectBetAmount,
         handleResetColorBetAmount,
+        handleDeleteColorBet,
       }}
     >
       <div className="min-h-screen font-rubik bg-gradient-to-t from-gray-700 via-amber-600 to-amber-400">
