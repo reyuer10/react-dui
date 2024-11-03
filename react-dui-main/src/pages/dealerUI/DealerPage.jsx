@@ -1,17 +1,18 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { createContext, useContext, useState } from "react";
 import SettingsSections from "../../components/SettingsSections";
 import { useNavigate } from "react-router-dom";
 import { useModal } from "../../hooks/useModal";
+
 import Modal from "../../modal/Modal";
 import BetAmount from "../modals/BetAmount";
 import ModalConfirmation from "../../modal/ModalConfirmation";
 import LeftSection from "./section/LeftSection";
 import MiddleSection from "./section/MiddleSection";
 import RightSection from "./section/RightSection";
+
 import { useColorInput } from "../../hooks/useColorInput";
 import { useColorBetInput } from "../../hooks/useColorBetInput";
 import { colorData } from "../../data/colorData";
-import { useTrendInput } from "../../hooks/useTrendInput";
 import { colorGameContext } from "../../App";
 
 export const dealerContext = createContext();
@@ -28,16 +29,20 @@ function DealerPage() {
     isConfirmationModalOpen,
   } = useModal();
   const navigate = useNavigate();
+
   const [amount, setAmount] = useState(0);
-
-  const handleRouteSelectView = () => {
-    navigate("/color-game/select-view");
-  };
-
-  const { colorBet, handleGetColorBet, handleDeleteColorBet } = useColorInput();
+  const [isColorBetEmpty, setIsColorBetEmpty] = useState(false);
+  const [isBetAmountEmpty, setIsBetAmountEmpty] = useState(false);
   const { handleIncrementRound } = useContext(colorGameContext);
+
   const {
-    round,
+    colorBet,
+    handleGetColorBet,
+    handleDeleteColorBet,
+    handleResetDefaultColorBet,
+  } = useColorInput();
+
+  const {
     totalAmount,
     newColorData,
     chipsCurrentID,
@@ -50,20 +55,22 @@ function DealerPage() {
     handleOpenEnableColorBetAmount,
     handleRemoveSelectBetAmount,
     handleResetColorBetAmount,
+    handleResetDefaultBet,
+    colorAmount,
   } = useColorBetInput();
-
-  const [isColorBetEmpty, setIsColorBetEmpty] = useState(false);
-  const [isBetAmountEmpty, setIsBetAmountEmpty] = useState(false);
 
   const handleOpenRound = () => {
     OpenModalTo(<BetAmount />);
     handleIncrementRound();
   };
 
+  const handleRouteSelectView = () => {
+    navigate("/color-game/select-view");
+  };
+
   return (
     <dealerContext.Provider
       value={{
-        round,
         amount,
         colorBet,
         colorData,
@@ -75,6 +82,7 @@ function DealerPage() {
         isResetAmountEnable,
         newColorData,
         chipsCurrentID,
+        colorAmount,
         setIsColorBetEmpty,
         setIsBetAmountEmpty,
         handleGetColorBet,
@@ -91,6 +99,8 @@ function DealerPage() {
         handleRemoveSelectBetAmount,
         handleResetColorBetAmount,
         handleDeleteColorBet,
+        handleResetDefaultBet,
+        handleResetDefaultColorBet,
       }}
     >
       <div className="min-h-screen font-rubik bg-gradient-to-t from-gray-700 via-amber-600 to-amber-400">

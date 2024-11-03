@@ -3,11 +3,9 @@ import { colorData } from "../../data/colorData";
 import ColorResultsConfirmation from "./ColorResultsConfirmation";
 import { dealerContext } from "../dealerUI/DealerPage";
 import { colorGameContext } from "../../App";
-// import { useColorBetInput } from "../../hooks/useColorBetInput";
+import { postResults } from "../../api/dealerApi";
 
 function InputResults() {
-  // const { colorResults } = useColorBetInput();
-  // const [savedColors, setSavedColors] = useState([]);
   const [resultsError, setResultsError] = useState(null);
 
   const {
@@ -19,6 +17,8 @@ function InputResults() {
     handleDeleteColorBet,
     totalAmount,
     newColorData,
+    handleResetDefaultBet,
+    handleResetDefaultColorBet,
   } = useContext(dealerContext);
 
   const { round } = useContext(colorGameContext);
@@ -26,28 +26,24 @@ function InputResults() {
   let amount = newColorData.map((d) => d.colorAmount);
   let colorName = colorBet.map((d) => d.colorBetName);
 
-
   const [data, setData] = useState({
     round: round,
     totalAmount: totalAmount,
-    colorAmount: [
-      {
-        yellow: amount[0],
-        white: amount[1],
-        pink: amount[2],
-        blue: amount[3],
-        red: amount[4],
-        green: amount[5],
-      },
-    ],
+    colorAmount: {
+      yellow: amount[0],
+      white: amount[1],
+      pink: amount[2],
+      blue: amount[3],
+      red: amount[4],
+      green: amount[5],
+    },
+
     colorNameResults: {
       firstColor: colorName[0],
       secondColor: colorName[1],
       thirdColor: colorName[2],
     },
   });
-
-  console.log(data?.colorAmount);
 
   const handleCancelSubmitColorResults = () => {
     closeModalConfirmaton();
@@ -61,9 +57,50 @@ function InputResults() {
   //   // }
   // }, []);
 
-  const handleSubmitColorResults = () => {
-    closeModalConfirmaton();
-    closeModal();
+  console.log();
+
+  const handleSubmitColorResults = async () => {
+    const dateNow = new Date()
+      .toISOString()
+      .split("T")
+      .splice(0, 1)
+      .toString()
+      .replace(/-/g, "");
+    const timeNow = new Date()
+      .toTimeString()
+      .split(" ")
+      .at(0)
+      .toString()
+      .replace(/:/g, "");
+
+    try {
+      const response = await postResults({
+        serial_num: `CG-${dateNow}${timeNow}`,
+        round_num: data.round,
+        result_firstColor: colorName[0],
+        result_secondColor: colorName[1],
+        result_thirdColor: colorName[2],
+        betAmount_yellow: parseInt(data.colorAmount.yellow),
+        betAmount_white: parseInt(data.colorAmount.white),
+        betAmount_pink: parseInt(data.colorAmount.pink),
+        betAmount_blue: parseInt(data.colorAmount.blue),
+        betAmount_red: parseInt(data.colorAmount.red),
+        betAmount_green: parseInt(data.colorAmount.green),
+        amount_totalBet: data.totalAmount,
+        current_minor: 20000,
+        current_major: 500000,
+        current_grand: 1000000,
+      });
+
+      closeModalConfirmaton();
+      closeModal();
+      handleResetDefaultBet();
+      handleResetDefaultColorBet();
+
+      return response;
+    } catch (error) {
+      console.log("error adding data to the server");
+    }
   };
 
   const handleOpenConfirmationColorResults = () => {

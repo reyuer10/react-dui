@@ -20,8 +20,17 @@ export const useColorInput = () => {
     const getColorId = colorBet.filter((c, index) => index !== id);
     // localStorage.removeItem(`${getColorId}`);
     // localStorage.setItem("color", JSON.stringify(getColorId));
-    setColorBet(getColorId)
+    setColorBet(getColorId);
   };
 
-  return { handleGetColorBet, handleDeleteColorBet, colorBet };
+  const handleResetDefaultColorBet = () => {
+    return setColorBet([]);
+  };
+
+  return {
+    handleGetColorBet,
+    handleDeleteColorBet,
+    handleResetDefaultColorBet,
+    colorBet,
+  };
 };

@@ -11,9 +11,6 @@ function MiddleContent() {
         <img src={colorGameLogo} alt="casinoLogo" className="w-[400px] my-8" />
       </div>
       {/* <ResultInput /> */}
-      <div>
-        <TimerSection />
-      </div>
     </div>
   );
 }

@@ -3,8 +3,6 @@ function ColorResultsConfirmation({
   handleSubmitColorResults,
   colorBet,
 }) {
-
-  
   return (
     <div className="fixed inset-0 flex justify-center items-center ">
       <div className="flex flex-col bg-zinc-700 text-center p-4 rounded-xl space-y-6 shadow-md shadow-black">

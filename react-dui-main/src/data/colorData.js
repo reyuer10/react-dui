@@ -2,7 +2,7 @@ export const colorData = [
   {
     colorId: 1,
     colorName: "Yellow",
-    colorBackground: "bg-gradient-to-t from-yellow-600 via-yellow-500 to-white",
+    colorBackground: "bg-gradient-to-t from-yellow-500 via-yellow-400 to-white",
     colorAmount: 0,
     colorAmountImg: null,
   },

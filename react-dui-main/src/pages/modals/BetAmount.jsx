@@ -16,6 +16,7 @@ function BetAmount() {
     chipsCurrentID,
     handleResetColorBetAmount,
     handleRemoveSelectBetAmount,
+    colorAmount,
   } = useContext(dealerContext);
 
   const handleSubmitAmount = () => {
@@ -45,7 +46,7 @@ function BetAmount() {
         <div className="flex space-x-4">
           <button
             onClick={handleSubmitAmount}
-            className=" shadow-inner shadow-black border-[5px] border-red-600 ring-4 ring-zinc-700 w-full bg-red-600 rounded-xl py-2"
+            className="shadow-inner shadow-black border-[5px] border-red-600 ring-4 ring-zinc-700 w-full bg-red-600 rounded-xl py-2"
           >
             <PrimaryLabel>BET</PrimaryLabel>
           </button>
@@ -56,32 +57,20 @@ function BetAmount() {
               chipsCurrentID === null
                 ? "border-zinc-400 bg-zinc-400"
                 : " border-orange-400 bg-orange-400"
-            } active:scale-95 transition-all font-black text-md px-2 shadow-inner shadow-black border-[5px] ring-4 ring-zinc-700  rounded-xl text-white text-drop-shadow`}
+            } active:scale-95 transition-all font-black text-xl px-2 shadow-inner shadow-black border-[5px] ring-4 ring-zinc-700  rounded-xl text-white text-drop-shadow`}
           >
-            <p>REMOVE</p>
+            REMOVE
           </button>
           <button
             onClick={() => handleResetColorBetAmount()}
             disabled={!isResetAmountEnable}
             className={`${
-              isResetAmountEnable
+              isResetAmountEnable && colorAmount !== 0
                 ? " border-yellow-400 bg-yellow-400"
                 : "border-zinc-400 bg-zinc-400"
-            } active:scale-95 transition-all duration-75 font-black text-white primary-drop-shadow text-3xl px-4 p-2 rounded-xl shadow-inner shadow-black border-[5px]  ring-4 ring-zinc-700`}
+            } active:scale-95 transition-all duration-75 font-black text-white primary-drop-shadow text-xl px-4 p-2 rounded-xl shadow-inner shadow-black border-[5px]  ring-4 ring-zinc-700`}
           >
-            <svg
-              className={`${
-                isResetAmountEnable ? "text-white" : "text-zinc-200"
-              } fill-current `}
-              xmlns="http://www.w3.org/2000/svg"
-              id="Layer_1"
-              data-name="Layer 1"
-              viewBox="0 0 24 24"
-              height="36"
-              width="36"
-            >
-              <path d="m23,17.187v4.52c0,.705-.852,1.058-1.35.559l-1.491-1.491c-2.2,2.042-5.103,3.225-8.158,3.225C6.066,24,.868,19.577.029,13.712c-.117-.82.453-1.58,1.273-1.697.816-.122,1.579.453,1.697,1.272.628,4.397,4.55,7.712,9,7.712,2.254,0,4.4-.856,6.041-2.342l-1.308-1.308c-.498-.498-.145-1.35.559-1.35h4.52c.656,0,1.187.531,1.187,1.187ZM1,6.813V2.293c0-.705.852-1.058,1.35-.559l1.491,1.491C6.042,1.183,8.945,0,12,0c5.934,0,11.132,4.423,11.971,10.288.117.82-.453,1.58-1.273,1.697-.816.122-1.579-.453-1.697-1.272-.628-4.397-4.55-7.712-9-7.712-2.254,0-4.4.856-6.041,2.342l1.308,1.308c.498.498.145,1.35-.559,1.35H2.187c-.656,0-1.187-.531-1.187-1.187Z" />
-            </svg>
+            RESET
           </button>
         </div>
       </div>

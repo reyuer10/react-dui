@@ -14,10 +14,12 @@ export const useColorBetInput = () => {
   const [isResetAmountEnable, setIsResetAmountEnable] = useState(false);
   const [colorBetAmountID, setColorBetAmountID] = useState(null);
   const [newColorData, setNewColorData] = useState(colorData);
-  const [round, setRound] = useState(0);
+  const [round, setRound] = useState(1);
 
-  const handleIncrementRound = () => {
-    return setRound((prevRound) => prevRound + 1);
+  const [colorAmount, setColorAmount] = useState(false);
+
+  const handleIncrementRound = (round) => {
+    return setRound((prevRound) => round + prevRound);
   };
 
   const handleSelectBetAmount = (amount, id) => {
@@ -59,10 +61,11 @@ export const useColorBetInput = () => {
     }
   };
 
-  const handleOpenEnableColorBetAmount = (id) => {
+  const handleOpenEnableColorBetAmount = (id, amount) => {
     if (currentChipsBet === null) {
       setColorBetAmountID(id);
       setIsResetAmountEnable(true);
+      setColorAmount(amount);
     }
   };
 
@@ -94,6 +97,30 @@ export const useColorBetInput = () => {
     setColorResults(results);
   };
 
+  const handleResetDefaultBet = () => {
+    setNewColorData((prevNewColorData) => {
+      return prevNewColorData.map((p) => {
+        return { ...p, colorAmount: 0, colorAmountImg: null };
+      });
+    });
+
+    // setNewColorData((prevNewColorData) => {
+    //   return prevNewColorData.map((p) => {
+    //     // Assuming you want to set all properties of p to null
+    //     return Object.keys(p).reduce((acc, key) => {
+    //       acc[key] = null; // Set each property to null
+    //       return acc;
+    //     }, {});
+    //   });
+    // });
+    setTotalAmount(0);
+    setCurrentChipsBet(null);
+    setChipsCurrentID(null);
+
+    setIsResetAmountEnable(false);
+    setColorBetAmountID(null);
+  };
+
   return {
     handleIncrementBetAmount,
     handleOpenEnableColorBetAmount,
@@ -103,6 +130,8 @@ export const useColorBetInput = () => {
     handleDeleteColor,
     handleIncrementRound,
     setChipsCurrentID,
+    handleResetDefaultBet,
+    colorAmount,
     round,
     colorResults,
     currentChipsBet,

@@ -1,14 +1,13 @@
 import React, { useContext, useState } from "react";
 import { dealerContext } from "../dealerUI/DealerPage";
-import chips from "../../assets/pictures/chips-1000.png";
 
 function ColorInput() {
   const {
-    colorBet,
     newColorData,
     colorBetAmountID,
     handleIncrementBetAmount,
     handleOpenEnableColorBetAmount,
+    colorAmount,
   } = useContext(dealerContext);
 
   return (
@@ -17,29 +16,27 @@ function ColorInput() {
         <div></div>
         <div className="relative grid grid-cols-3 gap-y-14 gap-x-7 mx-10">
           {newColorData.map((c, index) => {
+            console.log(colorBetAmountID === c.colorId);
             return (
               <div key={index}>
                 <ul
                   className={`transition-all duration-75 ${
-                    colorBetAmountID === c.colorId
-                      ? "  scale-95 ring-zinc-800"
-                      : "ring-black"
-                  } ${
-                    colorBet.some((b) => b.colorBetId === c.colorId) &&
-                    "opacity-50"
+                    colorBetAmountID === c.colorId && colorAmount !== 0
+                      ? " scale-95 ring-zinc-800"
+                      : "ring-black active:scale-95"
                   } relative flex justify-center items-center bg-gray-300 shadow-black ring-[4px] shadow-lg h-[140px] w-[140px] rounded-[24px]`}
                   key={c.colorId}
                 >
                   <button
                     onClick={() => {
                       handleIncrementBetAmount(c.colorId);
-                      handleOpenEnableColorBetAmount(c.colorId);
+                      handleOpenEnableColorBetAmount(c.colorId, c.colorAmount);
                     }}
                     className={`${
-                      colorBetAmountID === c.colorId
+                      colorBetAmountID === c.colorId && colorAmount !== 0
                         ? " bg-zinc-400"
                         : c.colorBackground
-                    } h-[135px] w-[135px] text-xl disabled: flex flex-col justify-center items-center font-bold text-white text-drop-shadow rounded-[24px] shadow-black shadow-inner`}
+                    } h-[135px] w-[135px] text-xl flex flex-col justify-center items-center font-bold text-white text-drop-shadow rounded-[24px] shadow-black shadow-inner`}
                   >
                     {c.colorAmountImg === null ? null : (
                       <img

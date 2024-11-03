@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { colorGameContext } from "../App";
 
 function TimerSection() {
-  const { round } = useContext(colorGameContext);
+  const { loading, roundString } = useContext(colorGameContext);
   return (
     <div className="w-[350px] ring-8 ring-black font-rubik flex items-center justify-around mx-2 my-4 from-yellow-300 via-yellow-400 to-orange-400 bg-gradient-to-bl border-[7px] border-yellow-300  shadow-inner shadow-orange-700 rounded-xl py-2">
       <div>
@@ -11,7 +11,7 @@ function TimerSection() {
         </div>
         <div className="text-center">
           <p className=" text-[72px] font-bold  shadow-transparent text-lime-700">
-            {round.toString().padStart(2, "0")}
+            {loading ? "00" : roundString}
           </p>
         </div>
       </div>
