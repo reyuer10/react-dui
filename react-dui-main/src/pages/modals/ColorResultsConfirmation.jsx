@@ -4,7 +4,7 @@ function ColorResultsConfirmation({
   colorBet,
 }) {
   return (
-    <div className="fixed inset-0 flex justify-center items-center ">
+    <div className="fixed inset-0 flex justify-center items-center z-30">
       <div className="flex flex-col bg-zinc-700 text-center p-4 rounded-xl space-y-6 shadow-md shadow-black">
         <div className="flex justify-center border-2 border-black rounded-xl shadow-black shadow-inner p-4">
           {colorBet.map((c, index) => {

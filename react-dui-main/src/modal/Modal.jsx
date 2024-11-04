@@ -5,7 +5,7 @@ function Modal({ children, isModalOpen }) {
     return false;
   }
   return (
-    <div className="inset-0 fixed w-full flex justify-center items-center flex-col">
+    <div className="z-20 inset-0 fixed w-full flex justify-center items-center flex-col">
       <div>{children}</div>
     </div>
   );

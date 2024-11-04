@@ -12,7 +12,7 @@ function BetConfirmation() {
   };
 
   return (
-    <div className="fixed font-rubik inset-0 flex justify-center items-center flex-col">
+    <div className="fixed font-rubik inset-0 z-30 flex justify-center items-center flex-col">
       <div className="bg-zinc-700 text-white space-y-8 p-4 rounded-2xl shadow-inner shadow-black border-[5px] border-zinc-700 ring-4 ring-black">
         <div className="text-center font-black chips-drop-shadow space-y-6">
           <p className="text-2xl">Bet amount:</p>

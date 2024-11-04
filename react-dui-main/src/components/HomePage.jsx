@@ -1,25 +1,47 @@
-import React from "react";
-import SideContent from "./SideContent";
+import React, { useEffect, useState } from "react";
 import MiddleContent from "./MiddleContent";
 import EndContent from "./EndContent";
 import Header from "./Header";
-import ColorPicked from "./ColorPicked";
 import ColorsResults from "./ColorsResults";
+import StartContent from "./StartContent";
+import { io } from "socket.io-client";
+
 function HomePage() {
+  const socket = io("http://localhost:3000");
+  const [inputValue, setInputValue] = useState("");
+
+  function sendMessage(text) {
+    socket.emit("sendMessage", text);
+  }
+
+  useEffect(() => {
+    socket.on("sendMessage", (data) => {
+      console.log("Message for everyone: ", data);
+      setInputValue(data);
+    });
+
+    return () => {
+      socket.off("sendMessage");
+    };
+  }, [socket, inputValue]);
+
   return (
     <div>
-      <div className="min-h-screen bg-gradient-to-t from-red-700 via-orange-500 to-yellow-400">
+      <div className="flex flex-col justify-between min-h-screen bg-gradient-to-t from-red-700 via-orange-500 to-yellow-400">
         <div>
-          <Header />
+          <input
+            type="text"
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+          />
+          <button className="text-xl" onClick={() => sendMessage(inputValue)}>
+            Send Message
+          </button>
+          <Header inputValue={inputValue} />
         </div>
         <div className="flex justify-between ">
           <div className=" flex items-center relative w-[500px]">
-            <div>
-              <SideContent />
-            </div>
-            {/* <div>
-              <ColorPicked />
-            </div> */}
+            <StartContent />
           </div>
           <div className="w-[500px]">
             <MiddleContent />
@@ -29,7 +51,7 @@ function HomePage() {
           </div>
         </div>
         <div>
-          <div className="bg-zinc-700 overflow-hidden p-3 rounded-xl ring-8 ring-black mx-4">
+          <div className="bg-zinc-700 overflow-hidden p-3 rounded-xl ring-8 ring-black m-4">
             <ColorsResults />
           </div>
         </div>

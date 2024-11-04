@@ -3,7 +3,12 @@ const { createServer } = require("http");
 const { Server } = require("socket.io");
 const cors = require("cors");
 const dealerRoutes = require("./routes/dealerRoutes");
-const db = require("./db/db");
+const colorGameRoutes = require("./routes/colorGameRoutes");
+
+const os = require("os")
+console.log("Computer Name:", os.hostname());
+
+// const db = require("./db/db");
 
 const app = express();
 app.use(cors());
@@ -22,9 +27,17 @@ const io = new Server(server, {
 
 io.on("connection", (socket) => {
   console.log("User is connected: ", socket.id);
+
+  socket.on("sendMessage", (data) => {
+    console.log("Message received: ", data);
+
+    io.emit("sendMessage", data);
+  });
 });
 
 app.use("/api", dealerRoutes);
+
+app.use("/api", colorGameRoutes);
 
 const PORT = process.env.PORT || 3000;
 

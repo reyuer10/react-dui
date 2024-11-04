@@ -4,7 +4,7 @@ function ModalConfirmation({ isConfirmationModalOpen, children }) {
   if (!isConfirmationModalOpen) {
     return false;
   }
-  return <div>{children}</div>;
+  return <div className="z-50" >{children}</div>;
 }
 
 export default ModalConfirmation;

@@ -1,8 +1,12 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { colorGameContext } from "../../App";
 
 function TableList() {
+  const { colorGameData } = useContext(colorGameContext);
   const navigate = useNavigate();
+
+  console.log(colorGameData);
 
   const [dataTables, setDataTables] = useState([
     {
@@ -59,7 +63,13 @@ function TableList() {
                 Name
               </th>
               <th className="px-4 bg-zinc-700 border-b border-l border-black text-white">
-                Date Created
+                Date Modified
+              </th>
+              <th className="px-4 bg-zinc-700 border-b border-l border-black text-white">
+                MIN
+              </th>
+              <th className="px-4 bg-zinc-700 border-b border-l border-black text-white">
+                MAX
               </th>
               <th className="px-4 bg-zinc-700 border-b border-l border-black text-white">
                 Status
@@ -70,16 +80,19 @@ function TableList() {
             </tr>
           </thead>
           <tbody className="m-6 ">
-            {dataTables.map((d) => {
+            {colorGameData.map((c) => {
               return (
-                <tr key={d.id} className=" border-t border-black">
+                <tr key={c.table_id} className=" border-t border-black">
                   <td className="text-center py-2 font-black border-r border-black text-white">
-                    {d.name}
+                    {c.table_name}
                   </td>
                   <td className="text-center border-r border-black text-white">
-                    {d.dateCreated}
+                    {new Date(c.table_timestamp).toLocaleString()}
                   </td>
-                  <td className="text-center font-bold border-r border-black text-white">
+                  <td className="text-center font-bold border-r border-black text-white">{c.table_min}</td>
+                  <td className="text-center font-bold border-r border-black text-white">{c.table_max}</td>
+                  <td className="text-center font-bold border-r border-black text-white">Available</td>
+                  {/* <td className="text-center font-bold border-r border-black text-white">
                     <button
                       className={`${
                         d.status === "Available" ? "bg-green-500" : "bg-red-500"
@@ -87,14 +100,15 @@ function TableList() {
                     >
                       {d.status}
                     </button>
-                  </td>
+                  </td> */}
                   <td className="text-center">
                     <button
                       onClick={handleSelectTable}
-                      disabled={d.status === "Playing"}
-                      className={`${
-                        d.status === "Available" ? "" : " opacity-50"
-                      } font-bold bg-black text-slate-200 px-4 rounded`}
+                      // disabled={d.status === "Playing"}
+                      // ${
+                      //   d.status === "Available" ? "" : " opacity-50"
+                      // } 
+                      className={`font-bold bg-black text-slate-200 px-4 rounded`}
                     >
                       Open
                     </button>
