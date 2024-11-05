@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import SettingsSections from "../../components/SettingsSections";
 import { useNavigate } from "react-router-dom";
 import { useModal } from "../../hooks/useModal";
@@ -18,6 +18,8 @@ import { colorGameContext } from "../../App";
 export const dealerContext = createContext();
 
 function DealerPage() {
+  const storedTable = localStorage.getItem("table");
+
   const {
     OpenModalTo,
     closeModal,
@@ -33,7 +35,7 @@ function DealerPage() {
   const [amount, setAmount] = useState(0);
   const [isColorBetEmpty, setIsColorBetEmpty] = useState(false);
   const [isBetAmountEmpty, setIsBetAmountEmpty] = useState(false);
-  const { handleIncrementRound } = useContext(colorGameContext);
+  const { handleIncrementRound, socket } = useContext(colorGameContext);
 
   const {
     colorBet,
@@ -41,6 +43,8 @@ function DealerPage() {
     handleDeleteColorBet,
     handleResetDefaultColorBet,
   } = useColorInput();
+
+  console.log();
 
   const {
     totalAmount,
@@ -62,10 +66,25 @@ function DealerPage() {
   const handleOpenRound = () => {
     OpenModalTo(<BetAmount />);
     handleIncrementRound();
+    if (storedTable) {
+      socket.emit("open_results", {
+        table: storedTable,
+        isModalResultsOpen: true,
+      });
+    }
   };
 
   const handleRouteSelectView = () => {
     navigate("/color-game/select-view");
+  };
+
+  const handleNotify = () => {
+    if (storedTable) {
+      socket.emit("send_message", {
+        table: storedTable,
+        message: "This should only send to other user.",
+      });
+    }
   };
 
   return (
@@ -106,6 +125,7 @@ function DealerPage() {
       <div className="min-h-screen font-rubik bg-gradient-to-t from-gray-700 via-amber-600 to-amber-400">
         <div className="flex font-black  text-orange-700 justify-between border-b border-orange-700 shadow shadow-orange-700">
           <button onClick={handleRouteSelectView}>BACK</button>
+          <button onClick={handleNotify}>notify</button>
           <SettingsSections />
         </div>
         <div className="flex justify-between h-[calc(99vh-20px)] ">

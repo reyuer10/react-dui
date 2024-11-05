@@ -5,7 +5,7 @@ function TableInfo() {
     <div>
       <div>
         <label
-          className="text-2xl font-black text-white text-drop-shadow"
+          className="text-xl font-black text-white text-drop-shadow"
           htmlFor=""
         >
           Table Name:
@@ -13,7 +13,7 @@ function TableInfo() {
       </div>
       <div>
         <label
-          className="text-2xl font-black text-white text-drop-shadow"
+          className="text-xl font-black text-white text-drop-shadow"
           htmlFor=""
         >
           Serial No:

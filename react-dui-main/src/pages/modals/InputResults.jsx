@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { colorData } from "../../data/colorData";
 import ColorResultsConfirmation from "./ColorResultsConfirmation";
 import { dealerContext } from "../dealerUI/DealerPage";
@@ -7,6 +7,8 @@ import { postResults } from "../../api/dealerApi";
 
 function InputResults() {
   const [resultsError, setResultsError] = useState(null);
+  const { round, socket } = useContext(colorGameContext);
+  const storedTable = localStorage.getItem("table");
 
   const {
     closeModal,
@@ -20,8 +22,6 @@ function InputResults() {
     handleResetDefaultBet,
     handleResetDefaultColorBet,
   } = useContext(dealerContext);
-
-  const { round } = useContext(colorGameContext);
 
   let amount = newColorData.map((d) => d.colorAmount);
   let colorName = colorBet.map((d) => d.colorBetName);
@@ -48,16 +48,6 @@ function InputResults() {
   const handleCancelSubmitColorResults = () => {
     closeModalConfirmaton();
   };
-
-  // useEffect(() => {
-  //   const storedColors = localStorage.getItem("color");
-  //   console.log(JSON.parse(storedColors))
-  //   // if (storedColors) {
-  //   //   setSavedColors(JSON.parse(storedColors));
-  //   // }
-  // }, []);
-
-  console.log();
 
   const handleSubmitColorResults = async () => {
     const dateNow = new Date()
@@ -92,6 +82,24 @@ function InputResults() {
         current_grand: 1000000,
       });
 
+      // dealer.emit("newResults", {
+      //   serial_num: `CG-${dateNow}${timeNow}`,
+      //   round_num: data.round,
+      //   result_firstColor: colorName[0],
+      //   result_secondColor: colorName[1],
+      //   result_thirdColor: colorName[2],
+      //   betAmount_yellow: parseInt(data.colorAmount.yellow),
+      //   betAmount_white: parseInt(data.colorAmount.white),
+      //   betAmount_pink: parseInt(data.colorAmount.pink),
+      //   betAmount_blue: parseInt(data.colorAmount.blue),
+      //   betAmount_red: parseInt(data.colorAmount.red),
+      //   betAmount_green: parseInt(data.colorAmount.green),
+      //   amount_totalBet: data.totalAmount,
+      //   current_minor: 20000,
+      //   current_major: 500000,
+      //   current_grand: 1000000,
+      // });
+
       closeModalConfirmaton();
       closeModal();
       handleResetDefaultBet();
@@ -119,23 +127,30 @@ function InputResults() {
     );
   };
 
+  useEffect(() => {
+    socket.emit("add_results", {
+      table: storedTable,
+      result: colorBet,
+    });
+  }, [colorBet]);
+
   return (
     <div className="font-rubik bg-zinc-700 p-6 rounded-2xl relative">
       <div>
         <div
           className={` ${
             resultsError ? "ring-red-500" : " ring-black"
-          } transition-all flex space-x-3 items-center justify-center text-2xl bg-zinc-700 w-full h-[130px] rounded-xl shadow-inner shadow-black border-[5px] border-zinc-600 ring-4 ring-black `}
+          } transition-all flex space-x-3 items-center justify-center text-2xl bg-zinc-700 w-full h-[160px] rounded-xl shadow-inner shadow-black border-[5px] border-zinc-600 ring-4 ring-black `}
         >
           {colorBet.map((c, index) => {
             return (
               <ul
-                className="flex justify-center items-center bg-gray-300 shadow-black ring-[3px] ring-black shadow-lg h-[80px] w-[80px] rounded-[24px]"
+                className="flex justify-center items-center bg-gray-300 shadow-black ring-[3px] ring-black shadow-lg h-[125px] w-[125px] rounded-[24px]"
                 key={index}
               >
                 <button
                   onClick={() => handleDeleteColorBet(index)}
-                  className={`h-[75px] w-[75px] rounded-full shadow-black shadow-inner ${c.colorBetBackground}`}
+                  className={`h-[120px] w-[120px] rounded-full shadow-black shadow-inner ${c.colorBetBackground}`}
                 ></button>
               </ul>
             );
@@ -147,7 +162,7 @@ function InputResults() {
               <ul
                 className={`${
                   colorBet.length === 3 ? "" : "active:scale-95"
-                }  transition-all duration-75 flex justify-center items-center bg-gray-300 shadow-black ring-[3px] ring-black shadow-lg h-[80px] w-[80px] rounded-[24px]`}
+                }  transition-all duration-75 flex justify-center items-center bg-gray-300 shadow-black ring-[3px] ring-black shadow-lg h-[125px] w-[125px] rounded-[24px]`}
                 key={c.colorId}
               >
                 <button
@@ -155,7 +170,7 @@ function InputResults() {
                     handleGetColorBet(c.colorId, c.colorName, c.colorBackground)
                   }
                   disabled={colorBet.length === 3}
-                  className={` h-[75px] w-[75px] rounded-full shadow-black shadow-inner ${c.colorBackground}`}
+                  className={` h-[120px] w-[120px] rounded-full shadow-black shadow-inner ${c.colorBackground}`}
                 ></button>
               </ul>
             );

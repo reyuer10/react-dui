@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { colorGameContext } from "../../App";
 
 function TableList() {
-  const { colorGameData } = useContext(colorGameContext);
+  const { colorGameData, handleJoinTable } = useContext(colorGameContext);
   const navigate = useNavigate();
 
   console.log(colorGameData);
@@ -37,10 +37,6 @@ function TableList() {
 
   const handleLogout = () => {
     navigate("/");
-  };
-
-  const handleSelectTable = () => {
-    navigate("/color-game/select-view");
   };
 
   return (
@@ -89,9 +85,15 @@ function TableList() {
                   <td className="text-center border-r border-black text-white">
                     {new Date(c.table_timestamp).toLocaleString()}
                   </td>
-                  <td className="text-center font-bold border-r border-black text-white">{c.table_min}</td>
-                  <td className="text-center font-bold border-r border-black text-white">{c.table_max}</td>
-                  <td className="text-center font-bold border-r border-black text-white">Available</td>
+                  <td className="text-center font-bold border-r border-black text-white">
+                    {c.table_min}
+                  </td>
+                  <td className="text-center font-bold border-r border-black text-white">
+                    {c.table_max}
+                  </td>
+                  <td className="text-center font-bold border-r border-black text-white">
+                    Available
+                  </td>
                   {/* <td className="text-center font-bold border-r border-black text-white">
                     <button
                       className={`${
@@ -103,11 +105,11 @@ function TableList() {
                   </td> */}
                   <td className="text-center">
                     <button
-                      onClick={handleSelectTable}
+                      onClick={() => handleJoinTable(c.table_name)}
                       // disabled={d.status === "Playing"}
                       // ${
                       //   d.status === "Available" ? "" : " opacity-50"
-                      // } 
+                      // }
                       className={`font-bold bg-black text-slate-200 px-4 rounded`}
                     >
                       Open

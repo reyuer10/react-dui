@@ -3,8 +3,8 @@ const databaseQuery = require("../db/databaseQuery");
 exports.getResults = async (req, res) => {
   try {
     const queryRounds = `SELECT round_num FROM cg_db.tb_results`;
-    const queryResultColors = `SELECT result_firstColor, result_secondColor, result_thirdColor from cg_db.tb_results order by result_ID desc`;
-    const querySortResultColors = `SELECT result_firstColor, result_secondColor, result_thirdColor from cg_db.tb_results`;
+    const queryResultColors = `SELECT result_firstColor, result_secondColor, result_thirdColor from cg_db.tb_results order by result_ID desc `;
+    const querySortResultColors = `SELECT result_ID,  result_firstColor, result_secondColor, result_thirdColor from cg_db.tb_results result_ID order by result_ID desc LIMIT 18`;
 
     const roundResults = await databaseQuery(queryRounds);
     const colorResults = await databaseQuery(queryResultColors);

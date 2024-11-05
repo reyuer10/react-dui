@@ -1,24 +1,53 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import colorGameLogo from "../../assets/pictures/color-game-logo.png";
 import { useNavigate } from "react-router-dom";
+import { colorGameContext } from "../../App";
 
 function SelectView() {
+  const { tableName, setTableName, socket } = useContext(colorGameContext);
+  const storedTable = localStorage.getItem("table");
+
   const navigate = useNavigate();
   const handleChangeTable = () => {
     navigate("/color-game/select-table");
+    const removedTable = localStorage.removeItem("table");
+
+    if (removedTable) {
+      setTableName(removedTable);
+    }
+
+    console.log(tableName);
   };
 
   const handleRouteTrendDisplay = () => {
     navigate("/color-game/mode/trend-display");
+    socket.emit("join_table", storedTable);
+
+    socket.emit("notify-joinTable", {
+      table: storedTable,
+      message: "programming",
+    });
   };
 
   const handleRouteDealerPage = () => {
     navigate("/color-game/mode/dealer-side");
+    socket.emit("join_table", storedTable);
+
+    socket.emit("notify-joinTable", {
+      table: storedTable,
+      message: "programming",
+    });
   };
 
   const handleLogout = () => {
-    navigate("/")
-  }
+    navigate("/");
+  };
+
+  useEffect(() => {
+    if (storedTable) {
+      setTableName(storedTable);
+    }
+  }, [storedTable]);
 
   return (
     <div className="min-h-screen box-border flex flex-col font-rubik items-center justify-center bg-gradient-to-t from-gray-700 via-amber-600 to-amber-400">
@@ -30,7 +59,9 @@ function SelectView() {
           QUIT TABLE
         </button>
 
-        <button onClick={handleLogout} className="font-bold text-orange-700">LOGOUT</button>
+        <button onClick={handleLogout} className="font-bold text-orange-700">
+          LOGOUT
+        </button>
       </div>
       <div className="p-4 space-y-14 w-[500px]">
         <div className="flex justify-center">
@@ -38,7 +69,9 @@ function SelectView() {
         </div>
         <div className="text-center flex items-center p-2 justify-evenly text-3xl font-black text-black  border-2 border-yellow-300  ring-4 ring-black shadow-inner shadow-orange-300 rounded-full">
           <p className="text-white primary-drop-shadow">Table Name:</p>
-          <p className="bg-black rounded-full px-5 py-1 text-white">CJ01</p>
+          <p className="bg-black rounded-full px-5 py-1 text-white">
+            {tableName}
+          </p>
         </div>
         <div className="space-y-6 bg-zinc-700 border-[6px] border-black p-6 rounded-3xl">
           <div className="flex flex-col space-y-4 text-center text-black font-bold text-xl">
