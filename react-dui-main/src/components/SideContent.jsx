@@ -13,7 +13,7 @@ function SideContent() {
           RESULTS
         </p>
       </div>
-      <div className="h-[calc(85vh-50px)] py-5 overflow-y-clip bg-zinc-700 rounded-2xl border-[5px] border-zinc-700 shadow-inner shadow-black ring-[5px] ring-black">
+      <div className="h-[calc(85vh-50px)] w-[400px] py-5 overflow-y-clip bg-zinc-700 rounded-2xl border-[5px] border-zinc-700 shadow-inner shadow-black ring-[5px] ring-black">
         {colorResults.map((c, index) => {
           return (
             <ul className="flex w-[400px]  my-6 space-x-5 relative" key={index}>

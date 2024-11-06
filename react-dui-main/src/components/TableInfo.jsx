@@ -1,24 +1,20 @@
-import React from "react";
+import { useContext } from "react";
+import { colorGameContext } from "../App";
 
 function TableInfo() {
+  const storedTable = localStorage.getItem("table");
+  const { serialNum } = useContext(colorGameContext);
+
   return (
-    <div>
-      <div>
-        <label
-          className="text-xl font-black text-white text-drop-shadow"
-          htmlFor=""
-        >
-          Table Name:
-        </label>{" "}
-      </div>
-      <div>
-        <label
-          className="text-xl font-black text-white text-drop-shadow"
-          htmlFor=""
-        >
-          Serial No:
-        </label>{" "}
-      </div>
+    <div className="font-rubik flex flex-col">
+      <label className="text-xl font-black text-orange-800 flex justify-between">
+        <p>Table Name:</p>
+        <p>{storedTable}</p>
+      </label>
+      <label className="text-xl font-black text-orange-800 flex justify-between">
+        <p>Serial No:</p>
+        <p>{serialNum}</p>
+      </label>
     </div>
   );
 }

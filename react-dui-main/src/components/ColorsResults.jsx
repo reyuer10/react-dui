@@ -3,7 +3,7 @@ import { colorGameContext } from "../App";
 import { useColor } from "../custom/useColor";
 
 function ColorsResults() {
-  const { sortColorResults } = useContext(colorGameContext);
+  const { sortColorResults, round } = useContext(colorGameContext);
   const { handleGetColor } = useColor();
 
   const sortedColorResults = sortColorResults.sort(
@@ -11,12 +11,12 @@ function ColorsResults() {
   );
 
   return (
-    <div className="relative flex p-4">
+    <div className="relative flex p-6 mt-4">
       <div className={`grid grid-cols-custom-101 gap-x-4`}>
         {sortedColorResults.map((c, index) => {
           return (
             <ul
-              className=" shadow-black shadow-inner bg-zinc-900 p-3 rounded-xl space-y-4 "
+              className=" shadow-black shadow-inner bg-zinc-800 p-3 rounded-xl space-y-4"
               key={index}
             >
               <li
@@ -38,7 +38,7 @@ function ColorsResults() {
                 ></div>
               </li>
               <li
-                className={`flex justify-center items-center bg-white rounded-2xl ring-[2px] p-[3px] ring-black `}
+                className={`flex  justify-center items-center bg-white rounded-2xl ring-[2px] p-[3px] ring-black `}
               >
                 <div
                   className={`${handleGetColor(
@@ -46,6 +46,14 @@ function ColorsResults() {
                   )} h-[55px] w-[55px] shadow-inner shadow-black rounded-full`}
                 ></div>
               </li>
+              <div className="font-rubik flex flex-col items-center -mx-2 text-white absolute -top-6 z-10 font-black leading-4">
+                <p className="bg-zinc-800 shadow-inner shadow-black px-3 p-1 rounded-lg">
+                  Round
+                </p>
+                <p className="bg-zinc-800 shadow-inner shadow-black px-1 rounded-b-4">
+                  {round}
+                </p>
+              </div>
             </ul>
           );
         })}

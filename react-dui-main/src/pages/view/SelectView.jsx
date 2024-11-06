@@ -21,7 +21,9 @@ function SelectView() {
 
   const handleRouteTrendDisplay = () => {
     navigate("/color-game/mode/trend-display");
-    socket.emit("join_table", storedTable);
+    if (storedTable) {
+      socket.emit("join_table", storedTable);
+    }
 
     socket.emit("notify-joinTable", {
       table: storedTable,
@@ -31,7 +33,9 @@ function SelectView() {
 
   const handleRouteDealerPage = () => {
     navigate("/color-game/mode/dealer-side");
-    socket.emit("join_table", storedTable);
+    if (storedTable) {
+      socket.emit("join_table", storedTable);
+    }
 
     socket.emit("notify-joinTable", {
       table: storedTable,

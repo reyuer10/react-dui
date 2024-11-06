@@ -3,7 +3,7 @@ import { colorData } from "../../data/colorData";
 import ColorResultsConfirmation from "./ColorResultsConfirmation";
 import { dealerContext } from "../dealerUI/DealerPage";
 import { colorGameContext } from "../../App";
-import { postResults } from "../../api/dealerApi";
+import { getResults, postResults } from "../../api/dealerApi";
 
 function InputResults() {
   const [resultsError, setResultsError] = useState(null);
@@ -82,28 +82,26 @@ function InputResults() {
         current_grand: 1000000,
       });
 
-      // dealer.emit("newResults", {
-      //   serial_num: `CG-${dateNow}${timeNow}`,
-      //   round_num: data.round,
-      //   result_firstColor: colorName[0],
-      //   result_secondColor: colorName[1],
-      //   result_thirdColor: colorName[2],
-      //   betAmount_yellow: parseInt(data.colorAmount.yellow),
-      //   betAmount_white: parseInt(data.colorAmount.white),
-      //   betAmount_pink: parseInt(data.colorAmount.pink),
-      //   betAmount_blue: parseInt(data.colorAmount.blue),
-      //   betAmount_red: parseInt(data.colorAmount.red),
-      //   betAmount_green: parseInt(data.colorAmount.green),
-      //   amount_totalBet: data.totalAmount,
-      //   current_minor: 20000,
-      //   current_major: 500000,
-      //   current_grand: 1000000,
-      // });
+      const updateResults = await getResults();
+
+      socket.emit("reset_results", {
+        table: storedTable,
+        resetResults: [],
+      });
+
+      socket.emit("new_results", {
+        table: storedTable,
+        results: updateResults,
+      });
 
       closeModalConfirmaton();
       closeModal();
       handleResetDefaultBet();
       handleResetDefaultColorBet();
+      socket.emit("close_results", {
+        table: storedTable,
+        isModalResultsOpen: false,
+      });
 
       return response;
     } catch (error) {

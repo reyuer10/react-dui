@@ -16,9 +16,8 @@ function App() {
   const socket = io("http://localhost:3000/dealer");
   const [isConnected, setIsConnected] = useState(socket.connected);
 
-  const storedRound = localStorage.getItem("round");
+
   const storedTable = localStorage.getItem("table");
-  const [storedData, setStoredData] = useState(null);
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -27,20 +26,15 @@ function App() {
   const [colorResults, setColorResults] = useState([]);
   const [sortColorResults, setSortColorResults] = useState([]);
   const [colorPercentage, setColorPercentage] = useState([]);
-
+  const [serialNum, setSerialNum] = useState("");
   const [openModalResults, setOpenModalResults] = useState(false);
-
   const [colorGameData, setColorGameData] = useState([]);
-
   const [tableName, setTableName] = useState("");
-
-  let roundString = round?.toString().padStart(2, "0");
+  const [jackpotPrizes, setJackpotPrizes] = useState([]);
 
   const handleIncrementRound = () => {
     setRound((prevRound) => {
       const newRound = prevRound + 1;
-      localStorage.setItem("round", newRound);
-
       socket.emit("increment_round", {
         table: storedTable,
         round: newRound,
@@ -48,8 +42,6 @@ function App() {
 
       return newRound;
     });
-
-    console.log(`Table: ${storedTable}, Round: ${round}`);
   };
 
   const handleJoinTable = (table) => {
@@ -70,15 +62,15 @@ function App() {
 
     console.log("is connected", isConnected);
 
-    socket.on("received-notify", (data) => {
-      console.log(data);
-    });
-
     // Update real time round
     socket.on("updated_round", (round) => {
-      console.log("current round: ", round);
-      const storedRound = localStorage.getItem("round");
-      setRound(storedRound);
+      setRound(round);
+    });
+
+    socket.on("update_newResults", (response) => {
+      setColorPercentage(response.colorPercentage);
+      setSortColorResults(response.sortColorResults);
+      setSerialNum(response?.latestSerialNum[0]?.serial_num);
     });
 
     if (storedTable) {
@@ -94,8 +86,6 @@ function App() {
     };
   }, []);
 
-  // console.log(storedRound);
-
   useEffect(() => {
     async function fetchResults() {
       try {
@@ -105,15 +95,15 @@ function App() {
         setResults(response);
 
         setColorResults(response.color_results);
+        console.log(colorResults)
         setSortColorResults(response.sortColorResults);
         setColorPercentage(response.colorPercentage);
         setColorGameData(colorGameResponse.data);
+        setSerialNum(response?.latestSerialNum[0]?.serial_num);
+        setRound(response.currentRound);
+        setJackpotPrizes(response.prizes_amount);
 
-        if (storedRound) {
-          setRound(parseInt(storedRound));
-        } else {
-          setRound(response?.currentRound?.round_num);
-        }
+        console.log(response);
 
         return response;
       } catch (error) {
@@ -136,7 +126,6 @@ function App() {
         socket,
         tableName,
         round,
-        roundString,
         results,
         error,
         loading,
@@ -146,6 +135,9 @@ function App() {
         colorGameData,
         openModalResults,
         setOpenModalResults,
+        storedTable,
+        serialNum,
+        jackpotPrizes,
       }}
     >
       <Routes>

@@ -4,8 +4,10 @@ function TrendResultColor({ trendColorBet }) {
   console.log(trendColorBet);
   return (
     <div className="relative font-rubik">
-      <div>
-        <p className="text-[42px] font-black text-white text-drop-shadow text-center bg-yellow-400">RESULT COLOR</p>
+      <div className=" mx-auto rounded-2xl w-[370px] bg-black ">
+        <p className="text-[42px] font-black  text-orange-400 text-drop-shadow text-center ">
+          RESULT COLOR
+        </p>
       </div>
       <div className="flex space-x-6 h-[200px] w-[500px] bg-zinc-700 p-7 shadow-inner shadow-black rounded-2xl border-[10px] border-zinc-700 ring-[10px] ring-black">
         {trendColorBet.map((t, index) => {

@@ -12,33 +12,26 @@ import TrendResultColor from "../modal/TrendResultColor";
 function HomePage() {
   const { socket, openModalResults, setOpenModalResults } =
     useContext(colorGameContext);
-  const [inputValue, setInputValue] = useState("");
   const [trendColorBet, setTrendColorBet] = useState([]);
 
+  const handleOpenModalResults = (openModal) => setOpenModalResults(openModal);
+  const handleCloseModalResults = (closeModal) =>
+    setOpenModalResults(closeModal);
+  const handleUpdateResults = (results) => setTrendColorBet(results);
+  const handleResetColorResults = (reset) => setTrendColorBet(reset);
+
   useEffect(() => {
-    socket.on("sendMessage", (data) => {
-      console.log("Message for everyone: ", data);
-      setInputValue(data);
-    });
-
-    socket.on("received_message", (message) => {
-      console.log(message);
-    });
-
-    socket.on("received_open", (isModalResultsOpen) => {
-      console.log(isModalResultsOpen);
-      setOpenModalResults(isModalResultsOpen);
-    });
-
-    socket.on("update_results", (data) => {
-      setTrendColorBet(data);
-    });
+    socket.on("received_open", handleOpenModalResults);
+    socket.on("received_close", handleCloseModalResults);
+    socket.on("update_results", handleUpdateResults);
+    socket.on("update_resetResults", handleResetColorResults);
 
     return () => {
       socket.off("sendMessage");
       socket.off("received_message");
       socket.off("received_open");
       socket.off("update_results");
+      socket.off("close_results");
     };
   }, []);
 
@@ -46,15 +39,7 @@ function HomePage() {
     <div>
       <div className="flex flex-col justify-between min-h-screen bg-gradient-to-t from-red-700 via-orange-500 to-yellow-400">
         <div>
-          {/* <input
-            type="text"
-            value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
-          />
-          <button className="text-xl" onClick={() => sendMessage(inputValue)}>
-            Send Message
-          </button> */}
-          <Header inputValue={inputValue} />
+          <Header />
         </div>
         <div className="flex justify-between">
           <div className=" flex items-center relative w-[500px]">
@@ -68,7 +53,7 @@ function HomePage() {
           </div>
         </div>
         <div>
-          <div className="bg-zinc-700 overflow-hidden rounded-xl ring-8 ring-black m-4">
+          <div className="bg-zinc-700 h-[310px] flex justify-start items-center rounded-xl ring-8 ring-black m-4 overflow-x-hidden">
             <ColorsResults />
           </div>
         </div>

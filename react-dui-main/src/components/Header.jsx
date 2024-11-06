@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-function Header({ inputValue }) {
+function Header() {
   const navigate = useNavigate();
 
   const handleRouteSelectView = () => {
@@ -14,7 +14,6 @@ function Header({ inputValue }) {
         onClick={handleRouteSelectView}
         className="flex items-center space-x-2"
       >
-        <p className=" text-lime-700 font-rubik font-bold">{inputValue}</p>
         {/* <p>BACK</p> */}
       </button>
     </div>
