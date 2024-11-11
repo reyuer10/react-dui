@@ -21,14 +21,14 @@ function SelectView() {
 
   const handleRouteTrendDisplay = () => {
     navigate("/color-game/mode/trend-display");
-    if (storedTable) {
-      socket.emit("join_table", storedTable);
-    }
+    // if (storedTable) {
+    //   socket.emit("join_table", storedTable);
+    // }
 
-    socket.emit("notify-joinTable", {
-      table: storedTable,
-      message: "programming",
-    });
+    // socket.emit("notify-joinTable", {
+    //   table: storedTable,
+    //   message: "programming",
+    // });
   };
 
   const handleRouteDealerPage = () => {
@@ -37,10 +37,10 @@ function SelectView() {
       socket.emit("join_table", storedTable);
     }
 
-    socket.emit("notify-joinTable", {
-      table: storedTable,
-      message: "programming",
-    });
+    // socket.emit("notify-joinTable", {
+    //   table: storedTable,
+    //   message: "programming",
+    // });
   };
 
   const handleLogout = () => {

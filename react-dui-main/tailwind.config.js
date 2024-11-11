@@ -17,6 +17,18 @@ export default {
         "custom-101": "repeat(1000, minmax(auto, 1fr))",
         "custom-6": "repeat(6, minmax(0, 1fr))",
       },
+      animation: {
+        "pulse-alternate-1.5sec": "pulseAlternate 1.5s infinite",
+        "pulse-alternate-2sec": "pulseAlternate 2s infinite",
+        "pulse-alternate-1sec": "pulseAlternate 1s infinite",
+      },
+      keyframes: {
+        pulseAlternate: {
+          "0%": { opacity: "1" },
+          "50%": { opacity: "0.5" },
+          "100%": { opacity: "1" },
+        },
+      },
     },
   },
   plugins: [],

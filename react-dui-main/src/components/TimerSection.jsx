@@ -3,7 +3,6 @@ import { colorGameContext } from "../App";
 
 function TimerSection() {
   const { loading, roundString, round } = useContext(colorGameContext);
-  console.log("round from useState: ", typeof round);
 
   return (
     <div className="w-[350px] ring-8 ring-black font-rubik flex items-center justify-around mx-2 my-4 from-yellow-300 via-yellow-400 to-orange-400 bg-gradient-to-bl border-[7px] border-yellow-300  shadow-inner shadow-orange-700 rounded-xl py-2">
@@ -13,7 +12,7 @@ function TimerSection() {
         </div>
         <div className="text-center">
           <p className=" text-[72px] font-bold  shadow-transparent text-lime-700">
-          {!round ? "0" : round}
+            {!round ? "0" : round}
           </p>
         </div>
       </div>

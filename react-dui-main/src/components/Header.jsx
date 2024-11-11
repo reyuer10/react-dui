@@ -9,12 +9,12 @@ function Header() {
   };
 
   return (
-    <div className="flex shadow-orange-400 shadow-md  font-noto-sans bg-yellow-400">
+    <div className="flex shadow-orange-400 shadow-md  bg-yellow-400 font-rubik">
       <button
         onClick={handleRouteSelectView}
         className="flex items-center space-x-2"
       >
-        {/* <p>BACK</p> */}
+        <p className="font-black text-orange-700">BACK</p>
       </button>
     </div>
   );

@@ -32,9 +32,6 @@ const postResults = async ({
   betAmount_red,
   betAmount_green,
   amount_totalBet,
-  current_minor,
-  current_major,
-  current_grand,
 }) => {
   try {
     const response = await axios.post(
@@ -52,9 +49,6 @@ const postResults = async ({
         betAmount_red: betAmount_red,
         betAmount_green: betAmount_green,
         amount_totalBet: amount_totalBet,
-        current_minor: current_minor,
-        current_major: current_major,
-        current_grand: current_grand,
       }
     );
 

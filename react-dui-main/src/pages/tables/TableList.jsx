@@ -6,37 +6,10 @@ function TableList() {
   const { colorGameData, handleJoinTable } = useContext(colorGameContext);
   const navigate = useNavigate();
 
-  console.log(colorGameData);
-
-  const [dataTables, setDataTables] = useState([
-    {
-      id: 1,
-      name: "CJ01",
-      dateCreated: new Date().toLocaleString(),
-      status: "Available",
-    },
-    {
-      id: 2,
-      name: "CJ02",
-      dateCreated: new Date().toLocaleString(),
-      status: "Available",
-    },
-    {
-      id: 3,
-      name: "CJ03",
-      dateCreated: new Date().toLocaleString(),
-      status: "Playing",
-    },
-    {
-      id: 4,
-      name: "CJ04",
-      dateCreated: new Date().toLocaleString(),
-      status: "Playing",
-    },
-  ]);
 
   const handleLogout = () => {
     navigate("/");
+    localStorage.removeItem("itadmin")
   };
 
   return (

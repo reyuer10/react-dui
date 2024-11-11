@@ -57,7 +57,7 @@ function BetAmount() {
               chipsCurrentID === null
                 ? "border-zinc-400 bg-zinc-400"
                 : " border-orange-400 bg-orange-400"
-            } active:scale-95 transition-all font-black text-xl px-2 shadow-inner shadow-black border-[5px] ring-4 ring-zinc-700  rounded-xl text-white text-drop-shadow`}
+            } active:scale-95 transition-all font-black text-xl px-2 shadow-inner shadow-black border-[5px] ring-4 ring-zinc-700  rounded-xl text-white primary-drop-shadow`}
           >
             REMOVE
           </button>

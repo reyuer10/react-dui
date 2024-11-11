@@ -8,16 +8,19 @@ import TableList from "./pages/tables/TableList";
 import { getResults } from "./api/dealerApi";
 import { io } from "socket.io-client";
 import { getColorGameTable } from "./api/colorGameApi";
+import ProtectedRoutes from "./pages/ProtectedRoutes";
+import ProtectedTable from "./pages/ProtectedTable";
 
 export const colorGameContext = createContext();
 
+
+
 function App() {
   const navigate = useNavigate();
-  const socket = io("http://localhost:3000/dealer");
-  const [isConnected, setIsConnected] = useState(socket.connected);
-
 
   const storedTable = localStorage.getItem("table");
+  const [socket, setSocket] = useState(null);
+  const [isConnected, setIsConnected] = useState(false);
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -32,78 +35,118 @@ function App() {
   const [tableName, setTableName] = useState("");
   const [jackpotPrizes, setJackpotPrizes] = useState([]);
 
+  // const [tableData, setTableData] = useState({
+  //   results: [],
+  //   colorResults: [],
+  //   sortColorResults: [],
+  //   colorPercentage: [],
+  //   colorGameData: [],
+  //   jackpotPrizes: [],
+  // });
+
+
   const handleIncrementRound = () => {
     setRound((prevRound) => {
       const newRound = prevRound + 1;
-      socket.emit("increment_round", {
-        table: storedTable,
-        round: newRound,
-      });
+      // socket.emit("increment_round", {
+      //   table: storedTable,
+      //   round: newRound,
+      // });
 
       return newRound;
     });
   };
 
+
   const handleJoinTable = (table) => {
+    if (socket && socket.readyState === WebSocket.OPEN) {
+      socket.send(JSON.stringify({
+        type: "join-table",
+        room: table
+      }))
+    }
     navigate("/color-game/select-view");
     localStorage.setItem("table", table);
+
+  };
+
+  const handleUpdateNewResults = (response) => {
+    setColorPercentage(response.colorPercentage);
+    setSortColorResults(response.sortColorResults);
+    setSerialNum(response?.latestSerialNum[0]?.serial_num);
+    setColorResults(response.color_results);
+    setJackpotPrizes(response.prizes_amount);
   };
 
   useEffect(() => {
-    // when socket connected
-    function onConnect() {
-      setIsConnected(true);
-    }
+    const ws = new WebSocket("ws://localhost:3000");
+    ws.onopen = () => {
+      setIsConnected(true)
+      setSocket(ws)
+      console.log("WebSocket is connected.");
 
-    // when socket disconnected
-    function onDisconnected() {
-      setIsConnected(false);
-    }
 
-    console.log("is connected", isConnected);
-
-    // Update real time round
-    socket.on("updated_round", (round) => {
-      setRound(round);
-    });
-
-    socket.on("update_newResults", (response) => {
-      setColorPercentage(response.colorPercentage);
-      setSortColorResults(response.sortColorResults);
-      setSerialNum(response?.latestSerialNum[0]?.serial_num);
-    });
-
-    if (storedTable) {
-      socket.emit("join_table", storedTable);
-    }
-
-    socket.on("connect", onConnect);
-    socket.on("disconnect", onDisconnected);
-
-    return () => {
-      socket.off("connect", onConnect);
-      socket.off("disconnect", onDisconnected);
+      if (storedTable) {
+        const joinedTable = {
+          type: "join-table",
+          room: storedTable
+        }
+        ws.send(JSON.stringify(joinedTable))
+      }
     };
+
+
+
+    ws.onmessage = (event) => {
+      const parseData = JSON.parse(event.data);
+      if (parseData.type === "join-table") {
+        console.log(`A new client joined room ${parseData.room}`)
+      }
+      if (parseData.type === "send-to-room") {
+        // let boolTrue = parseData.isModalOpen
+        console.log(parseData)
+        // setOpenModalResults(boolTrue)
+        // console.log(openModalResults)
+      }
+    };
+
+
+    ws.onclose = () => {
+      setIsConnected(false)
+      console.log("WebSocket is not connected.")
+    };
+
+    ws.onerror = () => {
+      console.log("WebSocket is not open.")
+    };
+    return () => {
+      if (!ws) {
+        ws.close()
+      }
+    }
   }, []);
 
   useEffect(() => {
     async function fetchResults() {
       try {
         setLoading(true);
-        const response = await getResults();
-        const colorGameResponse = await getColorGameTable();
-        setResults(response);
 
+        const [response, colorGameResponse] = await Promise.all([
+          getResults(),
+          getColorGameTable(),
+        ]);
+
+        setResults(response);
         setColorResults(response.color_results);
-        console.log(colorResults)
         setSortColorResults(response.sortColorResults);
         setColorPercentage(response.colorPercentage);
         setColorGameData(colorGameResponse.data);
         setSerialNum(response?.latestSerialNum[0]?.serial_num);
-        setRound(response.currentRound);
         setJackpotPrizes(response.prizes_amount);
+        setRound(response.currentRound);
 
-        console.log(response);
+
+
 
         return response;
       } catch (error) {
@@ -117,12 +160,18 @@ function App() {
     fetchResults();
   }, []);
 
+
+
+
+
   return (
+
     <colorGameContext.Provider
       value={{
         handleIncrementRound,
         handleJoinTable,
         setTableName,
+        setOpenModalResults,
         socket,
         tableName,
         round,
@@ -134,19 +183,25 @@ function App() {
         colorPercentage,
         colorGameData,
         openModalResults,
-        setOpenModalResults,
         storedTable,
         serialNum,
         jackpotPrizes,
       }}
     >
+
+
       <Routes>
         <Route path="/" element={<LoginPage />} />
-        <Route path="color-game/select-view" element={<SelectView />} />
-        <Route path="color-game/select-table" element={<TableList />} />
-        <Route path="color-game/mode/trend-display" element={<HomePage />} />
-        <Route path="color-game/mode/dealer-side" element={<DealerPage />} />
+        <Route element={<ProtectedRoutes />}>
+          <Route path="color-game/mode/trend-display" element={<HomePage />} />
+          <Route path="color-game/select-table" element={<TableList />} />
+          <Route element={<ProtectedTable />}>
+            <Route path="color-game/select-view" element={<SelectView />} />
+            <Route path="color-game/mode/dealer-side" element={<DealerPage />} />
+          </Route>
+        </Route>
       </Routes>
+
     </colorGameContext.Provider>
   );
 }

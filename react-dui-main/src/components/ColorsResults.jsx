@@ -3,7 +3,7 @@ import { colorGameContext } from "../App";
 import { useColor } from "../custom/useColor";
 
 function ColorsResults() {
-  const { sortColorResults, round } = useContext(colorGameContext);
+  const { sortColorResults } = useContext(colorGameContext);
   const { handleGetColor } = useColor();
 
   const sortedColorResults = sortColorResults.sort(
@@ -51,7 +51,7 @@ function ColorsResults() {
                   Round
                 </p>
                 <p className="bg-zinc-800 shadow-inner shadow-black px-1 rounded-b-4">
-                  {round}
+                  {c.round_num}
                 </p>
               </div>
             </ul>

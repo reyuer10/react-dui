@@ -16,7 +16,6 @@ function ColorInput() {
         <div></div>
         <div className="relative grid grid-cols-3 gap-y-14 gap-x-7 mx-10">
           {newColorData.map((c, index) => {
-            console.log(colorBetAmountID === c.colorId);
             return (
               <div key={index}>
                 <ul

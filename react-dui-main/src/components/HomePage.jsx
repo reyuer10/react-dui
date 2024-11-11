@@ -14,26 +14,34 @@ function HomePage() {
     useContext(colorGameContext);
   const [trendColorBet, setTrendColorBet] = useState([]);
 
-  const handleOpenModalResults = (openModal) => setOpenModalResults(openModal);
+  // const handleOpenModalResults = (openModal) => setOpenModalResults(openModal);
   const handleCloseModalResults = (closeModal) =>
     setOpenModalResults(closeModal);
   const handleUpdateResults = (results) => setTrendColorBet(results);
   const handleResetColorResults = (reset) => setTrendColorBet(reset);
+  // socket.on("received_open", handleOpenModalResults);
 
-  useEffect(() => {
-    socket.on("received_open", handleOpenModalResults);
-    socket.on("received_close", handleCloseModalResults);
-    socket.on("update_results", handleUpdateResults);
-    socket.on("update_resetResults", handleResetColorResults);
+  // useEffect(() => {
 
-    return () => {
-      socket.off("sendMessage");
-      socket.off("received_message");
-      socket.off("received_open");
-      socket.off("update_results");
-      socket.off("close_results");
-    };
-  }, []);
+  //   socket.on("received_close", handleCloseModalResults);
+  //   socket.on("update_results", handleUpdateResults);
+  //   socket.on("update_resetResults", handleResetColorResults);
+
+  //   return () => {
+  //     socket.off("sendMessage");
+  //     socket.off("received_message");
+  //     // socket.off("received_open");
+  //     socket.off("update_results");
+  //     socket.off("close_results");
+  //   };
+  // }, [])
+
+  // useEffect(() => {
+  //   console.log(socket)
+  // }, [socket])
+
+  console.log(openModalResults)
+
 
   return (
     <div>
@@ -42,13 +50,13 @@ function HomePage() {
           <Header />
         </div>
         <div className="flex justify-between">
-          <div className=" flex items-center relative w-[500px]">
+          <div className=" flex items-center relative">
             <StartContent />
           </div>
-          <div className="w-[500px]">
+          <div>
             <MiddleContent />
           </div>
-          <div className="w-[500px]">
+          <div>
             <EndContent />
           </div>
         </div>
@@ -58,7 +66,6 @@ function HomePage() {
           </div>
         </div>
       </div>
-      {/* <ResultsInputModal isModalOpen={isModalOpen} /> */}
       <ModalInputResults openModalResults={openModalResults}>
         <TrendResultColor trendColorBet={trendColorBet} />;
       </ModalInputResults>

@@ -31,9 +31,11 @@ function LoginPage() {
       });
 
       return;
+    } else {
+      localStorage.setItem("itadmin", "access-permission")
+      navigate("/color-game/select-table");
     }
 
-    navigate("/color-game/select-table");
   };
 
   const handleFocusInput = () => {
@@ -74,16 +76,15 @@ function LoginPage() {
               type="password"
               autoComplete="off"
             />
-            
+
             <label
               htmlFor="userPassword"
               onClick={handleFocusInput}
               id="userPassword"
-              className={`${
-                isInputFocus
-                  ? "scale-75 -translate-y-[21px] bg-amber-300 mx-3"
-                  : "opacity-80"
-              } left-0 right-0 transition-transform absolute max-w-[120px] cursor-text mx-3 rounded-md`}
+              className={`${isInputFocus
+                ? "scale-75 -translate-y-[21px] bg-amber-300 mx-3"
+                : "opacity-80"
+                } left-0 right-0 transition-transform absolute max-w-[120px] cursor-text mx-3 rounded-md`}
             >
               Password
             </label>

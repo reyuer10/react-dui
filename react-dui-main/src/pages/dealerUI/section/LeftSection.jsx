@@ -10,7 +10,7 @@ function LeftSection({ handleOpenRound }) {
       <div>
         <button
           onClick={handleOpenRound}
-          className=" py-2 text-[36px] px-12 font-black bg-red-500 border-4 border-red-500 ring-4 ring-black rounded-xl text-white primary-drop-shadow shadow-inner shadow-black"
+          className=" py-2 text-[36px] w-[450px] px-12 font-black bg-red-500 border-4 border-red-500 ring-4 ring-black rounded-xl text-white primary-drop-shadow shadow-inner shadow-black"
         >
           Open Round
         </button>

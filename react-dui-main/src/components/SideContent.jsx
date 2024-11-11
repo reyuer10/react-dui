@@ -13,13 +13,16 @@ function SideContent() {
           RESULTS
         </p>
       </div>
-      <div className="h-[calc(85vh-50px)] w-[400px] py-5 overflow-y-clip bg-zinc-700 rounded-2xl border-[5px] border-zinc-700 shadow-inner shadow-black ring-[5px] ring-black">
+      <div className="h-[calc(85vh-50px)] py-5 w-[440px] overflow-y-clip bg-zinc-700 rounded-2xl border-[5px] border-zinc-700 shadow-inner shadow-black ring-[5px] ring-black">
         {colorResults.map((c, index) => {
           return (
-            <ul className="flex w-[400px]  my-6 space-x-5 relative" key={index}>
-              <span className="absolute z-20 font-bold text-drop-shadow text-white text-[36px] -right-[15px] -top-[30px]">
-                3x
-              </span>
+            <ul
+              className="flex my-6 space-x-5 relative w-[440px] justify-center"
+              key={index}
+            >
+              {/* <span className="absolute z-20 font-bold text-drop-shadow text-white text-[36px] -right-[15px] -top-[30px]">
+              3x
+            </span> */}
               <li
                 className={` flex justify-center items-center rounded-3xl ring-4 bg-white ring-black p-1 `}
               >

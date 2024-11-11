@@ -77,9 +77,12 @@ function InputResults() {
         betAmount_red: parseInt(data.colorAmount.red),
         betAmount_green: parseInt(data.colorAmount.green),
         amount_totalBet: data.totalAmount,
-        current_minor: 20000,
-        current_major: 500000,
-        current_grand: 1000000,
+        minor_increment: 0.5,
+        major_increment: 0.5,
+        grand_increment: 0.5,
+        current_minor: 10000000,
+        current_major: 50000000,
+        current_grand: 100000000,
       });
 
       const updateResults = await getResults();
@@ -105,7 +108,7 @@ function InputResults() {
 
       return response;
     } catch (error) {
-      console.log("error adding data to the server");
+      console.log("error adding data to the server", error);
     }
   };
 

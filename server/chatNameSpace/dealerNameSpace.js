@@ -16,6 +16,10 @@ const dealerNameSpace = (io) => {
       dealer.in(table).emit("updated_round", round);
     });
 
+    socket.on("new_result:dealer", ({ table, results }) => {
+      dealer.to(table).emit("update_result:dealer", results);
+    });
+
     socket.on("send_message", ({ table, message }) => {
       dealer.to(table).emit("received_message", message);
     });
