@@ -11,15 +11,12 @@ export const useColorInput = () => {
     };
     const getColor = [...colorBet, newColorBet];
 
-    // localStorage.setItem("color", JSON.stringify(getColor));
 
     return setColorBet(getColor);
   };
 
   const handleDeleteColorBet = (id) => {
     const getColorId = colorBet.filter((c, index) => index !== id);
-    // localStorage.removeItem(`${getColorId}`);
-    // localStorage.setItem("color", JSON.stringify(getColorId));
     setColorBet(getColorId);
   };
 

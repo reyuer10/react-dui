@@ -10,38 +10,8 @@ import InputResults from "../pages/modals/InputResults";
 import TrendResultColor from "../modal/TrendResultColor";
 
 function HomePage() {
-  const { socket, openModalResults, setOpenModalResults } =
+  const { socket, openModalResults, trendColorBet } =
     useContext(colorGameContext);
-  const [trendColorBet, setTrendColorBet] = useState([]);
-
-  // const handleOpenModalResults = (openModal) => setOpenModalResults(openModal);
-  const handleCloseModalResults = (closeModal) =>
-    setOpenModalResults(closeModal);
-  const handleUpdateResults = (results) => setTrendColorBet(results);
-  const handleResetColorResults = (reset) => setTrendColorBet(reset);
-  // socket.on("received_open", handleOpenModalResults);
-
-  // useEffect(() => {
-
-  //   socket.on("received_close", handleCloseModalResults);
-  //   socket.on("update_results", handleUpdateResults);
-  //   socket.on("update_resetResults", handleResetColorResults);
-
-  //   return () => {
-  //     socket.off("sendMessage");
-  //     socket.off("received_message");
-  //     // socket.off("received_open");
-  //     socket.off("update_results");
-  //     socket.off("close_results");
-  //   };
-  // }, [])
-
-  // useEffect(() => {
-  //   console.log(socket)
-  // }, [socket])
-
-  console.log(openModalResults)
-
 
   return (
     <div>

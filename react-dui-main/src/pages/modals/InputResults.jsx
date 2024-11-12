@@ -4,8 +4,11 @@ import ColorResultsConfirmation from "./ColorResultsConfirmation";
 import { dealerContext } from "../dealerUI/DealerPage";
 import { colorGameContext } from "../../App";
 import { getResults, postResults } from "../../api/dealerApi";
+import { getColorGameTable } from "../../api/colorGameApi";
 
 function InputResults() {
+
+
   const [resultsError, setResultsError] = useState(null);
   const { round, socket } = useContext(colorGameContext);
   const storedTable = localStorage.getItem("table");
@@ -65,6 +68,7 @@ function InputResults() {
 
     try {
       const response = await postResults({
+        table_name: storedTable,
         serial_num: `CG-${dateNow}${timeNow}`,
         round_num: data.round,
         result_firstColor: colorName[0],
@@ -76,35 +80,42 @@ function InputResults() {
         betAmount_blue: parseInt(data.colorAmount.blue),
         betAmount_red: parseInt(data.colorAmount.red),
         betAmount_green: parseInt(data.colorAmount.green),
-        amount_totalBet: data.totalAmount,
-        minor_increment: 0.5,
-        major_increment: 0.5,
-        grand_increment: 0.5,
-        current_minor: 10000000,
-        current_major: 50000000,
-        current_grand: 100000000,
+        amount_totalBet: data.totalAmount
       });
 
-      const updateResults = await getResults();
 
-      socket.emit("reset_results", {
-        table: storedTable,
-        resetResults: [],
-      });
+      if (storedTable && socket && socket.readyState === WebSocket.OPEN) {
 
-      socket.emit("new_results", {
-        table: storedTable,
-        results: updateResults,
-      });
+        const newResults = await getResults({ table_name: storedTable });
+
+        socket.send(JSON.stringify({
+          type: "new_results",
+          room: storedTable,
+          isOpenModal: false,
+          trendResultColor: [],
+          response: newResults,
+        }))
+        
+        socket.send(JSON.stringify({
+          type: "increment-prizes",
+          data: newResults.prizes_amount[0]
+        }))
+
+        
+        // socket.send(JSON.stringify({
+        //   type: "hit_tripleColor",
+        //   data: true,
+
+        // }))
+      }
 
       closeModalConfirmaton();
       closeModal();
       handleResetDefaultBet();
       handleResetDefaultColorBet();
-      socket.emit("close_results", {
-        table: storedTable,
-        isModalResultsOpen: false,
-      });
+
+
+
 
       return response;
     } catch (error) {
@@ -129,19 +140,21 @@ function InputResults() {
   };
 
   useEffect(() => {
-    socket.emit("add_results", {
-      table: storedTable,
-      result: colorBet,
-    });
+    if (storedTable && socket && socket.readyState === WebSocket.OPEN) {
+      socket.send(JSON.stringify({
+        type: "update_results",
+        room: storedTable,
+        results: colorBet
+      }))
+    }
   }, [colorBet]);
 
   return (
     <div className="font-rubik bg-zinc-700 p-6 rounded-2xl relative">
       <div>
         <div
-          className={` ${
-            resultsError ? "ring-red-500" : " ring-black"
-          } transition-all flex space-x-3 items-center justify-center text-2xl bg-zinc-700 w-full h-[160px] rounded-xl shadow-inner shadow-black border-[5px] border-zinc-600 ring-4 ring-black `}
+          className={` ${resultsError ? "ring-red-500" : " ring-black"
+            } transition-all flex space-x-3 items-center justify-center text-2xl bg-zinc-700 w-full h-[160px] rounded-xl shadow-inner shadow-black border-[5px] border-zinc-600 ring-4 ring-black `}
         >
           {colorBet.map((c, index) => {
             return (
@@ -161,9 +174,8 @@ function InputResults() {
           {colorData.map((c) => {
             return (
               <ul
-                className={`${
-                  colorBet.length === 3 ? "" : "active:scale-95"
-                }  transition-all duration-75 flex justify-center items-center bg-gray-300 shadow-black ring-[3px] ring-black shadow-lg h-[125px] w-[125px] rounded-[24px]`}
+                className={`${colorBet.length === 3 ? "" : "active:scale-95"
+                  }  transition-all duration-75 flex justify-center items-center bg-gray-300 shadow-black ring-[3px] ring-black shadow-lg h-[125px] w-[125px] rounded-[24px]`}
                 key={c.colorId}
               >
                 <button

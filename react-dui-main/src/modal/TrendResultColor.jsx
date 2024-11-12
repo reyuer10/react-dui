@@ -2,6 +2,8 @@ import React from "react";
 
 function TrendResultColor({ trendColorBet }) {
   console.log(trendColorBet);
+
+  
   return (
     <div className="relative font-rubik">
       <div className=" mx-auto rounded-2xl w-[370px] bg-black ">

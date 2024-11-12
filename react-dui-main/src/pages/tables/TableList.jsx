@@ -40,6 +40,7 @@ function TableList() {
               <th className="px-4 bg-zinc-700 border-b border-l border-black text-white">
                 MAX
               </th>
+              <th className="px-4 bg-zinc-700 border-b border-l border-black text-white">Current Round</th>
               <th className="px-4 bg-zinc-700 border-b border-l border-black text-white">
                 Status
               </th>
@@ -61,8 +62,12 @@ function TableList() {
                   <td className="text-center font-bold border-r border-black text-white">
                     {c.table_min}
                   </td>
+                 
                   <td className="text-center font-bold border-r border-black text-white">
                     {c.table_max}
+                  </td>
+                  <td className="text-center font-bold border-r border-black text-white">
+                    {c.current_round}
                   </td>
                   <td className="text-center font-bold border-r border-black text-white">
                     Available

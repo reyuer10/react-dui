@@ -10,6 +10,8 @@ function ColorsResults() {
     (a, b) => a.result_ID - b.result_ID
   );
 
+  console.log(sortedColorResults)
+
   return (
     <div className="relative flex p-6 mt-4">
       <div className={`grid grid-cols-custom-101 gap-x-4`}>

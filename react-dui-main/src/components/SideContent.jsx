@@ -6,6 +6,8 @@ function SideContent() {
   const { colorResults } = useContext(colorGameContext);
   const { handleGetColor } = useColor();
 
+  console.log(colorResults)
+
   return (
     <div className=" relative flex flex-col justify-between items-center">
       <div className="z-20">

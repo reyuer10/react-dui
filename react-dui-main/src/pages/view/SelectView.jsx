@@ -2,6 +2,7 @@ import React, { useContext, useEffect } from "react";
 import colorGameLogo from "../../assets/pictures/color-game-logo.png";
 import { useNavigate } from "react-router-dom";
 import { colorGameContext } from "../../App";
+import { getResults } from "../../api/dealerApi";
 
 function SelectView() {
   const { tableName, setTableName, socket } = useContext(colorGameContext);
@@ -19,33 +20,8 @@ function SelectView() {
     console.log(tableName);
   };
 
-  const handleRouteTrendDisplay = () => {
-    navigate("/color-game/mode/trend-display");
-    // if (storedTable) {
-    //   socket.emit("join_table", storedTable);
-    // }
-
-    // socket.emit("notify-joinTable", {
-    //   table: storedTable,
-    //   message: "programming",
-    // });
-  };
-
-  const handleRouteDealerPage = () => {
-    navigate("/color-game/mode/dealer-side");
-    if (storedTable) {
-      socket.emit("join_table", storedTable);
-    }
-
-    // socket.emit("notify-joinTable", {
-    //   table: storedTable,
-    //   message: "programming",
-    // });
-  };
-
-  const handleLogout = () => {
-    navigate("/");
-  };
+  const handleRouteTrendDisplay = async () => navigate("/color-game/mode/trend-display");
+  const handleRouteDealerPage = () => navigate("/color-game/mode/dealer-side");
 
   useEffect(() => {
     if (storedTable) {
@@ -63,9 +39,6 @@ function SelectView() {
           QUIT TABLE
         </button>
 
-        <button onClick={handleLogout} className="font-bold text-orange-700">
-          LOGOUT
-        </button>
       </div>
       <div className="p-4 space-y-14 w-[500px]">
         <div className="flex justify-center">
@@ -95,15 +68,6 @@ function SelectView() {
               Dealer
             </button>
           </div>
-          {/* <div className="text-center text-xl space-y-4">
-            <p className="font-black text-white">Change Table</p>
-            <button
-              onClick={handleChangeTable}
-              className=" bg-yellow-300 shadow-md shadow-black border-6 w-full rounded-full py-2 font-black text-[18px] text-orange-700 transition-colors hover:bg-yellow-200"
-            >
-              Back
-            </button>
-          </div> */}
         </div>
       </div>
     </div>

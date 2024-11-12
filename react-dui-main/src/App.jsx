@@ -6,10 +6,10 @@ import SelectView from "./pages/view/SelectView";
 import DealerPage from "./pages/dealerUI/DealerPage";
 import TableList from "./pages/tables/TableList";
 import { getResults } from "./api/dealerApi";
-import { io } from "socket.io-client";
 import { getColorGameTable } from "./api/colorGameApi";
 import ProtectedRoutes from "./pages/ProtectedRoutes";
 import ProtectedTable from "./pages/ProtectedTable";
+import { getTableInfo } from "./api/tableApi";
 
 export const colorGameContext = createContext();
 
@@ -34,40 +34,40 @@ function App() {
   const [colorGameData, setColorGameData] = useState([]);
   const [tableName, setTableName] = useState("");
   const [jackpotPrizes, setJackpotPrizes] = useState([]);
-
-  // const [tableData, setTableData] = useState({
-  //   results: [],
-  //   colorResults: [],
-  //   sortColorResults: [],
-  //   colorPercentage: [],
-  //   colorGameData: [],
-  //   jackpotPrizes: [],
-  // });
-
+  const [trendColorBet, setTrendColorBet] = useState([]);
+  const [table, setTable] = useState([])
 
   const handleIncrementRound = () => {
     setRound((prevRound) => {
       const newRound = prevRound + 1;
-      // socket.emit("increment_round", {
-      //   table: storedTable,
-      //   round: newRound,
-      // });
 
+      socket.send(JSON.stringify({
+        type: "increment_round",
+        room: storedTable,
+        round: newRound
+      }))
       return newRound;
     });
   };
 
 
-  const handleJoinTable = (table) => {
-    if (socket && socket.readyState === WebSocket.OPEN) {
-      socket.send(JSON.stringify({
-        type: "join-table",
-        room: table
-      }))
-    }
-    navigate("/color-game/select-view");
-    localStorage.setItem("table", table);
+  const handleJoinTable = async (table) => {
+    try {
+      if (socket && socket.readyState === WebSocket.OPEN) {
+        socket.send(JSON.stringify({
+          type: "join-table",
+          room: table
+        }))
+      }
+      const response = await getResults({ table_name: table });
 
+      navigate("/color-game/select-view");
+      localStorage.setItem("table", table);
+
+      return response
+    } catch (error) {
+      console.log("error joining the table", error)
+    }
   };
 
   const handleUpdateNewResults = (response) => {
@@ -85,7 +85,6 @@ function App() {
       setSocket(ws)
       console.log("WebSocket is connected.");
 
-
       if (storedTable) {
         const joinedTable = {
           type: "join-table",
@@ -99,15 +98,44 @@ function App() {
 
     ws.onmessage = (event) => {
       const parseData = JSON.parse(event.data);
+      console.log(parseData.message?.type === "new_results")
+      // parseData.type === "increment-prizes"
       if (parseData.type === "join-table") {
         console.log(`A new client joined room ${parseData.room}`)
       }
-      if (parseData.type === "send-to-room") {
-        // let boolTrue = parseData.isModalOpen
-        console.log(parseData)
-        // setOpenModalResults(boolTrue)
-        // console.log(openModalResults)
+
+
+      if (parseData?.message?.type === "increment_round") {
+
+        setRound(parseData.message?.round);
+
       }
+      if (parseData && parseData.message?.isModalOpen === true) {
+        setOpenModalResults(parseData.message)
+      }
+
+      if (parseData && parseData.message?.results) {
+        setTrendColorBet(parseData.message?.results)
+      }
+
+      if (parseData.message?.type === "new_results") {
+        // 
+        // setColorGameData(parseData.message?.newColorGameResults?.data);
+        // setSerialNum(parseData.message?.response?.latestSerialNum[0]?.serial_num);
+        setTrendColorBet(parseData.message?.trendResultColor)
+        setOpenModalResults(parseData.message?.isOpenModal)
+        setColorPercentage(parseData.message?.response?.colorPercentage[0]);
+        // console.log(parseData.message?.response?.prizes_amount);
+        setColorResults(parseData.message?.response?.color_results);
+        setSortColorResults(parseData.message?.response?.sortColorResults);
+
+      }
+
+      if (parseData.type === "increment-prizes") {
+        setJackpotPrizes(parseData.data);
+      }
+
+
     };
 
 
@@ -131,24 +159,32 @@ function App() {
       try {
         setLoading(true);
 
-        const [response, colorGameResponse] = await Promise.all([
-          getResults(),
-          getColorGameTable(),
-        ]);
+        if (storedTable) {
+          const res = await getTableInfo({ table_name: storedTable });
+          let data = res.data[0];
+          setTable(data)
+          setRound(data.current_round);
+          setSerialNum(data.current_serialNum);
 
-        setResults(response);
-        setColorResults(response.color_results);
-        setSortColorResults(response.sortColorResults);
-        setColorPercentage(response.colorPercentage);
+
+          const response = await getResults({ table_name: storedTable })
+
+          // console.log(response)
+
+          setResults(response);
+          setColorResults(response.color_results);
+          setSortColorResults(response.sortColorResults);
+          setColorPercentage(response.colorPercentage[0]);
+
+          setJackpotPrizes(response.prizes_amount[0]);
+
+        }
+        const colorGameResponse = await getColorGameTable()
         setColorGameData(colorGameResponse.data);
-        setSerialNum(response?.latestSerialNum[0]?.serial_num);
-        setJackpotPrizes(response.prizes_amount);
-        setRound(response.currentRound);
 
 
 
 
-        return response;
       } catch (error) {
         console.log("Error fetching results.", error);
         return setError(error);
@@ -158,11 +194,10 @@ function App() {
     }
 
     fetchResults();
-  }, []);
+  }, [storedTable]);
 
 
-
-
+  // console.log(results)
 
   return (
 
@@ -172,6 +207,8 @@ function App() {
         handleJoinTable,
         setTableName,
         setOpenModalResults,
+        table,
+        trendColorBet,
         socket,
         tableName,
         round,
@@ -193,10 +230,11 @@ function App() {
       <Routes>
         <Route path="/" element={<LoginPage />} />
         <Route element={<ProtectedRoutes />}>
-          <Route path="color-game/mode/trend-display" element={<HomePage />} />
+
           <Route path="color-game/select-table" element={<TableList />} />
           <Route element={<ProtectedTable />}>
             <Route path="color-game/select-view" element={<SelectView />} />
+            <Route path="color-game/mode/trend-display" element={<HomePage />} />
             <Route path="color-game/mode/dealer-side" element={<DealerPage />} />
           </Route>
         </Route>

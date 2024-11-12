@@ -2,9 +2,11 @@ import axios from "axios";
 
 const MAIN_API = "http://localhost:3000";
 
-const getResults = async () => {
+const getResults = async ({ table_name }) => {
   try {
-    const response = await axios(`${MAIN_API}/api/cg/dealer/get/results`);
+    const response = await axios.post(`${MAIN_API}/api/cg/dealer/get/results`, {
+      table_name: table_name,
+    });
 
     return response.data;
   } catch (error) {
@@ -20,6 +22,7 @@ const getResults = async () => {
 };
 
 const postResults = async ({
+  table_name,
   serial_num,
   round_num,
   result_firstColor,
@@ -37,6 +40,7 @@ const postResults = async ({
     const response = await axios.post(
       `${MAIN_API}/api/cg/dealer/post/results`,
       {
+        table_name: table_name,
         serial_num: serial_num,
         round_num: round_num,
         result_firstColor: result_firstColor,
