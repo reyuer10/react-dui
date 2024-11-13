@@ -10,7 +10,7 @@ function InputResults() {
 
 
   const [resultsError, setResultsError] = useState(null);
-  const { round, socket } = useContext(colorGameContext);
+  const { round, socket, trendColorBet } = useContext(colorGameContext);
   const storedTable = localStorage.getItem("table");
 
   const {
@@ -83,6 +83,15 @@ function InputResults() {
         amount_totalBet: data.totalAmount
       });
 
+      if (colorName[0] === colorName[1] && colorName[1] === colorName[2]) {
+        socket.send(JSON.stringify({
+          type: "hit_tripleColor",
+          room: storedTable,
+          isTripleColorHit: true,
+          result_ID: response.result_ID
+        }))
+      }
+
 
       if (storedTable && socket && socket.readyState === WebSocket.OPEN) {
 
@@ -93,29 +102,21 @@ function InputResults() {
           room: storedTable,
           isOpenModal: false,
           trendResultColor: [],
+          displayTrendResultColor: trendColorBet,
           response: newResults,
         }))
-        
+
         socket.send(JSON.stringify({
           type: "increment-prizes",
           data: newResults.prizes_amount[0]
         }))
 
-        
-        // socket.send(JSON.stringify({
-        //   type: "hit_tripleColor",
-        //   data: true,
-
-        // }))
       }
 
       closeModalConfirmaton();
       closeModal();
       handleResetDefaultBet();
       handleResetDefaultColorBet();
-
-
-
 
       return response;
     } catch (error) {

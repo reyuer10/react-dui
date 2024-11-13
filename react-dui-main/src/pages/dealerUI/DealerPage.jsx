@@ -14,6 +14,8 @@ import { useColorBetInput } from "../../hooks/useColorBetInput";
 import { colorData } from "../../data/colorData";
 import { colorGameContext } from "../../App";
 import EndContent from "../../components/EndContent";
+import ModalHitJackpot from "../../modal/ModalHitJackpot";
+import TripleHitJackpot from "../../modal/TripleHitJackpot";
 
 export const dealerContext = createContext();
 
@@ -35,7 +37,7 @@ function DealerPage() {
   const [amount, setAmount] = useState(0);
   const [isColorBetEmpty, setIsColorBetEmpty] = useState(false);
   const [isBetAmountEmpty, setIsBetAmountEmpty] = useState(false);
-  const { handleIncrementRound, socket, handleIncrement } = useContext(colorGameContext);
+  const { handleIncrementRound, socket, tableObject } = useContext(colorGameContext);
 
   const {
     colorBet,
@@ -73,7 +75,7 @@ function DealerPage() {
           type: "send-to-room",
           room: storedTable,
           isModalOpen: true
-        }));
+        }))
 
 
 
@@ -87,7 +89,7 @@ function DealerPage() {
     navigate("/color-game/select-view");
   };
 
-  
+
 
   return (
     <dealerContext.Provider
@@ -127,19 +129,21 @@ function DealerPage() {
       <div className="min-h-screen font-rubik bg-gradient-to-t from-gray-700 via-amber-600 to-amber-400">
         <div className="flex font-black  text-orange-700 justify-between border-b border-orange-700 shadow shadow-orange-700">
           <button onClick={handleRouteSelectView}>BACK</button>
-          <button onClick={handleIncrement}>Add</button>
           <SettingsSections />
         </div>
         <div className="flex justify-between h-[calc(99vh-20px)] ">
           <LeftSection handleOpenRound={handleOpenRound} />
           <MiddleSection />
-          <EndContent/>
+          <EndContent />
         </div>
       </div>
       <Modal isModalOpen={isModalOpen}>{currentModal}</Modal>
       <ModalConfirmation isConfirmationModalOpen={isConfirmationModalOpen}>
         {confirmationModal}
       </ModalConfirmation>
+      <ModalHitJackpot openModal={tableObject.openModalTripleColor} >
+        <TripleHitJackpot />
+      </ModalHitJackpot>
     </dealerContext.Provider>
   );
 }

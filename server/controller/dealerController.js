@@ -63,12 +63,14 @@ exports.getResults = async (req, res) => {
 
 exports.postResults = async (req, res) => {
   const sql =
-    "INSERT INTO cg_db.tb_results (`table_name`, `serial_num`, `round_num`, `result_firstColor`, `result_secondColor`, `result_thirdColor`, `betAmount_yellow`, `betAmount_white`, `betAmount_pink`, `betAmount_blue`, `betAmount_red`, `betAmount_green`, `amount_totalBet`,`minor_increment`,`major_increment`, `grand_increment`,  `current_minor`, `current_major`, `current_grand`, `start_time`, `end_time`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())";
+    "INSERT INTO cg_db.tb_results (`table_name`, `serial_num`, `round_num`, `result_firstColor`, `result_secondColor`, `result_thirdColor`, `betAmount_yellow`, `betAmount_white`, `betAmount_pink`, `betAmount_blue`, `betAmount_red`, `betAmount_green`, `amount_totalBet`,`minor_increment`,`major_increment`, `grand_increment`,  `current_minor`, `current_major`, `current_grand`, `result_label`, `start_time`, `end_time`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())";
 
   const getJackpotPrizes = `SELECT * FROM cg_db.tb_prizes`;
 
   const queryUpdateJackpotPrizes = `UPDATE cg_db.tb_prizes SET minor_prizes = ?, major_prizes = ?, grand_prizes = ? WHERE prizes_id = 1`;
   const queryUpdateTableInfo = `UPDATE cg_db.tb_colortable SET current_serialNum = ?, current_round = ? WHERE table_name = ? `;
+  const queryIsEqual = `SELECT CASE WHEN result_firstColor = result_secondColor AND result_secondColor = result_thirdColor THEN true ELSE false END AS equal FROM cg_db.tb_results order by result_ID desc LIMIT 1;`;
+  const queryGetLatestID = `SELECT result_ID FROM cg_db.tb_results WHERE table_name = ?  ORDER BY result_ID desc LIMIT 1`;
 
   const {
     body: {
@@ -89,6 +91,21 @@ exports.postResults = async (req, res) => {
   } = req;
 
   try {
+    const tripleColor = await databaseQuery(queryIsEqual);
+    const getResultID = await databaseQuery(queryGetLatestID, [table_name]);
+    const isTripleColorHit = tripleColor[0];
+    console.log(isTripleColorHit);
+
+    const hitJackpotLabel =
+      isTripleColorHit.equal === 0 ? "Triple Color Hit" : "Normal Result";
+
+    const getLatestID = (value) => {
+      let a = value[0];
+      let b = a.result_ID + 1;
+      return b;
+    };
+    const latestID = getLatestID(getResultID);
+
     const currentJackpotPrizes = await databaseQuery(getJackpotPrizes);
 
     let currJP = currentJackpotPrizes[0];
@@ -125,6 +142,7 @@ exports.postResults = async (req, res) => {
       increment_currentMinor,
       increment_currentMajor,
       increment_currentGrand,
+      hitJackpotLabel,
     ]);
 
     const incrementJackpotPrizes = await databaseQuery(
@@ -143,10 +161,37 @@ exports.postResults = async (req, res) => {
       data: results,
       update_data: updateTableInfo,
       update_jackpotPrizes: incrementJackpotPrizes,
+      result_ID: latestID,
     });
   } catch (error) {
     if (error) {
       return res.status(500).send({ message: "Internal server error." });
     }
+  }
+};
+
+exports.updateResults = async (req, res) => {
+  const sqlUpdateResults = `UPDATE cg_db.tb_results SET result_spin = ? WHERE result_ID = ?`;
+  const sqlResetMinorPrizes = `UPDATE cg_db.tb_prizes SET minor_prizes = 10000000 WHERE prizes_id = 1`;
+  const sqlResetMajorPrizes = `UPDATE cg_db.tb_prizes SET major_prizes = 50000000 WHERE prizes_id = 1`;
+  const sqlResetGrandPrizes = `UPDATE cg_db.tb_prizes SET grand_prizes = 100000000 WHERE prizes_id = 1`;
+
+  const {
+    body: { result_spin, result_ID },
+  } = req;
+
+  try {
+    if (result_spin === "Minor Jackpot") {
+      await databaseQuery(sqlResetMinorPrizes);
+    } else if (result_spin === "Major Jackpot") {
+      await databaseQuery(sqlResetMajorPrizes);
+    } else if (result_spin === "Grand Jackpot") {
+      await databaseQuery(sqlResetGrandPrizes);
+    }
+    await databaseQuery(sqlUpdateResults, [result_spin, result_ID]);
+
+    return res.status(200).send({ message: "results successfully updated! " });
+  } catch (error) {
+    return res.status(500).send({ message: "Internal server error." });
   }
 };

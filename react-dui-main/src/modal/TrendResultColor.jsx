@@ -1,13 +1,14 @@
 import React from "react";
 
 function TrendResultColor({ trendColorBet }) {
-  console.log(trendColorBet);
 
-  
   return (
     <div className="relative font-rubik">
-      <div className=" mx-auto rounded-2xl w-[370px] bg-black ">
-        <p className="text-[42px] font-black  text-orange-400 text-drop-shadow text-center ">
+      <div className=" mx-auto rounded-2xl w-[370px] bg-black">
+        {/* <p className="text-[42px] font-black  text-orange-400 text-drop-shadow text-center">
+          RESULT COLOR
+        </p> */}
+        <p className="text-[42px] font-black text-orange-400 text-drop-shadow text-center ">
           RESULT COLOR
         </p>
       </div>

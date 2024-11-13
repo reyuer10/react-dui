@@ -77,7 +77,7 @@ wss.on("connection", (ws) => {
     const parseData = JSON.parse(data);
     clients.add(ws);
 
-    // console.log(parseData);
+    console.log(parseData);
 
     if (parseData.type === "join-table") {
       joinedRoom(parseData.room);
@@ -104,6 +104,20 @@ wss.on("connection", (ws) => {
       clients.forEach((client) => {
         client.send(JSON.stringify(parseData));
       });
+    }
+
+    if (parseData.type === "hit_tripleColor") {
+      ws.send(JSON.stringify(parseData));
+    }
+
+    if (parseData.type === "reset_prizes") {
+      clients.forEach((client) => {
+        client.send(JSON.stringify(parseData));
+      });
+    }
+
+    if (parseData.type === "open_modal_jackpot") {
+      sendToAllRoom(parseData.room, parseData, ws);
     }
 
     ws.on("close", () => {

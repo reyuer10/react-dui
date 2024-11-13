@@ -36,6 +36,22 @@ function App() {
   const [jackpotPrizes, setJackpotPrizes] = useState([]);
   const [trendColorBet, setTrendColorBet] = useState([]);
   const [table, setTable] = useState([])
+  const [tableObject, setTableObject] = useState({
+    result_ID: 0,
+    result_spin: "",
+    displaySpinResults: "",
+    displayColorResults: [],
+    background_color: "",
+    width: "",
+    border_color: "",
+    code: "",
+    openModalTripleColor: false,
+    isEmpty: false,
+    isCodeEmpty: false,
+    isOpenModalJackpotHit: true,
+  })
+
+  console.log(tableObject.displayColorResults)
 
   const handleIncrementRound = () => {
     setRound((prevRound) => {
@@ -49,6 +65,8 @@ function App() {
       return newRound;
     });
   };
+
+  // console.log(tableObject.isOpenModalJackpotHit)
 
 
   const handleJoinTable = async (table) => {
@@ -98,12 +116,12 @@ function App() {
 
     ws.onmessage = (event) => {
       const parseData = JSON.parse(event.data);
-      console.log(parseData.message?.type === "new_results")
-      // parseData.type === "increment-prizes"
+      console.log(parseData)
+
+
       if (parseData.type === "join-table") {
         console.log(`A new client joined room ${parseData.room}`)
       }
-
 
       if (parseData?.message?.type === "increment_round") {
 
@@ -119,24 +137,45 @@ function App() {
       }
 
       if (parseData.message?.type === "new_results") {
-        // 
-        // setColorGameData(parseData.message?.newColorGameResults?.data);
-        // setSerialNum(parseData.message?.response?.latestSerialNum[0]?.serial_num);
         setTrendColorBet(parseData.message?.trendResultColor)
         setOpenModalResults(parseData.message?.isOpenModal)
         setColorPercentage(parseData.message?.response?.colorPercentage[0]);
-        // console.log(parseData.message?.response?.prizes_amount);
         setColorResults(parseData.message?.response?.color_results);
         setSortColorResults(parseData.message?.response?.sortColorResults);
-
+        setTableObject(prevValue => ({
+          ...prevValue, displayColorResults: parseData.message?.displayTrendResultColor
+        }))
       }
 
       if (parseData.type === "increment-prizes") {
         setJackpotPrizes(parseData.data);
       }
 
+      if (parseData.type === "hit_tripleColor") {
+        setTableObject(prevObjet => (
+          {
+            ...prevObjet,
+            result_ID: parseData.result_ID,
+            openModalTripleColor: parseData?.isTripleColorHit,
+            result_spin: parseData?.result_spin,
+          }
+        ))
+      }
 
+      if (parseData.type === "reset_prizes") {
+        setJackpotPrizes(parseData.response[0]);
+      }
+
+
+      if (parseData.message?.type === "open_modal_jackpot") {
+        setTableObject(prevValue => ({
+          ...prevValue,
+          isOpenModalJackpotHit: parseData.message?.isOpenModal,
+          displaySpinResults: parseData.message?.result_spin
+        }))
+      }
     };
+
 
 
     ws.onclose = () => {
@@ -169,8 +208,6 @@ function App() {
 
           const response = await getResults({ table_name: storedTable })
 
-          // console.log(response)
-
           setResults(response);
           setColorResults(response.color_results);
           setSortColorResults(response.sortColorResults);
@@ -197,8 +234,6 @@ function App() {
   }, [storedTable]);
 
 
-  // console.log(results)
-
   return (
 
     <colorGameContext.Provider
@@ -207,6 +242,8 @@ function App() {
         handleJoinTable,
         setTableName,
         setOpenModalResults,
+        setTableObject,
+        tableObject,
         table,
         trendColorBet,
         socket,
@@ -222,7 +259,7 @@ function App() {
         openModalResults,
         storedTable,
         serialNum,
-        jackpotPrizes,
+        jackpotPrizes
       }}
     >
 

@@ -66,4 +66,24 @@ const postResults = async ({
   }
 };
 
-export { postResults, getResults };
+const updateResults = async ({ result_spin, result_ID }) => {
+  try {
+    const response = await axios.put(
+      `${MAIN_API}/api/cg/dealer/update/results`,
+      {
+        result_spin: result_spin,
+        result_ID: result_ID,
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    if (error.response?.message?.data) {
+      console.log("Error updating the data.");
+    }
+
+    throw error;
+  }
+};
+
+export { postResults, getResults, updateResults };
