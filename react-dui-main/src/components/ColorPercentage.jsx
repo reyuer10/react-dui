@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import { colorGameContext } from "../App";
 
+
 function ColorPercentage() {
   const { colorPercentage } = useContext(colorGameContext);
 

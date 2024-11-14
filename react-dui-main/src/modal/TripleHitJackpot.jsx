@@ -23,7 +23,7 @@ function TripleHitJackpot() {
 
             const response = await updateResults({ result_ID: tableObject.result_ID, result_spin: tableObject.result_spin });
             const newResults = await getResults({ table_name: storedTable });
-            console.log(newResults)
+            // console.log(newResults)
 
 
             if (storedTable && socket && socket.readyState === WebSocket.OPEN) {
@@ -37,6 +37,13 @@ function TripleHitJackpot() {
                     room: storedTable,
                     isOpenModal: true,
                     result_spin: tableObject.displaySpinResults
+                }))
+
+
+                socket.send(JSON.stringify({
+                    type: "update_resultSpin",
+                    room: storedTable,
+                    response: newResults?.sortColorResults
                 }))
             }
 
@@ -81,7 +88,7 @@ function TripleHitJackpot() {
     return (
         <div className='font-rubik'>
             <div className='text-center '>
-                <p className='triplejp-title text-[#FFF9C7] font-black text-[72px]'>TRIPLE COLOR HIT!</p>
+                <p className='triplejp-title  text-[#FFF9C7] font-black text-[72px]'>TRIPLE COLOR HIT!</p>
             </div>
             <div className='w-[1200px] border-[15px] border-[#0A1A10] ring-amber-300 ring-[4px] flex flex-col bg-gradient-to-r from-[#0A1A10] via-[#2C553A] to-[#0A1A10] p-8 rounded-2xl space-y-8 shadow-inner shadow-black '>
                 <div>

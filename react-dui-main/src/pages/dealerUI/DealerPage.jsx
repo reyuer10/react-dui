@@ -90,6 +90,11 @@ function DealerPage() {
   };
 
 
+  const handleResetGame = () => {
+    
+  }
+
+
 
   return (
     <dealerContext.Provider
@@ -126,12 +131,13 @@ function DealerPage() {
         handleResetDefaultColorBet,
       }}
     >
-      <div className="min-h-screen font-rubik bg-gradient-to-t from-gray-700 via-amber-600 to-amber-400">
-        <div className="flex font-black  text-orange-700 justify-between border-b border-orange-700 shadow shadow-orange-700">
+      <div className="min-h-screen font-rubik bg-[url(assets/pictures/casino-bg.jpg)]">
+        <div className="flex font-black  text-amber-400 justify-between">
           <button onClick={handleRouteSelectView}>BACK</button>
+          <button >NEW GAME</button>
           <SettingsSections />
         </div>
-        <div className="flex justify-between h-[calc(99vh-20px)] ">
+        <div className="flex justify-between h-[calc(99vh-20px)]">
           <LeftSection handleOpenRound={handleOpenRound} />
           <MiddleSection />
           <EndContent />

@@ -48,6 +48,35 @@ input::-webkit-inner-spin-button {
   z-index: 1;
 }
 
+.major-drop-shadow {
+  box-shadow: 0 0 15px 5px #6645fa;
+  z-index: 1;
+}
+
+.minor-default-drop-shadow {
+  box-shadow: 0 0 15px 2px #62b346;
+  z-index: 1;
+}
+
+.major-default-drop-shadow {
+  box-shadow: 0 0 15px 2px #6645fa;
+  z-index: 1;
+}
+
+.grand-drop-shadow {
+  box-shadow: 0 0 15px 5px #ffd700;
+  z-index: 1;
+}
+
+.grand-default-drop-shadow {
+  box-shadow: 0 0 15px 2px #ffd700;
+  z-index: 1;
+}
+
+.minor-drop-shadow {
+  box-shadow: 0 0 15px 5px #62b346;
+}
+
 .default-drop-shadow {
   box-shadow: 0 0 11px 1px #474943;
   z-index: 1;
@@ -243,5 +272,5 @@ input::-webkit-inner-spin-button {
   );
   transform: translate(calc((1 - cos(45deg)) * 100%), -100%) rotate(45deg);
   transform-origin: 0% 100%;
-  background-color: 	#FFD700; /* the main color  */
+  background-color: #ffd700; /* the main color  */
 }

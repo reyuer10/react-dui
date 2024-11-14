@@ -2,16 +2,16 @@ import React, { useContext, useEffect } from "react";
 import colorGameLogo from "../../assets/pictures/color-game-logo.png";
 import { useNavigate } from "react-router-dom";
 import { colorGameContext } from "../../App";
-import { getResults } from "../../api/dealerApi";
 
 function SelectView() {
-  const { tableName, setTableName, socket } = useContext(colorGameContext);
+  const { tableName, setTableName } = useContext(colorGameContext);
   const storedTable = localStorage.getItem("table");
 
   const navigate = useNavigate();
   const handleChangeTable = () => {
     navigate("/color-game/select-table");
     const removedTable = localStorage.removeItem("table");
+    localStorage.removeItem("game-no");
 
     if (removedTable) {
       setTableName(removedTable);
@@ -30,11 +30,11 @@ function SelectView() {
   }, [storedTable]);
 
   return (
-    <div className="min-h-screen box-border flex flex-col font-rubik items-center justify-center bg-gradient-to-t from-gray-700 via-amber-600 to-amber-400">
+    <div className="min-h-screen box-border flex flex-col font-rubik items-center justify-center bg-[url(assets/pictures/casino-bg.jpg)]">
       <div className="absolute left-0 top-0 p-5 flex flex-col items-start space-y-4">
         <button
           onClick={handleChangeTable}
-          className="font-bold text-orange-700"
+          className="font-bold text-amber-400"
         >
           QUIT TABLE
         </button>
@@ -44,7 +44,7 @@ function SelectView() {
         <div className="flex justify-center">
           <img src={colorGameLogo} alt="casino-logo" className="w-[80%]" />
         </div>
-        <div className="text-center flex items-center p-2 justify-evenly text-3xl font-black text-black  border-2 border-yellow-300  ring-4 ring-black shadow-inner shadow-orange-300 rounded-full">
+        <div className="text-center flex items-center p-2 justify-evenly text-3xl font-black text-black  border-2 border-yellow-300  ring-4 ring-black rounded-full">
           <p className="text-white primary-drop-shadow">Table Name:</p>
           <p className="bg-black rounded-full px-5 py-1 text-white">
             {tableName}

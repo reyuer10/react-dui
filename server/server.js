@@ -116,6 +116,10 @@ wss.on("connection", (ws) => {
       });
     }
 
+    if (parseData.type === "update_resultSpin") {
+      sendToAllRoom(parseData.room, parseData);
+    }
+
     if (parseData.type === "open_modal_jackpot") {
       sendToAllRoom(parseData.room, parseData, ws);
     }

@@ -12,6 +12,8 @@ function InputResults() {
   const [resultsError, setResultsError] = useState(null);
   const { round, socket, trendColorBet } = useContext(colorGameContext);
   const storedTable = localStorage.getItem("table");
+  const storedGameNo = localStorage.getItem("game-no");
+
 
   const {
     closeModal,
@@ -71,6 +73,7 @@ function InputResults() {
         table_name: storedTable,
         serial_num: `CG-${dateNow}${timeNow}`,
         round_num: data.round,
+        game_num: storedGameNo,
         result_firstColor: colorName[0],
         result_secondColor: colorName[1],
         result_thirdColor: colorName[2],
@@ -93,9 +96,9 @@ function InputResults() {
       }
 
 
-      if (storedTable && socket && socket.readyState === WebSocket.OPEN) {
+      if (storedTable && storedGameNo && socket && socket.readyState === WebSocket.OPEN) {
 
-        const newResults = await getResults({ table_name: storedTable });
+        const newResults = await getResults({ table_name: storedTable, game_num: storedGameNo });
 
         socket.send(JSON.stringify({
           type: "new_results",

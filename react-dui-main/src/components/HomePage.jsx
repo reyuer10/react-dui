@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect } from "react";
 import MiddleContent from "./MiddleContent";
 import EndContent from "./EndContent";
 import Header from "./Header";
@@ -12,33 +12,30 @@ import ModalSpinResults from "../modal/ModalSpinResults";
 function HomePage() {
   const { openModalResults, trendColorBet, setTableObject, tableObject } = useContext(colorGameContext);
 
-  console.log(tableObject.isOpenModalJackpotHit);
+  useEffect(() => {
+    if (tableObject?.isOpenModalJackpotHit) {
+      const modalTimeout = setTimeout(() => {
+        setTableObject(prevValue => ({
+          ...prevValue,
+          isOpenModalJackpotHit: false,
+          displaySpinResults: "",
+          displayColorResults: [],
+        }))
+      }, 3000);
 
-  // useEffect(() => {
+      return () => {
+        clearTimeout(modalTimeout)
+      }
+    }
 
-
-  //   if (tableObject?.isOpenModalJackpotHit) {
-  //     const modalTimeout = setTimeout(() => {
-  //       setTableObject(prevValue => ({
-  //         ...prevValue,
-  //         isOpenModalJackpotHit: false,
-  //         displaySpinResults: "",
-  //       }))
-  //     }, 3000);
-
-  //     return () => {
-  //       clearTimeout(modalTimeout)
-  //     }
-  //   }
-
-  // }, [tableObject])
+  }, [tableObject])
 
   console.log(tableObject.displaySpinResults)
 
 
   return (
     <div>
-      <div className="flex flex-col justify-between min-h-screen bg-gradient-to-t from-red-700 via-orange-500 to-yellow-400">
+      <div className="flex flex-col justify-between min-h-screen bg-[url(assets/pictures/casino-bg.jpg)]">
         <div>
           <Header />
         </div>
@@ -54,13 +51,14 @@ function HomePage() {
           </div>
         </div>
         <div>
-          <div className="bg-zinc-700 h-[310px] flex justify-start items-center rounded-xl ring-8 ring-black m-4 overflow-x-hidden">
+          {/* h-[310px] */}
+          <div className="bg-zinc-700 pb-12  flex justify-start items-center rounded-xl ring-8 ring-black m-4 overflow-x-hidden">
             <ColorsResults />
           </div>
         </div>
       </div>
       <ModalSpinResults isOpenModal={tableObject.isOpenModalJackpotHit}>
-        <div className="relative h-[400px] w-[600px] bg-gradient-to-t from-golden-yellow via-transparent to-golden-yellow rounded-3xl flex justify-center items-center">
+        <div className="relative h-[400px] w-[600px] bg-gradient-to-l from-transparent via-amber-400 to-transparent border-none flex justify-center items-center">
           <div className="ribbon">
             {tableObject.displaySpinResults}
           </div>

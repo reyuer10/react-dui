@@ -2,10 +2,11 @@ import axios from "axios";
 
 const MAIN_API = "http://localhost:3000";
 
-const getResults = async ({ table_name }) => {
+const getResults = async ({ table_name, game_num }) => {
   try {
     const response = await axios.post(`${MAIN_API}/api/cg/dealer/get/results`, {
       table_name: table_name,
+      game_num: game_num,
     });
 
     return response.data;
@@ -25,6 +26,7 @@ const postResults = async ({
   table_name,
   serial_num,
   round_num,
+  game_num,
   result_firstColor,
   result_secondColor,
   result_thirdColor,
@@ -43,6 +45,7 @@ const postResults = async ({
         table_name: table_name,
         serial_num: serial_num,
         round_num: round_num,
+        game_num: game_num,
         result_firstColor: result_firstColor,
         result_secondColor: result_secondColor,
         result_thirdColor: result_thirdColor,

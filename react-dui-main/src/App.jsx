@@ -19,6 +19,7 @@ function App() {
   const navigate = useNavigate();
 
   const storedTable = localStorage.getItem("table");
+  const storedGameNo = localStorage.getItem("game-no")
   const [socket, setSocket] = useState(null);
   const [isConnected, setIsConnected] = useState(false);
 
@@ -48,10 +49,10 @@ function App() {
     openModalTripleColor: false,
     isEmpty: false,
     isCodeEmpty: false,
-    isOpenModalJackpotHit: true,
+    isOpenModalJackpotHit: false,
   })
 
-  console.log(tableObject.displayColorResults)
+  // console.log(tableObject.displayColorResults)
 
   const handleIncrementRound = () => {
     setRound((prevRound) => {
@@ -69,7 +70,7 @@ function App() {
   // console.log(tableObject.isOpenModalJackpotHit)
 
 
-  const handleJoinTable = async (table) => {
+  const handleJoinTable = async (table, gameNo) => {
     try {
       if (socket && socket.readyState === WebSocket.OPEN) {
         socket.send(JSON.stringify({
@@ -77,23 +78,18 @@ function App() {
           room: table
         }))
       }
-      const response = await getResults({ table_name: table });
+      const response = await getResults({ table_name: table, game_num: gameNo });
 
       navigate("/color-game/select-view");
       localStorage.setItem("table", table);
+      localStorage.setItem("game-no", gameNo);
 
+
+      console.log(response)
       return response
     } catch (error) {
       console.log("error joining the table", error)
     }
-  };
-
-  const handleUpdateNewResults = (response) => {
-    setColorPercentage(response.colorPercentage);
-    setSortColorResults(response.sortColorResults);
-    setSerialNum(response?.latestSerialNum[0]?.serial_num);
-    setColorResults(response.color_results);
-    setJackpotPrizes(response.prizes_amount);
   };
 
   useEffect(() => {
@@ -174,6 +170,11 @@ function App() {
           displaySpinResults: parseData.message?.result_spin
         }))
       }
+
+      if (parseData.message?.type === "update_resultSpin") {
+        setSortColorResults(parseData.message?.response)
+        console.log(parseData.message?.response)
+      }
     };
 
 
@@ -198,7 +199,7 @@ function App() {
       try {
         setLoading(true);
 
-        if (storedTable) {
+        if (storedTable && storedGameNo) {
           const res = await getTableInfo({ table_name: storedTable });
           let data = res.data[0];
           setTable(data)
@@ -206,7 +207,7 @@ function App() {
           setSerialNum(data.current_serialNum);
 
 
-          const response = await getResults({ table_name: storedTable })
+          const response = await getResults({ table_name: storedTable, game_num: storedGameNo })
 
           setResults(response);
           setColorResults(response.color_results);
@@ -231,7 +232,9 @@ function App() {
     }
 
     fetchResults();
-  }, [storedTable]);
+  }, [storedTable, storedGameNo]);
+
+  console.log(results)
 
 
   return (

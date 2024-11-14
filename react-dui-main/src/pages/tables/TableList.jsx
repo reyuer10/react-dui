@@ -9,13 +9,13 @@ function TableList() {
 
   const handleLogout = () => {
     navigate("/");
-    localStorage.removeItem("itadmin")
+    localStorage.removeItem("itadmin");
   };
 
   return (
-    <div className="min-h-screen font-rubik flex flex-col items-center justify-center bg-gradient-to-t from-gray-700 via-amber-600 to-amber-400">
+    <div className="min-h-screen font-rubik flex flex-col items-center justify-center bg-[url(assets/pictures/casino-bg.jpg)]">
       <div className="absolute left-0 top-0 p-5">
-        <button onClick={handleLogout} className="font-bold text-orange-700">
+        <button onClick={handleLogout} className="font-bold text-amber-400">
           LOGOUT
         </button>
       </div>
@@ -62,7 +62,7 @@ function TableList() {
                   <td className="text-center font-bold border-r border-black text-white">
                     {c.table_min}
                   </td>
-                 
+
                   <td className="text-center font-bold border-r border-black text-white">
                     {c.table_max}
                   </td>
@@ -83,7 +83,7 @@ function TableList() {
                   </td> */}
                   <td className="text-center">
                     <button
-                      onClick={() => handleJoinTable(c.table_name)}
+                      onClick={() => handleJoinTable(c.table_name, c.game_count)}
                       // disabled={d.status === "Playing"}
                       // ${
                       //   d.status === "Available" ? "" : " opacity-50"

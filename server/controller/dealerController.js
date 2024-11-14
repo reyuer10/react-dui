@@ -1,18 +1,12 @@
 const databaseQuery = require("../db/databaseQuery");
-// const {
-//   color,
-//   arrColor,
-//   arrColorLength,
-//   getColorLength,
-// } = require("../custom/color");
-
+// ;
 exports.getResults = async (req, res) => {
-  const querySortResultColors = `SELECT result_ID, round_num,  result_firstColor, result_secondColor, result_thirdColor from cg_db.tb_results result_ID order by result_ID desc LIMIT 18`;
+  const querySortResultColors = `SELECT r.result_ID, r.table_name, r.game_num, r.result_firstColor, r.result_secondColor, r.result_thirdColor, r.result_spin FROM cg_db.tb_results as r INNER JOIN cg_db.tb_colortable as c on r.table_name = c.table_name WHERE r.table_name = ? AND r.game_num = ? ORDER BY result_ID desc LIMIT 15`;
   const queryFindingLatestSerialNumber = `SELECT result_ID, serial_num FROM cg_db.tb_results order by result_ID desc limit 1`;
   const queryCheckCurrentRound = `SELECT result_ID FROM cg_db.tb_results order by result_ID desc LIMIT 1`;
   const queryCurrentRound = `SELECT round_num FROM cg_db.tb_results order by round_num desc LIMIT 1;`;
   const queryGetAmountPrizes = `SELECT * FROM cg_db.tb_prizes`;
-  const queryGetColorResults = `SELECT result_firstColor, result_secondColor, result_thirdColor from cg_db.tb_results WHERE table_name = ? order by result_ID desc`;
+  const queryGetColorResults = `SELECT result_firstColor, result_secondColor, result_thirdColor from cg_db.tb_results WHERE table_name = ? AND game_num = ? order by result_ID desc`;
   const queryResultColors = `SELECT 
     ROUND((SUM((result_firstcolor = 'Red') + (result_secondcolor = 'Red') + (result_thirdcolor = 'Red')) / (COUNT(*) * 3)) * 100 ,1) AS red_percentage,
     ROUND((SUM((result_firstcolor = 'Blue') + (result_secondcolor = 'Blue') + (result_thirdcolor = 'Blue')) / (COUNT(*) * 3)) * 100,1) AS blue_percentage,
@@ -28,11 +22,15 @@ exports.getResults = async (req, res) => {
     ) AS latest_results;`;
 
   const {
-    body: { table_name },
+    body: { table_name, game_num },
   } = req;
 
   try {
-    const sortColorResults = await databaseQuery(querySortResultColors);
+    const sortColorResults = await databaseQuery(querySortResultColors, [
+      table_name,
+      game_num,
+    ]);
+
     const latestSerialNumResults = await databaseQuery(
       queryFindingLatestSerialNumber
     );
@@ -41,8 +39,12 @@ exports.getResults = async (req, res) => {
     const checkCurrentRound = await databaseQuery(queryCheckCurrentRound);
     const colorResults = await databaseQuery(queryGetColorResults, [
       table_name,
+      game_num,
     ]);
-    let colorPercentage = await databaseQuery(queryResultColors, [table_name]);
+
+    const colorPercentage = await databaseQuery(queryResultColors, [
+      table_name,
+    ]);
 
     // latest round
     const latestRound = await databaseQuery(queryCurrentRound);
@@ -63,20 +65,20 @@ exports.getResults = async (req, res) => {
 
 exports.postResults = async (req, res) => {
   const sql =
-    "INSERT INTO cg_db.tb_results (`table_name`, `serial_num`, `round_num`, `result_firstColor`, `result_secondColor`, `result_thirdColor`, `betAmount_yellow`, `betAmount_white`, `betAmount_pink`, `betAmount_blue`, `betAmount_red`, `betAmount_green`, `amount_totalBet`,`minor_increment`,`major_increment`, `grand_increment`,  `current_minor`, `current_major`, `current_grand`, `result_label`, `start_time`, `end_time`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())";
+    "INSERT INTO cg_db.tb_results (`table_name`, `serial_num`, `round_num`, `game_num`, `result_firstColor`, `result_secondColor`, `result_thirdColor`, `betAmount_yellow`, `betAmount_white`, `betAmount_pink`, `betAmount_blue`, `betAmount_red`, `betAmount_green`, `amount_totalBet`,`minor_increment`,`major_increment`, `grand_increment`,  `current_minor`, `current_major`, `current_grand`, `result_label`, `start_time`, `end_time`) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())";
 
   const getJackpotPrizes = `SELECT * FROM cg_db.tb_prizes`;
 
   const queryUpdateJackpotPrizes = `UPDATE cg_db.tb_prizes SET minor_prizes = ?, major_prizes = ?, grand_prizes = ? WHERE prizes_id = 1`;
   const queryUpdateTableInfo = `UPDATE cg_db.tb_colortable SET current_serialNum = ?, current_round = ? WHERE table_name = ? `;
-  const queryIsEqual = `SELECT CASE WHEN result_firstColor = result_secondColor AND result_secondColor = result_thirdColor THEN true ELSE false END AS equal FROM cg_db.tb_results order by result_ID desc LIMIT 1;`;
-  const queryGetLatestID = `SELECT result_ID FROM cg_db.tb_results WHERE table_name = ?  ORDER BY result_ID desc LIMIT 1`;
+  const queryGetLatestID = `SELECT result_ID FROM cg_db.tb_results WHERE table_name = ? AND result_ID = ? ORDER BY result_ID desc LIMIT 1`;
 
   const {
     body: {
       serial_num,
       table_name,
       round_num,
+      game_num,
       result_firstColor,
       result_secondColor,
       result_thirdColor,
@@ -91,20 +93,23 @@ exports.postResults = async (req, res) => {
   } = req;
 
   try {
-    const tripleColor = await databaseQuery(queryIsEqual);
-    const getResultID = await databaseQuery(queryGetLatestID, [table_name]);
-    const isTripleColorHit = tripleColor[0];
-    console.log(isTripleColorHit);
+    const getResultID = await databaseQuery(queryGetLatestID, [
+      table_name,
+      round_num,
+    ]);
 
+    console.log("result_ID: ", getResultID);
     const hitJackpotLabel =
-      isTripleColorHit.equal === 0 ? "Triple Color Hit" : "Normal Result";
-
-    const getLatestID = (value) => {
-      let a = value[0];
-      let b = a.result_ID + 1;
-      return b;
-    };
-    const latestID = getLatestID(getResultID);
+      result_firstColor === result_secondColor &&
+      result_secondColor === result_thirdColor
+        ? "Triple Color Hit"
+        : "Normal Result";
+    // const getLatestID = (value) => {
+    //   let a = value[0];
+    //   let b = a.result_ID + 1;
+    //   return b;
+    // };
+    // const latestID = getLatestID(getResultID);
 
     const currentJackpotPrizes = await databaseQuery(getJackpotPrizes);
 
@@ -126,6 +131,7 @@ exports.postResults = async (req, res) => {
       table_name,
       serial_num,
       round_num,
+      game_num,
       result_firstColor,
       result_secondColor,
       result_thirdColor,
@@ -145,23 +151,27 @@ exports.postResults = async (req, res) => {
       hitJackpotLabel,
     ]);
 
-    const incrementJackpotPrizes = await databaseQuery(
-      queryUpdateJackpotPrizes,
-      [increment_currentMinor, increment_currentMajor, increment_currentGrand]
-    );
+    if (results) {
+      await databaseQuery(queryUpdateJackpotPrizes, [
+        increment_currentMinor,
+        increment_currentMajor,
+        increment_currentGrand,
+      ]);
 
-    const updateTableInfo = await databaseQuery(queryUpdateTableInfo, [
-      serial_num,
-      round_num,
-      table_name,
-    ]);
+      await databaseQuery(queryUpdateTableInfo, [
+        serial_num,
+        round_num,
+        table_name,
+      ]);
+    }
 
     return res.status(200).send({
       message: "Successfully added.",
       data: results,
-      update_data: updateTableInfo,
-      update_jackpotPrizes: incrementJackpotPrizes,
-      result_ID: latestID,
+      // update_data: updateTableInfo,
+      // update_jackpotPrizes: incrementJackpotPrizes,
+      // result_ID: latestID,
+      // result_ID: 1,
     });
   } catch (error) {
     if (error) {
@@ -191,6 +201,14 @@ exports.updateResults = async (req, res) => {
     await databaseQuery(sqlUpdateResults, [result_spin, result_ID]);
 
     return res.status(200).send({ message: "results successfully updated! " });
+  } catch (error) {
+    return res.status(500).send({ message: "Internal server error." });
+  }
+};
+
+exports.newTableGame = (req, res) => {
+  const queryNewTableGame = `UPDATE`;
+  try {
   } catch (error) {
     return res.status(500).send({ message: "Internal server error." });
   }

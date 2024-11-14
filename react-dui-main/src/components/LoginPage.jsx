@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import colorGameLogo from "../assets/pictures/color-game-logo.png";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import casino_bg from "../assets/pictures/casino-bg.jpg"
 
 function LoginPage() {
   const navigate = useNavigate();
@@ -53,7 +54,7 @@ function LoginPage() {
     <form
       onClick={handleBlur}
       onSubmit={handleSubmit(handleLogin)}
-      className="min-h-screen font-rubik flex flex-col items-center justify-center bg-gradient-to-t from-gray-700 via-amber-600 to-amber-400"
+      className="min-h-screen font-rubik flex flex-col items-center justify-center bg-[url(assets/pictures/casino-bg.jpg)]"
     >
       <div className="p-4 space-y-14 w-[500px]">
         <div className="flex justify-center">
@@ -72,7 +73,7 @@ function LoginPage() {
               ref={inputRef}
               value={userPassword}
               onChange={(e) => setUserPassword(e.target.value)}
-              className={`w-full text-sm bg-transparent border-none outline-none text-center`}
+              className={`w-full text-sm bg-transparent border-none outline-none text-center text-amber-400`}
               type="password"
               autoComplete="off"
             />
@@ -82,9 +83,9 @@ function LoginPage() {
               onClick={handleFocusInput}
               id="userPassword"
               className={`${isInputFocus
-                ? "scale-75 -translate-y-[21px] bg-amber-300 mx-3"
-                : "opacity-80"
-                } left-0 right-0 transition-transform absolute max-w-[120px] cursor-text mx-3 rounded-md`}
+                ? "scale-75 -translate-y-[21px] bg-amber-300 mx-3 text-black"
+                : "opacity-80 text-amber-300"
+                } left-0 right-0 transition-transform absolute max-w-[120px] cursor-text mx-3 rounded-md `}
             >
               Password
             </label>
