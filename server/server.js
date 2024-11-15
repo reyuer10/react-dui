@@ -77,7 +77,7 @@ wss.on("connection", (ws) => {
     const parseData = JSON.parse(data);
     clients.add(ws);
 
-    console.log(parseData);
+    // console.log(parseData);
 
     if (parseData.type === "join-table") {
       joinedRoom(parseData.room);
@@ -121,6 +121,10 @@ wss.on("connection", (ws) => {
     }
 
     if (parseData.type === "open_modal_jackpot") {
+      sendToAllRoom(parseData.room, parseData, ws);
+    }
+
+    if (parseData.type === "fetch_newGame") {
       sendToAllRoom(parseData.room, parseData, ws);
     }
 

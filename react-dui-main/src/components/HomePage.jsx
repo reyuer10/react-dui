@@ -8,6 +8,7 @@ import { colorGameContext } from "../App";
 import ModalInputResults from "../modal/ModalInputResults";
 import TrendResultColor from "../modal/TrendResultColor";
 import ModalSpinResults from "../modal/ModalSpinResults";
+import HomePageEndContent from "./HomePageEndContent";
 
 function HomePage() {
   const { openModalResults, trendColorBet, setTableObject, tableObject } = useContext(colorGameContext);
@@ -47,12 +48,12 @@ function HomePage() {
             <MiddleContent />
           </div>
           <div>
-            <EndContent />
+            <HomePageEndContent />
           </div>
         </div>
         <div>
           {/* h-[310px] */}
-          <div className="bg-zinc-700 pb-12  flex justify-start items-center rounded-xl ring-8 ring-black m-4 overflow-x-hidden">
+          <div className="bg-zinc-700 h-[330px] flex justify-start items-center rounded-xl ring-8 ring-black m-4 overflow-x-hidden overflow-y-hidden">
             <ColorsResults />
           </div>
         </div>

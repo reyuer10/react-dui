@@ -9,22 +9,16 @@ function ColorsResults() {
   const sortedColorResults = sortColorResults.sort(
     (a, b) => a.result_ID - b.result_ID
   );
-  const [jackpotObj, setJackpotObj] = useState({
-    minor: "MINOR JACKPOT",
-    major: "MAJOR JACKPOT",
-    grand: "GRAND JACKPOT"
-  })
-  console.log()
 
 
   return (
-    <div className="relative flex px-6">
+    <div className="relative flex px-6 my-10">
       <div className={`grid grid-cols-custom-101 gap-x-4`}>
         {sortedColorResults.map((c, index) => {
 
           return (
             <ul
-              className={` relative px-1 rounded-xl`}
+              className={` relative px-1  rounded-xl`}
               key={index}
             >
               <div className="font-rubik flex flex-col items-center text-white font-black leading-4 relative top-3">

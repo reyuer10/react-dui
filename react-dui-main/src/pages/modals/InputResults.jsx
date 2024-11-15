@@ -4,7 +4,6 @@ import ColorResultsConfirmation from "./ColorResultsConfirmation";
 import { dealerContext } from "../dealerUI/DealerPage";
 import { colorGameContext } from "../../App";
 import { getResults, postResults } from "../../api/dealerApi";
-import { getColorGameTable } from "../../api/colorGameApi";
 
 function InputResults() {
 
@@ -106,6 +105,7 @@ function InputResults() {
           isOpenModal: false,
           trendResultColor: [],
           displayTrendResultColor: trendColorBet,
+          serial_num: newResults.latestSerialNum,
           response: newResults,
         }))
 

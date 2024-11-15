@@ -89,4 +89,16 @@ const updateResults = async ({ result_spin, result_ID }) => {
   }
 };
 
-export { postResults, getResults, updateResults };
+const newGameTable = async ({ table_name }) => {
+  try {
+    const response = await axios.put(`${MAIN_API}/api/cg/dealer/new-game/table`, {
+      table_name: table_name,
+    });
+    return response.data;
+  } catch (error) {
+    if (error.response?.message?.data) {
+      console.log("error creating new game table", error);
+    }
+  }
+};
+export { postResults, getResults, updateResults, newGameTable };

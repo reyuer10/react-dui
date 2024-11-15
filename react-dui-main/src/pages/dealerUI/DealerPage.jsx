@@ -1,5 +1,4 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import SettingsSections from "../../components/SettingsSections";
 import { useNavigate } from "react-router-dom";
 import { useModal } from "../../hooks/useModal";
 
@@ -16,6 +15,7 @@ import { colorGameContext } from "../../App";
 import EndContent from "../../components/EndContent";
 import ModalHitJackpot from "../../modal/ModalHitJackpot";
 import TripleHitJackpot from "../../modal/TripleHitJackpot";
+import ModalNewGameTable from "../../modal/ModalNewGameTable";
 
 export const dealerContext = createContext();
 
@@ -90,9 +90,10 @@ function DealerPage() {
   };
 
 
-  const handleResetGame = () => {
-    
+  const handleOpenModalNewTableGame = () => {
+    OpenModalTo(<ModalNewGameTable closeModal={closeModal} socket={socket} />)
   }
+
 
 
 
@@ -134,13 +135,11 @@ function DealerPage() {
       <div className="min-h-screen font-rubik bg-[url(assets/pictures/casino-bg.jpg)]">
         <div className="flex font-black  text-amber-400 justify-between">
           <button onClick={handleRouteSelectView}>BACK</button>
-          <button >NEW GAME</button>
-          <SettingsSections />
         </div>
         <div className="flex justify-between h-[calc(99vh-20px)]">
           <LeftSection handleOpenRound={handleOpenRound} />
           <MiddleSection />
-          <EndContent />
+          <EndContent handleOpenModalNewTableGame={handleOpenModalNewTableGame} />
         </div>
       </div>
       <Modal isModalOpen={isModalOpen}>{currentModal}</Modal>

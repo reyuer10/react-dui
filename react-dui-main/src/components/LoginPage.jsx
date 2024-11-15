@@ -91,7 +91,7 @@ function LoginPage() {
             </label>
           </div>
           {errors.userPassword && (
-            <p className="text-sm mt-2 font-medium opacity-80">{errors.userPassword.message}</p>
+            <p className="text-amber-500 text-sm mt-2 font-medium opacity-80">{errors.userPassword.message}</p>
           )}
           <div>
             <button

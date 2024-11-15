@@ -15,11 +15,11 @@ function SideContent() {
         </p>
       </div>
       <div className="h-[calc(85vh-50px)] py-5 w-[440px] overflow-y-clip bg-zinc-700 rounded-2xl border-[5px] border-zinc-700 shadow-inner shadow-black ring-[5px] ring-black">
-        {colorResults.map((c, index) => {
+        {colorResults.map((c) => {
           return (
             <ul
               className="flex my-6 space-x-5 relative w-[440px] justify-center"
-              key={index}
+              key={c.result_ID}
             >
               {/* <span className="absolute z-20 font-bold text-drop-shadow text-white text-[36px] -right-[15px] -top-[30px]">
               3x

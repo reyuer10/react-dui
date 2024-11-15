@@ -112,7 +112,7 @@ function App() {
 
     ws.onmessage = (event) => {
       const parseData = JSON.parse(event.data);
-      console.log(parseData)
+      console.log()
 
 
       if (parseData.type === "join-table") {
@@ -120,9 +120,7 @@ function App() {
       }
 
       if (parseData?.message?.type === "increment_round") {
-
         setRound(parseData.message?.round);
-
       }
       if (parseData && parseData.message?.isModalOpen === true) {
         setOpenModalResults(parseData.message)
@@ -133,6 +131,8 @@ function App() {
       }
 
       if (parseData.message?.type === "new_results") {
+        setSerialNum(parseData.message?.response?.latestSerialNum)
+        console.log(parseData)
         setTrendColorBet(parseData.message?.trendResultColor)
         setOpenModalResults(parseData.message?.isOpenModal)
         setColorPercentage(parseData.message?.response?.colorPercentage[0]);
@@ -174,6 +174,14 @@ function App() {
       if (parseData.message?.type === "update_resultSpin") {
         setSortColorResults(parseData.message?.response)
         console.log(parseData.message?.response)
+      }
+
+      if (parseData.message?.type === "fetch_newGame") {
+        const { response } = parseData?.message
+        console.log(response)
+        setRound(response.currentRound);
+        setColorPercentage(response.colorPercentage);
+        setSerialNum(response.latestSerialNum);
       }
     };
 
