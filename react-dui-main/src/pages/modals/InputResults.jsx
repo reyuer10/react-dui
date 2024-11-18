@@ -12,6 +12,7 @@ function InputResults() {
   const { round, socket, trendColorBet } = useContext(colorGameContext);
   const storedTable = localStorage.getItem("table");
   const storedGameNo = localStorage.getItem("game-no");
+  const storedTableId = localStorage.getItem("table-id");
 
 
   const {
@@ -70,6 +71,7 @@ function InputResults() {
     try {
       const response = await postResults({
         table_name: storedTable,
+        table_id: storedTableId,
         serial_num: `CG-${dateNow}${timeNow}`,
         round_num: data.round,
         game_num: storedGameNo,
@@ -86,18 +88,21 @@ function InputResults() {
       });
 
       if (colorName[0] === colorName[1] && colorName[1] === colorName[2]) {
+
+        const newResults = await getResults({ table_id: storedTableId, game_num: storedGameNo });
+
         socket.send(JSON.stringify({
           type: "hit_tripleColor",
           room: storedTable,
           isTripleColorHit: true,
-          result_ID: response.result_ID
+          result_ID: newResults.latest_ID
         }))
       }
 
 
-      if (storedTable && storedGameNo && socket && socket.readyState === WebSocket.OPEN) {
+      if (storedTable && storedTableId && storedGameNo && socket && socket.readyState === WebSocket.OPEN) {
 
-        const newResults = await getResults({ table_name: storedTable, game_num: storedGameNo });
+        const newResults = await getResults({ table_id: storedTableId, game_num: storedGameNo });
 
         socket.send(JSON.stringify({
           type: "new_results",

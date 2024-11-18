@@ -21,6 +21,7 @@ export const dealerContext = createContext();
 
 function DealerPage() {
   const storedTable = localStorage.getItem("table");
+  const storedGameNo = localStorage.getItem("game-no");
 
   const {
     OpenModalTo,
@@ -95,6 +96,20 @@ function DealerPage() {
   }
 
 
+  const handleSyncTable = async () => {
+    try {
+      if (storedTable && storedGameNo && socket && socket.readyState === WebSocket.OPEN) {
+        socket.send(JSON.stringify({
+          type: "sync_table",
+          room: storedTable,
+        }))
+      }
+    } catch (error) {
+      console.log("error sync table.", error)
+    }
+  }
+
+
 
 
   return (
@@ -132,14 +147,14 @@ function DealerPage() {
         handleResetDefaultColorBet,
       }}
     >
-      <div className="min-h-screen font-rubik bg-[url(assets/pictures/casino-bg.jpg)]">
+      <div className="min-h-screen font-rubik bg-cover bg-[url(assets/pictures/casino-bg.jpg)]">
         <div className="flex font-black  text-amber-400 justify-between">
           <button onClick={handleRouteSelectView}>BACK</button>
         </div>
         <div className="flex justify-between h-[calc(99vh-20px)]">
           <LeftSection handleOpenRound={handleOpenRound} />
           <MiddleSection />
-          <EndContent handleOpenModalNewTableGame={handleOpenModalNewTableGame} />
+          <EndContent handleOpenModalNewTableGame={handleOpenModalNewTableGame} handleSyncTable={handleSyncTable} />
         </div>
       </div>
       <Modal isModalOpen={isModalOpen}>{currentModal}</Modal>

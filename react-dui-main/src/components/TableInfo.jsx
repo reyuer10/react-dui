@@ -1,15 +1,51 @@
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { colorGameContext } from "../App";
 
 function TableInfo() {
+  const [tableInfo, setTableInfo] = useState({
+    tableName: "",
+    tableMin: 0,
+    tableMax: 0
+  })
   const storedTable = localStorage.getItem("table");
+  const storedMin = localStorage.getItem("min");
+  const storedMax = localStorage.getItem("max");
+
+  useEffect(() => {
+    if (storedTable && storedMin && storedMax) {
+      setTableInfo(prevTableInfo => ({
+        ...prevTableInfo,
+        tableName: storedTable,
+        tableMin: storedMin,
+        tableMax: storedMax
+      }))
+    }
+  }, [])
+
   const { serialNum } = useContext(colorGameContext);
 
   return (
     <div className="font-rubik flex flex-col">
+      <div className="border-orange-500 rounded-xl border-[5px]">
+        <table className="w-full  ">
+          <thead className="bg-orange-500">
+            <tr>
+              <th className="text-orange-800 font-black">MIN</th>
+              <th className="text-orange-800 font-black">MAX</th>
+            </tr>
+          </thead>
+          <tbody className="text-center">
+            <tr>
+              <td className="font-bold shadow-inner shadow-black rounded-bl-lg">{tableInfo.tableMin}</td>
+              <td className="font-bold shadow-inner shadow-black rounded-br-lg">{tableInfo.tableMax}</td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
       <label className="text-xl font-black text-orange-800 flex justify-between">
         <p>Table Name:</p>
-        <p>{storedTable}</p>
+        <p>{tableInfo.tableName}</p>
       </label>
       <label className="text-xl font-black text-orange-800 flex justify-between">
         <p>Serial No:</p>

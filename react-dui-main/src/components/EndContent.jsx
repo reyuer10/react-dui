@@ -4,7 +4,7 @@ import Odometer from "react-odometerjs"
 import { colorGameContext } from "../App";
 
 
-function EndContent({ handleOpenModalNewTableGame }) {
+function EndContent({ handleOpenModalNewTableGame, handleSyncTable }) {
   const { jackpotPrizes } = useContext(colorGameContext);
 
   return (
@@ -47,7 +47,7 @@ function EndContent({ handleOpenModalNewTableGame }) {
           <p>NEW</p>
           <p>GAME</p>
         </button>
-        <button className="text-white w-[240px] bg-blue-500 rounded-xl border-[5px] border-blue-500 ring-[5px] ring-black shadow-inner shadow-black px-4 py-2 font-black primary-drop-shadow text-[36px]">
+        <button onClick={handleSyncTable} className="text-white w-[240px] bg-blue-500 rounded-xl border-[5px] border-blue-500 ring-[5px] ring-black shadow-inner shadow-black px-4 py-2 font-black primary-drop-shadow text-[36px]">
           SYNC
         </button>
       </div>

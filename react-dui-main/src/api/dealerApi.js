@@ -2,10 +2,10 @@ import axios from "axios";
 
 const MAIN_API = "http://localhost:3000";
 
-const getResults = async ({ table_name, game_num }) => {
+const getResults = async ({ table_id, game_num }) => {
   try {
     const response = await axios.post(`${MAIN_API}/api/cg/dealer/get/results`, {
-      table_name: table_name,
+      table_id: table_id,
       game_num: game_num,
     });
 
@@ -24,6 +24,7 @@ const getResults = async ({ table_name, game_num }) => {
 
 const postResults = async ({
   table_name,
+  table_id,
   serial_num,
   round_num,
   game_num,
@@ -43,6 +44,7 @@ const postResults = async ({
       `${MAIN_API}/api/cg/dealer/post/results`,
       {
         table_name: table_name,
+        table_id: table_id,
         serial_num: serial_num,
         round_num: round_num,
         game_num: game_num,
@@ -91,9 +93,12 @@ const updateResults = async ({ result_spin, result_ID }) => {
 
 const newGameTable = async ({ table_name }) => {
   try {
-    const response = await axios.put(`${MAIN_API}/api/cg/dealer/new-game/table`, {
-      table_name: table_name,
-    });
+    const response = await axios.put(
+      `${MAIN_API}/api/cg/dealer/new-game/table`,
+      {
+        table_name: table_name,
+      }
+    );
     return response.data;
   } catch (error) {
     if (error.response?.message?.data) {

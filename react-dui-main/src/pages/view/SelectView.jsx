@@ -12,12 +12,13 @@ function SelectView() {
     navigate("/color-game/select-table");
     const removedTable = localStorage.removeItem("table");
     localStorage.removeItem("game-no");
+    localStorage.removeItem("table-id");
+    localStorage.removeItem("min");
+    localStorage.removeItem("max");
 
     if (removedTable) {
       setTableName(removedTable);
     }
-
-    console.log(tableName);
   };
 
   const handleRouteTrendDisplay = async () => navigate("/color-game/mode/trend-display");
@@ -30,7 +31,7 @@ function SelectView() {
   }, [storedTable]);
 
   return (
-    <div className="min-h-screen box-border flex flex-col font-rubik items-center justify-center bg-[url(assets/pictures/casino-bg.jpg)]">
+    <div className="min-h-screen box-border flex flex-col font-rubik items-center justify-center bg-cover bg-[url(assets/pictures/casino-bg.jpg)]">
       <div className="absolute left-0 top-0 p-5 flex flex-col items-start space-y-4">
         <button
           onClick={handleChangeTable}

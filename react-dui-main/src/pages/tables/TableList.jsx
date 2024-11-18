@@ -1,10 +1,43 @@
 import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { colorGameContext } from "../../App";
+import { updateTableInfo } from "../../api/tableApi";
+import { getColorGameTable } from "../../api/colorGameApi";
+import ModalNewTable from "../../modal/ModalNewTable";
 
 function TableList() {
-  const { colorGameData, handleJoinTable } = useContext(colorGameContext);
   const navigate = useNavigate();
+  const { colorGameData, handleJoinTable, socket } = useContext(colorGameContext);
+  const [newTable, setNewTable] = useState({
+    isOpenNewTable: false,
+    newTableName: "",
+    newTableMin: 0,
+    newTableMax: 0,
+  })
+
+
+  const [editTable, setEditTable] = useState({
+    isEditTable: false,
+    getTableId: null,
+    tableName: "",
+    tableMin: 0,
+    tableMax: 0,
+  })
+
+  console.log(editTable)
+
+
+  const handleOnChangeTable = (e) => {
+    const { value, name } = e.target;
+
+    setEditTable(prevValue => ({ ...prevValue, [name]: value }))
+  }
+
+
+  const handleOnChangeNewTable = (e) => {
+    const { value, name } = e.target;
+    setNewTable(prevValue => ({ ...prevValue, [name]: value }))
+  }
 
 
   const handleLogout = () => {
@@ -12,8 +45,78 @@ function TableList() {
     localStorage.removeItem("itadmin");
   };
 
+  const handleEditTable = (tableId, tableNameValue, minValue, maxValue) => {
+    setEditTable(prevValue => (
+      {
+        ...prevValue,
+        isEditTable: true,
+        getTableId: tableId,
+        tableName: tableNameValue,
+        tableMin: minValue,
+        tableMax: maxValue
+      }
+    ))
+
+  }
+
+  const handleCancelEditTable = () => {
+    setEditTable(prevValue => (
+      {
+        ...prevValue,
+        isEditTable: false,
+        tableName: "",
+        tableMin: 0,
+        talbeMax: 0
+      }
+    ))
+  }
+
+  const handleSaveUpdatedTableInfo = async (table_name, table_min, table_max, table_id) => {
+    try {
+      const response = await updateTableInfo({
+        table_name: table_name,
+        table_min: table_min,
+        table_max: table_max,
+        table_id: table_id,
+      })
+
+      if (response && socket && socket.readyState === WebSocket.OPEN) {
+        const updateTable = await getColorGameTable()
+        socket.send(JSON.stringify({
+          type: "update_tableInfo",
+          response: updateTable,
+        }))
+
+        setEditTable(prevValue => (
+          {
+            ...prevValue,
+            isEditTable: false,
+            tableName: "",
+            tableMin: 0,
+            talbeMax: 0
+          }
+        ))
+
+
+        return response.data;
+      }
+    } catch (error) {
+      console.log("error updating the table", error);
+    }
+  }
+
+  const handleOpenNewTable = () => {
+    setNewTable(prevValue => ({
+      ...prevValue, isOpenNewTable: true,
+    }));
+  }
+
+
+
+
+
   return (
-    <div className="min-h-screen font-rubik flex flex-col items-center justify-center bg-[url(assets/pictures/casino-bg.jpg)]">
+    <div className="min-h-screen bg-cover font-rubik flex flex-col items-center justify-center bg-[url(assets/pictures/casino-bg.jpg)]">
       <div className="absolute left-0 top-0 p-5">
         <button onClick={handleLogout} className="font-bold text-amber-400">
           LOGOUT
@@ -24,81 +127,89 @@ function TableList() {
           Select Table
         </p>
       </div>
-      <div className="border-[6px] border-zinc-700 rounded-2xl w-[60%] bg-zinc-600">
-        <table className="w-full ">
-          <thead className="">
-            <tr>
-              <th className="px-4 bg-zinc-700 border-b border-black text-white">
-                Name
-              </th>
-              <th className="px-4 bg-zinc-700 border-b border-l border-black text-white">
-                Date Modified
-              </th>
-              <th className="px-4 bg-zinc-700 border-b border-l border-black text-white">
-                MIN
-              </th>
-              <th className="px-4 bg-zinc-700 border-b border-l border-black text-white">
-                MAX
-              </th>
-              <th className="px-4 bg-zinc-700 border-b border-l border-black text-white">Current Round</th>
-              <th className="px-4 bg-zinc-700 border-b border-l border-black text-white">
-                Status
-              </th>
-              <th className="px-4 bg-zinc-700 border-b border-l border-black text-white">
-                Action
-              </th>
-            </tr>
-          </thead>
-          <tbody className="m-6 ">
-            {colorGameData.map((c) => {
-              return (
-                <tr key={c.table_id} className=" border-t border-black">
-                  <td className="text-center py-2 font-black border-r border-black text-white">
-                    {c.table_name}
-                  </td>
-                  <td className="text-center border-r border-black text-white">
-                    {new Date(c.table_timestamp).toLocaleString()}
-                  </td>
-                  <td className="text-center font-bold border-r border-black text-white">
-                    {c.table_min}
-                  </td>
+      <div className="w-[60%]">
+        <div className=" text-white text-right my-2">
+          <button onClick={handleOpenNewTable} className="text-white text-drop-shadow font-black bg-zinc-700 py-2 px-4 rounded-md">New Table</button>
+        </div>
+        <div className=" bg-zinc-600 border-[6px] border-zinc-700 rounded-2xl">
+          <table className="w-full shadow-black shadow-inner rounded-xl ">
+            <thead>
+              <tr>
+                <th className=" bg-zinc-700 border-b border-black text-white px-6">
+                  Name
+                </th>
+                <th className=" bg-zinc-700 border-black text-white px-6">
+                  MIN
+                </th>
+                <th className=" bg-zinc-700 border-black text-white px-6">
+                  MAX
+                </th>
+                <th className=" bg-zinc-700 border-black text-white  px-6">Current Round</th>
+                <th className=" bg-zinc-700 border-black text-white px-20">
+                  Modify
+                </th>
+                <th className=" bg-zinc-700 border-black text-white">
+                  Action
+                </th>
+              </tr>
+            </thead>
+            <tbody className="m-6 shadow-black shadow-inner rounded-b-xl">
+              {colorGameData.map((c) => {
+                return (
+                  <tr key={c.table_id} className=" border-t border-black">
+                    {c.table_id === editTable.getTableId && editTable.isEditTable ? (
+                      <>
+                        <td className="text-center py-2 font-bold border-r border-black text-white">
+                          <input type="text" autoComplete="off" className="w-[130px] bg-zinc-600 text-amber-300 font-black text-center outline-none" value={editTable.tableName} name="tableName" onChange={handleOnChangeTable} />
+                        </td>
+                        <td className="text-center font-bold border-r border-black text-white">
+                          <input type="number" autoComplete="off" className="w-[130px] bg-zinc-600 text-amber-300 font-bold text-center outline-none" value={editTable.tableMin} name="tableMin" onChange={handleOnChangeTable} />
+                        </td>
+                        <td className="text-center font-bold border-r border-black text-white">
+                          <input type="number" autoComplete="off" className="w-[130px] bg-zinc-600 text-amber-300 font-bold text-center outline-none" value={editTable.tableMax} name="tableMax" onChange={handleOnChangeTable} />
+                        </td>
+                        <td className="text-center font-bold border-r border-black text-white">
+                          {c.current_round}
+                        </td>
+                        <td className="text-center font-bold border-r border-black text-white space-x-4">
+                          <button className="px-4 bg-zinc-300 text-black rounded-md" onClick={() => handleCancelEditTable()}>Cancel</button>
+                          <button className="px-4 bg-black text-white rounded-md" onClick={() => handleSaveUpdatedTableInfo(editTable.tableName, editTable.tableMin, editTable.tableMax, editTable.getTableId)}>Save</button>
+                        </td>
+                      </>) :
+                      (<>
+                        <td className="text-center py-2 font-black border-r border-black text-white px-12">
+                          {c.table_name}
+                        </td>
+                        <td className="text-center font-bold border-r border-black px-14 text-white">
+                          {c.table_min}
+                        </td>
+                        <td className="text-center font-bold border-r border-black px-14 text-white">
+                          {c.table_max}
+                        </td>
+                        <td className="text-center font-bold border-r border-black text-white">
+                          {c.current_round}
+                        </td>
+                        <td className="text-center font-bold border-r border-black text-white px-12">
+                          <button onClick={() => handleEditTable(c.table_id, c.table_name, c.table_min, c.table_max)} className="bg-black text-white px-4 rounded-md" >Edit</button>
+                        </td>
+                      </>)}
 
-                  <td className="text-center font-bold border-r border-black text-white">
-                    {c.table_max}
-                  </td>
-                  <td className="text-center font-bold border-r border-black text-white">
-                    {c.current_round}
-                  </td>
-                  <td className="text-center font-bold border-r border-black text-white">
-                    Available
-                  </td>
-                  {/* <td className="text-center font-bold border-r border-black text-white">
-                    <button
-                      className={`${
-                        d.status === "Available" ? "bg-green-500" : "bg-red-500"
-                      } font-bold bg-black text-slate-200 px-4 rounded`}
-                    >
-                      {d.status}
-                    </button>
-                  </td> */}
-                  <td className="text-center">
-                    <button
-                      onClick={() => handleJoinTable(c.table_name, c.game_count)}
-                      // disabled={d.status === "Playing"}
-                      // ${
-                      //   d.status === "Available" ? "" : " opacity-50"
-                      // }
-                      className={`font-bold bg-black text-slate-200 px-4 rounded`}
-                    >
-                      Open
-                    </button>
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
+                    <td className="text-center">
+                      <button
+                        onClick={() => handleJoinTable(c.table_name, c.table_id, c.game_count, c.table_min, c.table_max)}
+                        className={`font-bold bg-black text-slate-200 px-4 rounded mx-10`}
+                      >
+                        Open
+                      </button>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
       </div>
+      <ModalNewTable isOpenNewTable={newTable.isOpenNewTable} setNewTable={setNewTable} socket={socket} />
     </div>
   );
 }

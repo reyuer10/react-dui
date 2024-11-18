@@ -31,12 +31,9 @@ function HomePage() {
 
   }, [tableObject])
 
-  console.log(tableObject.displaySpinResults)
-
-
   return (
     <div>
-      <div className="flex flex-col justify-between min-h-screen bg-[url(assets/pictures/casino-bg.jpg)]">
+      <div className="flex flex-col justify-between min-h-screen bg-cover bg-[url(assets/pictures/casino-bg.jpg)]">
         <div>
           <Header />
         </div>
@@ -53,7 +50,7 @@ function HomePage() {
         </div>
         <div>
           {/* h-[310px] */}
-          <div className="bg-zinc-700 h-[330px] flex justify-start items-center rounded-xl ring-8 ring-black m-4 overflow-x-hidden overflow-y-hidden">
+          <div className="bg-zinc-700 h-[340px] flex justify-start items-center rounded-xl ring-8 ring-black m-4 overflow-x-hidden overflow-y-hidden">
             <ColorsResults />
           </div>
         </div>

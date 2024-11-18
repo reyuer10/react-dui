@@ -4,13 +4,14 @@ import { getResults, newGameTable } from "../api/dealerApi";
 function ModalNewGameTable({ closeModal, socket }) {
     const storedTable = localStorage.getItem("table");
     const storedGameNo = localStorage.getItem("game-no");
+    const storedTableId = localStorage.getItem("table-id")
 
     const handleNewTableGame = async () => {
         try {
-            if (storedTable && storedGameNo && socket && socket.readyState === WebSocket.OPEN) {
+            if (storedTable && storedTableId && storedGameNo && socket && socket.readyState === WebSocket.OPEN) {
                 const table = await newGameTable({ table_name: storedTable });
                 localStorage.setItem("game-no", table?.response[0]?.game_count);
-                const newResponse = await getResults({ table_name: storedTable, game_num: storedGameNo })
+                const newResponse = await getResults({ table_id: storedTableId, game_num: storedGameNo })
                 socket.send(JSON.stringify({
                     type: "fetch_newGame",
                     room: storedTable,

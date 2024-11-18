@@ -6,6 +6,7 @@ const cors = require("cors");
 const dealerRoutes = require("./routes/dealerRoutes");
 const colorGameRoutes = require("./routes/colorGameRoutes");
 const tableRoutes = require("./routes/tableRoutes");
+const bodyParser = require("body-parser");
 
 const WebSocket = require("ws");
 // const uuid = require("uuid");
@@ -18,6 +19,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(bodyParser.json())
 
 app.use(
   cors({
@@ -116,6 +118,12 @@ wss.on("connection", (ws) => {
       });
     }
 
+    if (parseData.type === "update_tableInfo") {
+      clients.forEach((client) => {
+        client.send(JSON.stringify(parseData));
+      });
+    }
+
     if (parseData.type === "update_resultSpin") {
       sendToAllRoom(parseData.room, parseData);
     }
@@ -125,6 +133,10 @@ wss.on("connection", (ws) => {
     }
 
     if (parseData.type === "fetch_newGame") {
+      sendToAllRoom(parseData.room, parseData, ws);
+    }
+
+    if (parseData.type === "sync_table") {
       sendToAllRoom(parseData.room, parseData, ws);
     }
 

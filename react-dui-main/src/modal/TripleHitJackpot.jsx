@@ -6,8 +6,7 @@ function TripleHitJackpot() {
     const { tableObject, setTableObject, socket, trendColorBet } = useContext(colorGameContext);
     const storedTable = localStorage.getItem("table");
     const storedGameNo = localStorage.getItem("game-no");
-
-    console.log(tableObject)
+    const storedTableId = localStorage.getItem("table-id")
 
 
     const handleUpdateResults = async () => {
@@ -23,7 +22,7 @@ function TripleHitJackpot() {
 
 
             const response = await updateResults({ result_ID: tableObject.result_ID, result_spin: tableObject.result_spin });
-            const newResults = await getResults({ table_name: storedTable, game_num: storedGameNo });
+            const newResults = await getResults({ table_id: storedTableId, game_num: storedGameNo });
             // console.log(newResults)
 
 

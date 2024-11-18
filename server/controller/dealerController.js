@@ -1,10 +1,10 @@
 const databaseQuery = require("../db/databaseQuery");
 // ;
 exports.getResults = async (req, res) => {
-  const querySortResultColors = `SELECT r.result_ID, r.table_name, r.game_num, r.round_num, r.result_firstColor, r.result_secondColor, r.result_thirdColor, r.result_spin FROM cg_db.tb_results as r INNER JOIN cg_db.tb_colortable as c on r.table_name = c.table_name WHERE r.table_name = ? AND r.game_num = ? ORDER BY result_ID desc LIMIT 15`;
-  const queryGetCurrentRound = `SELECT current_round FROM cg_db.tb_colortable WHERE table_name = ?`;
+  const querySortResultColors = `SELECT r.result_ID, r.table_id, r.game_num, r.round_num, r.result_firstColor, r.result_secondColor, r.result_thirdColor, r.result_spin FROM cg_db.tb_results as r INNER JOIN cg_db.tb_colortable as c on r.table_name = c.table_name WHERE r.table_id = ? AND r.game_num = ? ORDER BY result_ID desc LIMIT 15`;
+  const queryGetCurrentRound = `SELECT current_round FROM cg_db.tb_colortable WHERE table_id = ?`;
   const queryGetAmountPrizes = `SELECT * FROM cg_db.tb_prizes`;
-  const queryGetColorResults = `SELECT result_ID, result_firstColor, result_secondColor, result_thirdColor from cg_db.tb_results WHERE table_name = ? AND game_num = ? order by result_ID desc`;
+  const queryGetColorResults = `SELECT result_ID, table_id, result_firstColor, result_secondColor, result_thirdColor from cg_db.tb_results WHERE table_id = ? AND game_num = ? order by result_ID desc`;
   const queryResultColors = `SELECT 
     ROUND((SUM((result_firstcolor = 'Red') + (result_secondcolor = 'Red') + (result_thirdcolor = 'Red')) / (COUNT(*) * 3)) * 100 ,1) AS red_percentage,
     ROUND((SUM((result_firstcolor = 'Blue') + (result_secondcolor = 'Blue') + (result_thirdcolor = 'Blue')) / (COUNT(*) * 3)) * 100,1) AS blue_percentage,
@@ -15,23 +15,27 @@ exports.getResults = async (req, res) => {
     FROM (
     SELECT result_firstcolor, result_secondcolor, result_thirdcolor
     FROM cg_db.tb_results
-    where table_name = ? AND game_num = ?
+    where table_id = ? AND game_num = ?
     ORDER BY result_ID DESC
     ) AS latest_results;`;
 
-  const querySelectTableSerialNum = `SELECT serial_num FROM cg_db.tb_results WHERE table_name = ? AND game_num = ? order by result_ID desc limit 1`;
+  const querySelectTableSerialNum = `SELECT serial_num FROM cg_db.tb_results WHERE table_id = ? AND game_num = ? order by result_ID desc limit 1`;
+  const queryID = `SELECT result_ID FROM cg_db.tb_results WHERE table_id = ? AND game_num = ? ORDER BY result_ID desc LIMIT 1`;
 
   const {
-    body: { table_name, game_num },
+    body: { table_id, game_num },
   } = req;
 
   try {
+    const getLatestID = await databaseQuery(queryID, [table_id, game_num]);
+    const result_ID = getLatestID[0]?.result_ID;
+    console.log(result_ID);
     const tableCurrentRound = await databaseQuery(queryGetCurrentRound, [
-      table_name,
+      table_id,
     ]);
 
     const querySerialNum = await databaseQuery(querySelectTableSerialNum, [
-      table_name,
+      table_id,
       game_num,
     ]);
 
@@ -39,18 +43,18 @@ exports.getResults = async (req, res) => {
     let serialNum = querySerialNum[0]?.serial_num;
 
     const sortColorResults = await databaseQuery(querySortResultColors, [
-      table_name,
+      table_id,
       game_num,
     ]);
 
     const prizesAmount = await databaseQuery(queryGetAmountPrizes);
     const colorResults = await databaseQuery(queryGetColorResults, [
-      table_name,
+      table_id,
       game_num,
     ]);
 
     const colorPercentage = await databaseQuery(queryResultColors, [
-      table_name,
+      table_id,
       game_num,
     ]);
 
@@ -61,6 +65,7 @@ exports.getResults = async (req, res) => {
       colorPercentage: colorPercentage,
       currentRound: round,
       latestSerialNum: serialNum,
+      latest_ID: result_ID,
     });
   } catch (error) {
     return res.status(500).send({ message: "Internal Server Error!" });
@@ -69,17 +74,18 @@ exports.getResults = async (req, res) => {
 
 exports.postResults = async (req, res) => {
   const sql =
-    "INSERT INTO cg_db.tb_results (`table_name`, `serial_num`, `round_num`, `game_num`, `result_firstColor`, `result_secondColor`, `result_thirdColor`, `betAmount_yellow`, `betAmount_white`, `betAmount_pink`, `betAmount_blue`, `betAmount_red`, `betAmount_green`, `amount_totalBet`,`minor_increment`,`major_increment`, `grand_increment`,  `current_minor`, `current_major`, `current_grand`, `result_label`, `start_time`, `end_time`) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())";
+    "INSERT INTO cg_db.tb_results (`table_name`, `table_id`, `serial_num`, `round_num`, `game_num`, `result_firstColor`, `result_secondColor`, `result_thirdColor`, `betAmount_yellow`, `betAmount_white`, `betAmount_pink`, `betAmount_blue`, `betAmount_red`, `betAmount_green`, `amount_totalBet`,`minor_increment`,`major_increment`, `grand_increment`,  `current_minor`, `current_major`, `current_grand`, `result_label`, `start_time`, `end_time`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())";
 
   const getJackpotPrizes = `SELECT * FROM cg_db.tb_prizes`;
   const queryUpdateJackpotPrizes = `UPDATE cg_db.tb_prizes SET minor_prizes = ?, major_prizes = ?, grand_prizes = ? WHERE prizes_id = 1`;
-  const queryUpdateTableInfo = `UPDATE cg_db.tb_colortable SET current_serialNum = ?, current_round = ? WHERE table_name = ? `;
-  const queryGetLatestID = `SELECT result_ID FROM cg_db.tb_results WHERE table_name = ? AND result_ID = ? ORDER BY result_ID desc LIMIT 1`;
+  const queryUpdateTableInfo = `UPDATE cg_db.tb_colortable SET current_serialNum = ?, current_round = ? WHERE table_id = ? `;
+  const queryGetLatestID = `SELECT result_ID FROM cg_db.tb_results WHERE table_id = ? AND result_ID = ? ORDER BY result_ID desc LIMIT 1`;
 
   const {
     body: {
       serial_num,
       table_name,
+      table_id,
       round_num,
       game_num,
       result_firstColor,
@@ -97,7 +103,7 @@ exports.postResults = async (req, res) => {
 
   try {
     const getResultID = await databaseQuery(queryGetLatestID, [
-      table_name,
+      table_id,
       round_num,
     ]);
 
@@ -132,6 +138,7 @@ exports.postResults = async (req, res) => {
 
     const results = await databaseQuery(sql, [
       table_name,
+      table_id,
       serial_num,
       round_num,
       game_num,
@@ -164,7 +171,7 @@ exports.postResults = async (req, res) => {
       await databaseQuery(queryUpdateTableInfo, [
         serial_num,
         round_num,
-        table_name,
+        table_id,
       ]);
     }
 

@@ -5,6 +5,10 @@ import { useForm } from "react-hook-form";
 import casino_bg from "../assets/pictures/casino-bg.jpg"
 
 function LoginPage() {
+  const storedTableName = localStorage.getItem("table");
+  const storedTableId = localStorage.getItem("table-id");
+
+
   const navigate = useNavigate();
   const inputRef = useRef(null);
   const {
@@ -33,8 +37,14 @@ function LoginPage() {
 
       return;
     } else {
-      localStorage.setItem("itadmin", "access-permission")
-      navigate("/color-game/select-table");
+      localStorage.setItem("itadmin", "access-permission");
+      if (storedTableName && storedTableId) {
+        navigate("/color-game/select-view");
+      } else {
+        navigate("/color-game/select-table");
+      }
+
+
     }
 
   };
@@ -54,7 +64,7 @@ function LoginPage() {
     <form
       onClick={handleBlur}
       onSubmit={handleSubmit(handleLogin)}
-      className="min-h-screen font-rubik flex flex-col items-center justify-center bg-[url(assets/pictures/casino-bg.jpg)]"
+      className="min-h-screen font-rubik flex flex-col items-center bg-cover justify-center bg-[url(assets/pictures/casino-bg.jpg)]"
     >
       <div className="p-4 space-y-14 w-[500px]">
         <div className="flex justify-center">

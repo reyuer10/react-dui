@@ -19,7 +19,8 @@ function App() {
   const navigate = useNavigate();
 
   const storedTable = localStorage.getItem("table");
-  const storedGameNo = localStorage.getItem("game-no")
+  const storedGameNo = localStorage.getItem("game-no");
+  const storedTableId = localStorage.getItem("table-id");
   const [socket, setSocket] = useState(null);
   const [isConnected, setIsConnected] = useState(false);
 
@@ -52,7 +53,6 @@ function App() {
     isOpenModalJackpotHit: false,
   })
 
-  // console.log(tableObject.displayColorResults)
 
   const handleIncrementRound = () => {
     setRound((prevRound) => {
@@ -67,10 +67,9 @@ function App() {
     });
   };
 
-  // console.log(tableObject.isOpenModalJackpotHit)
 
 
-  const handleJoinTable = async (table, gameNo) => {
+  const handleJoinTable = async (table, tableId, gameNo, min, max) => {
     try {
       if (socket && socket.readyState === WebSocket.OPEN) {
         socket.send(JSON.stringify({
@@ -78,14 +77,16 @@ function App() {
           room: table
         }))
       }
-      const response = await getResults({ table_name: table, game_num: gameNo });
+      const response = await getResults({ table_id: tableId, game_num: gameNo });
 
       navigate("/color-game/select-view");
       localStorage.setItem("table", table);
       localStorage.setItem("game-no", gameNo);
+      localStorage.setItem("table-id", tableId);
+      localStorage.setItem("min", min);
+      localStorage.setItem("max", max)
 
 
-      console.log(response)
       return response
     } catch (error) {
       console.log("error joining the table", error)
@@ -112,7 +113,7 @@ function App() {
 
     ws.onmessage = (event) => {
       const parseData = JSON.parse(event.data);
-      console.log()
+      console.log(parseData)
 
 
       if (parseData.type === "join-table") {
@@ -132,7 +133,6 @@ function App() {
 
       if (parseData.message?.type === "new_results") {
         setSerialNum(parseData.message?.response?.latestSerialNum)
-        console.log(parseData)
         setTrendColorBet(parseData.message?.trendResultColor)
         setOpenModalResults(parseData.message?.isOpenModal)
         setColorPercentage(parseData.message?.response?.colorPercentage[0]);
@@ -173,15 +173,28 @@ function App() {
 
       if (parseData.message?.type === "update_resultSpin") {
         setSortColorResults(parseData.message?.response)
-        console.log(parseData.message?.response)
+        // console.log(parseData.message?.response)
       }
 
       if (parseData.message?.type === "fetch_newGame") {
         const { response } = parseData?.message
-        console.log(response)
         setRound(response.currentRound);
         setColorPercentage(response.colorPercentage);
         setSerialNum(response.latestSerialNum);
+      }
+
+
+
+      if (parseData.message?.type === "sync_table") {
+        const { response } = parseData?.message
+        location.reload()
+      }
+
+
+      if (parseData.type === "update_tableInfo") {
+        const { response } = parseData
+        console.log(response)
+        setColorGameData(response.data);
       }
     };
 
@@ -207,7 +220,7 @@ function App() {
       try {
         setLoading(true);
 
-        if (storedTable && storedGameNo) {
+        if (storedTableId && storedGameNo) {
           const res = await getTableInfo({ table_name: storedTable });
           let data = res.data[0];
           setTable(data)
@@ -215,7 +228,8 @@ function App() {
           setSerialNum(data.current_serialNum);
 
 
-          const response = await getResults({ table_name: storedTable, game_num: storedGameNo })
+          const response = await getResults({ table_id: storedTableId, game_num: storedGameNo });
+          console.log(response)
 
           setResults(response);
           setColorResults(response.color_results);
@@ -225,7 +239,7 @@ function App() {
           setJackpotPrizes(response.prizes_amount[0]);
 
         }
-        const colorGameResponse = await getColorGameTable()
+        const colorGameResponse = await getColorGameTable();
         setColorGameData(colorGameResponse.data);
 
 
@@ -242,7 +256,6 @@ function App() {
     fetchResults();
   }, [storedTable, storedGameNo]);
 
-  console.log(results)
 
 
   return (

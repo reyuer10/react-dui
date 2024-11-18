@@ -12,8 +12,8 @@ function ColorsResults() {
 
 
   return (
-    <div className="relative flex px-6 my-10">
-      <div className={`grid grid-cols-custom-101 gap-x-4`}>
+    <div className="relative flex px-6">
+      <div className={`grid grid-cols-custom-101 gap-x-4 my-10`}>
         {sortedColorResults.map((c, index) => {
 
           return (
@@ -36,7 +36,7 @@ function ColorsResults() {
                   Round
                 </p>
                 <p className={`
-                  ${c.result_spin === null ? "shadow-black shadow-inner bg-zinc-800" : ""}
+                  ${c.result_spin === null ? " bg-zinc-800" : ""}
                   ${c.result_spin === "x3" && " bg-[#D92426] text-zinc-800 rounded-b-md"} 
                   ${c.result_spin === "x10" && " bg-[#1795D2] text-zinc-800 rounded-b-md"} 
                   ${c.result_spin === "x20" && " bg-[#FCCC0A] text-zinc-800 rounded-b-md"} 
@@ -45,7 +45,7 @@ function ColorsResults() {
                   ${c.result_spin === "Minor Jackpot" && " bg-transparent text-amber-400 primary-drop-shadow rounded-b-md"} 
                   ${c.result_spin === "Major Jackpot" && " bg-transparent text-amber-400 primary-drop-shadow rounded-b-md"} 
                   ${c.result_spin === "Grand Jackpot" && " bg-transparent text-amber-400 primary-drop-shadow rounded-b-md"} 
-                   shadow-black px-1 rounded-b-4`}>
+                   shadow-black px-3 rounded-b-4`}>
                   {c.round_num}
                 </p>
                 {c.result_spin === "Major Jackpot" && <div className="absolute top-[60px] text-center space-y-6 text-[36px] primary-drop-shadow text-amber-400">
