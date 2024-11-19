@@ -1,14 +1,16 @@
 import React from "react";
 
-import HomePage from "../components/HomePage";
 import LoginPage from "../components/LoginPage";
 import { Outlet } from "react-router-dom";
+import useLocalStorage from "../custom/useLocalStorage";
 
 
 
 export default function ProtectedRoutes() {
+  const { getItem } = useLocalStorage()
 
-  const isLoggedIn = localStorage.getItem("itadmin");
+  const isAdminAccess = getItem("itadmin");
+  const isUserAccess = getItem("user");
 
-  return !isLoggedIn ? <LoginPage /> : <Outlet />;
+  return isAdminAccess || isUserAccess ? <Outlet /> : <LoginPage />;
 }

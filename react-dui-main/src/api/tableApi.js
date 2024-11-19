@@ -4,6 +4,36 @@ const host = "http://localhost";
 const port = "3000";
 const main_api = "/api";
 
+const getSpecificTableInfo = async ({ table_id }) => {
+  try {
+    const response = await axios.post(
+      `${host}:${port}${main_api}/cg/table/specific-info`,
+      { table_id: table_id }
+    );
+    return response.data;
+  } catch (error) {
+    if (error && error.response.data.message) {
+      console.log(error.response.data.message);
+    }
+
+    throw error;
+  }
+};
+
+const getSpecificTableInfoPerRound = async ({ table_id, game_num }) => {
+  try {
+    const response = await axios.post(
+      `${host}:${port}${main_api}/cg/table/specific-info/per-round`,
+      { table_id: table_id, game_num: game_num }
+    );
+    return response.data;
+  } catch (error) {
+    if (error && error.response.data.message) {
+      console.log(error.response.data.message);
+    }
+  }
+};
+
 const getTableInfo = async ({ table_name }) => {
   try {
     const response = await axios.post(
@@ -67,4 +97,10 @@ const createNewTable = async ({ table_name, table_min, table_max }) => {
   }
 };
 
-export { getTableInfo, updateTableInfo, createNewTable };
+export {
+  getTableInfo,
+  updateTableInfo,
+  createNewTable,
+  getSpecificTableInfo,
+  getSpecificTableInfoPerRound,
+};

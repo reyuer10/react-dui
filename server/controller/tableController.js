@@ -42,7 +42,7 @@ exports.updateTableInfo = async (req, res) => {
 
 exports.newTableInfo = async (req, res) => {
   const queryNewTable =
-    "INSERT INTO cg_db.tb_colortable(`table_name`, `table_min`, `table_max`, `game_count`, `current_round`, `jackpot_hit`, `table_timestamp`) VALUES(?, ?, ?, 0, 0, 0, NOW())";
+    "INSERT INTO cg_db.tb_colortable(`table_name`, `table_min`, `table_max`, `game_count`, `current_round`, `jackpot_hit`, `table_timestamp`) VALUES(?, ?, ?, 1, 0, 0, NOW())";
   const queryCheckTableName = `SELECT table_name FROM cg_db.tb_colortable WHERE table_name = ?`;
 
   const {
@@ -115,5 +115,48 @@ exports.newTableInfo = async (req, res) => {
   } catch (error) {
     console.error(error); // Log the error for debugging
     return res.status(500).send({ message: "Internal server error." });
+  }
+};
+
+exports.getSpecificTableInfo = async (req, res) => {
+  const getTableInfo = `SELECT * FROM cg_db.tb_colortable WHERE table_id = ?`;
+  const getTableGame = `SELECT game_num FROM cg_db.tb_results WHERE table_id = ? GROUP BY game_num HAVING COUNT(game_num)`;
+  const {
+    body: { table_id },
+  } = req;
+  try {
+    const tableInfo = await databaseQuery(getTableInfo, [table_id]);
+    const tableGame = await databaseQuery(getTableGame, [table_id]);
+
+    return res.status(200).send({
+      tableInfo: tableInfo,
+      tableGame: tableGame,
+    });
+  } catch (error) {
+    return res.status(500).send({
+      message: "Internal server error.",
+    });
+  }
+};
+
+exports.getSpecificTableInfoPerRound = async (req, res) => {
+  const getTableInfoPerRound = `SELECT serial_num, round_num, result_firstColor, result_secondColor, result_thirdColor, amount_totalBet, FORMAT(minor_increment / 100, 2) as minor_increment, FORMAT(major_increment / 100, 2) as major_increment, FORMAT(grand_increment / 100, 2) as grand_increment, FORMAT(current_minor / 100, 2) as current_minor, FORMAT(current_major / 100, 2) as current_major, FORMAT(current_grand / 100, 2) as current_grand FROM cg_db.tb_results WHERE table_id = ? AND game_num = ?`;
+
+  const {
+    body: { table_id, game_num },
+  } = req;
+  try {
+    const tableInfoPerRound = await databaseQuery(getTableInfoPerRound, [
+      table_id,
+      game_num,
+    ]);
+
+    return res.status(200).send({
+      infoPerRound: tableInfoPerRound,
+    });
+  } catch (error) {
+    return res.status(500).send({
+      message: "Internal server error.",
+    });
   }
 };

@@ -10,11 +10,9 @@ import { getColorGameTable } from "./api/colorGameApi";
 import ProtectedRoutes from "./pages/ProtectedRoutes";
 import ProtectedTable from "./pages/ProtectedTable";
 import { getTableInfo } from "./api/tableApi";
+import TableHistory from "./pages/TableHistory";
 
 export const colorGameContext = createContext();
-
-
-
 function App() {
   const navigate = useNavigate();
 
@@ -38,6 +36,8 @@ function App() {
   const [jackpotPrizes, setJackpotPrizes] = useState([]);
   const [trendColorBet, setTrendColorBet] = useState([]);
   const [table, setTable] = useState([])
+
+
   const [tableObject, setTableObject] = useState({
     result_ID: 0,
     result_spin: "",
@@ -68,7 +68,6 @@ function App() {
   };
 
 
-
   const handleJoinTable = async (table, tableId, gameNo, min, max) => {
     try {
       if (socket && socket.readyState === WebSocket.OPEN) {
@@ -84,8 +83,7 @@ function App() {
       localStorage.setItem("game-no", gameNo);
       localStorage.setItem("table-id", tableId);
       localStorage.setItem("min", min);
-      localStorage.setItem("max", max)
-
+      localStorage.setItem("max", max);
 
       return response
     } catch (error) {
@@ -113,7 +111,6 @@ function App() {
 
     ws.onmessage = (event) => {
       const parseData = JSON.parse(event.data);
-      console.log(parseData)
 
 
       if (parseData.type === "join-table") {
@@ -173,7 +170,6 @@ function App() {
 
       if (parseData.message?.type === "update_resultSpin") {
         setSortColorResults(parseData.message?.response)
-        // console.log(parseData.message?.response)
       }
 
       if (parseData.message?.type === "fetch_newGame") {
@@ -186,13 +182,12 @@ function App() {
 
 
       if (parseData.message?.type === "sync_table") {
-        const { response } = parseData?.message
         location.reload()
       }
 
 
-      if (parseData.type === "update_tableInfo") {
-        const { response } = parseData
+      if (parseData.message?.type === "update_tableInfo") {
+        const { response } = parseData.message
         console.log(response)
         setColorGameData(response.data);
       }
@@ -293,6 +288,7 @@ function App() {
         <Route element={<ProtectedRoutes />}>
 
           <Route path="color-game/select-table" element={<TableList />} />
+          <Route path="color-game/table/history" element={<TableHistory />} />
           <Route element={<ProtectedTable />}>
             <Route path="color-game/select-view" element={<SelectView />} />
             <Route path="color-game/mode/trend-display" element={<HomePage />} />

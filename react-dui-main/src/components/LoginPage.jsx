@@ -1,12 +1,13 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import colorGameLogo from "../assets/pictures/color-game-logo.png";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import casino_bg from "../assets/pictures/casino-bg.jpg"
+import useLocalStorage from "../custom/useLocalStorage";
+import { colorGameContext } from "../App";
 
 function LoginPage() {
-  const storedTableName = localStorage.getItem("table");
-  const storedTableId = localStorage.getItem("table-id");
+  const { socket } = useContext(colorGameContext)
+  const { setItem } = useLocalStorage();
 
 
   const navigate = useNavigate();
@@ -22,6 +23,13 @@ function LoginPage() {
   const [isInputFocus, setIsInputFocus] = useState(false);
 
   const handleLogin = () => {
+
+    // if (storedTableName && storedTableId) {
+    //   navigate("/color-game/select-view");
+    // } else {
+    //   navigate("/color-game/select-table");
+    // }
+
     if (!userPassword) {
       setError("userPassword", {
         type: "manual",
@@ -29,22 +37,29 @@ function LoginPage() {
       });
 
       return;
-    } else if (userPassword !== "ITD@casin0!") {
-      setError("userPassword", {
-        type: "manual",
-        message: "Incorrect password, please try again.",
-      });
-
-      return;
-    } else {
-      localStorage.setItem("itadmin", "access-permission");
-      if (storedTableName && storedTableId) {
-        navigate("/color-game/select-view");
-      } else {
+    } else if (userPassword === "ITD@casin0!") {
+      if (socket && socket.readyState === WebSocket.OPEN) {
+        socket.send(JSON.stringify({
+          type: "join-room:table_list",
+          room: "table_list"
+        }))
+        setItem("itadmin", "admin-access");
         navigate("/color-game/select-table");
       }
-
-
+    } else if (userPassword === "CPpass2024!") {
+      if (socket && socket.readyState === WebSocket.OPEN) {
+        socket.send(JSON.stringify({
+          type: "join-room:table_list",
+          room: "table_list"
+        }))
+      }
+      setItem("user", "user-access");
+      navigate("/color-game/select-table");
+    } else {
+      setError("userPassword", {
+        type: "manual",
+        message: "Invalid access, please try again.",
+      });
     }
 
   };

@@ -1,13 +1,21 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { colorGameContext } from "../../App";
 import { updateTableInfo } from "../../api/tableApi";
 import { getColorGameTable } from "../../api/colorGameApi";
 import ModalNewTable from "../../modal/ModalNewTable";
+import useLocalStorage from "../../custom/useLocalStorage";
 
 function TableList() {
   const navigate = useNavigate();
   const { colorGameData, handleJoinTable, socket } = useContext(colorGameContext);
+  const { getItem, removeItem, setItem } = useLocalStorage();
+
+  const adminAccess = getItem("itadmin");
+  const userAccess = getItem("user");
+
+
+
   const [newTable, setNewTable] = useState({
     isOpenNewTable: false,
     newTableName: "",
@@ -24,8 +32,6 @@ function TableList() {
     tableMax: 0,
   })
 
-  console.log(editTable)
-
 
   const handleOnChangeTable = (e) => {
     const { value, name } = e.target;
@@ -41,8 +47,15 @@ function TableList() {
 
 
   const handleLogout = () => {
-    navigate("/");
-    localStorage.removeItem("itadmin");
+    if (adminAccess) {
+      navigate("/");
+      return removeItem("itadmin");
+    } else if (userAccess) {
+      navigate("/");
+      return removeItem("user");
+    }
+
+
   };
 
   const handleEditTable = (tableId, tableNameValue, minValue, maxValue) => {
@@ -84,6 +97,7 @@ function TableList() {
         const updateTable = await getColorGameTable()
         socket.send(JSON.stringify({
           type: "update_tableInfo",
+          room: "table_list",
           response: updateTable,
         }))
 
@@ -111,6 +125,20 @@ function TableList() {
     }));
   }
 
+  const handleRouteTableHistory = (table_id) => {
+    setItem("history:table_id", table_id);
+    navigate("/color-game/table/history");
+  }
+
+  useEffect(() => {
+    if (socket && socket.readyState === WebSocket.OPEN) {
+      socket.send(JSON.stringify({
+        type: "join-room:table_list",
+        room: "table_list",
+      }))
+    }
+  }, [socket])
+
 
 
 
@@ -128,9 +156,12 @@ function TableList() {
         </p>
       </div>
       <div className="w-[60%]">
-        <div className=" text-white text-right my-2">
-          <button onClick={handleOpenNewTable} className="text-white text-drop-shadow font-black bg-zinc-700 py-2 px-4 rounded-md">New Table</button>
-        </div>
+        {adminAccess ? (
+          <div className=" text-white text-right my-2">
+            <button onClick={handleOpenNewTable} className="text-white text-drop-shadow font-black bg-zinc-700 py-2 px-4 rounded-md">New Table</button>
+          </div>
+        ) :
+          null}
         <div className=" bg-zinc-600 border-[6px] border-zinc-700 rounded-2xl">
           <table className="w-full shadow-black shadow-inner rounded-xl ">
             <thead>
@@ -145,15 +176,19 @@ function TableList() {
                   MAX
                 </th>
                 <th className=" bg-zinc-700 border-black text-white  px-6">Current Round</th>
-                <th className=" bg-zinc-700 border-black text-white px-20">
-                  Modify
-                </th>
+                {adminAccess ?
+                  (<th className=" bg-zinc-700 border-black text-white px-20">
+                    Modify
+                  </th>) :
+                  null
+                }
                 <th className=" bg-zinc-700 border-black text-white">
                   Action
                 </th>
+                <th className=" bg-zinc-700 border-black text-white">History</th>
               </tr>
             </thead>
-            <tbody className="m-6 shadow-black shadow-inner rounded-b-xl">
+            <tbody className="m-6 shadow-black shadow-inner border-zinc-700 rounded-b-xl">
               {colorGameData.map((c) => {
                 return (
                   <tr key={c.table_id} className=" border-t border-black">
@@ -189,17 +224,28 @@ function TableList() {
                         <td className="text-center font-bold border-r border-black text-white">
                           {c.current_round}
                         </td>
-                        <td className="text-center font-bold border-r border-black text-white px-12">
-                          <button onClick={() => handleEditTable(c.table_id, c.table_name, c.table_min, c.table_max)} className="bg-black text-white px-4 rounded-md" >Edit</button>
-                        </td>
+                        {adminAccess ?
+                          (
+                            <td className="text-center font-bold border-r border-black text-white px-12">
+                              <button onClick={() => handleEditTable(c.table_id, c.table_name, c.table_min, c.table_max)} className="bg-black text-white px-4 rounded-md" >Edit</button>
+                            </td>
+                          ) :
+                          null}
                       </>)}
-
-                    <td className="text-center">
+                    <td  className="text-center font-bold border-r border-black text-white">
                       <button
                         onClick={() => handleJoinTable(c.table_name, c.table_id, c.game_count, c.table_min, c.table_max)}
-                        className={`font-bold bg-black text-slate-200 px-4 rounded mx-10`}
+                        className={`font-bold bg-black text-slate-200 px-4 rounded-lg mx-10`}
                       >
                         Open
+                      </button>
+                    </td>
+                    <td  className="text-center font-bold border-r border-black text-white">
+                      <button
+                        onClick={() => handleRouteTableHistory(c.table_id)}
+                        className={`font-bold bg-black text-slate-200 px-4 rounded-lg mx-10`}
+                      >
+                        View Details
                       </button>
                     </td>
                   </tr>

@@ -27,17 +27,17 @@ function TableInfo() {
   return (
     <div className="font-rubik flex flex-col">
       <div className="border-orange-500 rounded-xl border-[5px]">
-        <table className="w-full  ">
+        <table className="w-full table-auto">
           <thead className="bg-orange-500">
             <tr>
               <th className="text-orange-800 font-black">MIN</th>
               <th className="text-orange-800 font-black">MAX</th>
             </tr>
           </thead>
-          <tbody className="text-center">
+          <tbody className="text-center shadow-inner shadow-black rounded-b-lg">
             <tr>
-              <td className="font-bold shadow-inner shadow-black rounded-bl-lg">{tableInfo.tableMin}</td>
-              <td className="font-bold shadow-inner shadow-black rounded-br-lg">{tableInfo.tableMax}</td>
+              <td className="font-bold border-r border-black">{tableInfo.tableMin}</td>
+              <td className="font-bold border-l border-black">{tableInfo.tableMax}</td>
             </tr>
 
           </tbody>

@@ -113,20 +113,13 @@ exports.postResults = async (req, res) => {
       result_secondColor === result_thirdColor
         ? "Triple Color Hit"
         : "Normal Result";
-    // const getLatestID = (value) => {
-    //   let a = value[0];
-    //   let b = a.result_ID + 1;
-    //   return b;
-    // };
-    // const latestID = getLatestID(getResultID);
-
     const currentJackpotPrizes = await databaseQuery(getJackpotPrizes);
 
     let currJP = currentJackpotPrizes[0];
 
-    const compMinor = amount_totalBet * 0.005;
-    const compMajor = amount_totalBet * 0.003;
-    const compGrand = amount_totalBet * 0.001;
+    const compMinor = amount_totalBet * 0.005 * 100;
+    const compMajor = amount_totalBet * 0.003 * 100;
+    const compGrand = amount_totalBet * 0.001 * 100;
 
     const minorIncrement = amount_totalBet * 0.005 * 100;
     const majorIncrement = amount_totalBet * 0.003 * 100;
