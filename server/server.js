@@ -78,6 +78,7 @@ wss.on("connection", (ws) => {
   ws.on("message", (data) => {
     const parseData = JSON.parse(data);
     clients.add(ws);
+    console.log(parseData);
 
     if (parseData.type === "join-table") {
       joinedRoom(parseData.room);
@@ -88,12 +89,15 @@ wss.on("connection", (ws) => {
       joinedRoom(parseData.room);
       ws.send(JSON.stringify(parseData));
     }
+    if (parseData.type === "table_list") {
+      sendToAllRoom(parseData.room, parseData);
+    }
 
     if (parseData.type === "send-to-room" && parseData.isModalOpen === true) {
       sendToAllRoom(parseData.room, parseData);
     }
 
-    if (parseData.type === "increment_round") {
+    if (parseData.type === "sync_table") {
       sendToAllRoom(parseData.room, parseData);
     }
 
@@ -122,7 +126,7 @@ wss.on("connection", (ws) => {
     }
 
     if (parseData.type === "update_tableInfo") {
-      sendToAllRoom(parseData.room, parseData, ws);
+      sendToAllRoom(parseData.room, parseData);
     }
 
     if (parseData.type === "update_resultSpin") {
@@ -134,10 +138,6 @@ wss.on("connection", (ws) => {
     }
 
     if (parseData.type === "fetch_newGame") {
-      sendToAllRoom(parseData.room, parseData, ws);
-    }
-
-    if (parseData.type === "sync_table") {
       sendToAllRoom(parseData.room, parseData, ws);
     }
 

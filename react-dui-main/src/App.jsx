@@ -1,24 +1,43 @@
+// react hooks
 import React, { createContext, useEffect, useState } from "react";
+
+// react-router-dom
 import { Routes, Route, useNavigate } from "react-router-dom";
+
+// Pages
 import LoginPage from "./components/LoginPage";
 import HomePage from "./components/HomePage";
 import SelectView from "./pages/view/SelectView";
 import DealerPage from "./pages/dealerUI/DealerPage";
 import TableList from "./pages/tables/TableList";
-import { getResults } from "./api/dealerApi";
-import { getColorGameTable } from "./api/colorGameApi";
+import TableHistory from "./pages/TableHistory";
+
+// Protected routes
 import ProtectedRoutes from "./pages/ProtectedRoutes";
 import ProtectedTable from "./pages/ProtectedTable";
+
+
+// Api functions
 import { getTableInfo } from "./api/tableApi";
-import TableHistory from "./pages/TableHistory";
+import { getResults } from "./api/dealerApi";
+import { getColorGameTable } from "./api/colorGameApi";
+import useLocalStorage from "./custom/useLocalStorage";
+
 
 export const colorGameContext = createContext();
 function App() {
   const navigate = useNavigate();
+  const { getItem } = useLocalStorage()
 
-  const storedTable = localStorage.getItem("table");
-  const storedGameNo = localStorage.getItem("game-no");
-  const storedTableId = localStorage.getItem("table-id");
+
+
+  // localstorage
+  const storedTable = getItem("table");
+  const storedGameNo = getItem("game-no");
+  const storedTableId = getItem("table-id");
+
+
+
   const [socket, setSocket] = useState(null);
   const [isConnected, setIsConnected] = useState(false);
 
@@ -107,10 +126,9 @@ function App() {
       }
     };
 
-
-
     ws.onmessage = (event) => {
       const parseData = JSON.parse(event.data);
+      console.log(parseData)
 
 
       if (parseData.type === "join-table") {
@@ -159,7 +177,6 @@ function App() {
         setJackpotPrizes(parseData.response[0]);
       }
 
-
       if (parseData.message?.type === "open_modal_jackpot") {
         setTableObject(prevValue => ({
           ...prevValue,
@@ -183,6 +200,7 @@ function App() {
 
       if (parseData.message?.type === "sync_table") {
         location.reload()
+        console.log(parseData)
       }
 
 
@@ -286,7 +304,6 @@ function App() {
       <Routes>
         <Route path="/" element={<LoginPage />} />
         <Route element={<ProtectedRoutes />}>
-
           <Route path="color-game/select-table" element={<TableList />} />
           <Route path="color-game/table/history" element={<TableHistory />} />
           <Route element={<ProtectedTable />}>

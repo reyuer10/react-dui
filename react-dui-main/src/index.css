@@ -274,3 +274,7 @@ input::-webkit-inner-spin-button {
   transform-origin: 0% 100%;
   background-color: #ffd700; /* the main color  */
 }
+
+.tr-body {
+  text-align: center;
+}

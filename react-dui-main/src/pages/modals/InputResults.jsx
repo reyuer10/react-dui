@@ -1,4 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
+
+
 import { colorData } from "../../data/colorData";
 import ColorResultsConfirmation from "./ColorResultsConfirmation";
 import { dealerContext } from "../dealerUI/DealerPage";
@@ -72,7 +74,7 @@ function InputResults() {
       const response = await postResults({
         table_name: storedTable,
         table_id: storedTableId,
-        serial_num: `CG-${dateNow}${timeNow}`,
+        serial_num: `${storedTable}-${dateNow}${timeNow}`,
         round_num: data.round,
         game_num: storedGameNo,
         result_firstColor: colorName[0],

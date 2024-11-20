@@ -3,15 +3,13 @@ import { useForm } from 'react-hook-form'
 import { createNewTable } from '../api/tableApi'
 import { getColorGameTable } from '../api/colorGameApi'
 
-function ModalNewTable({ isOpenNewTable, newTable, setNewTable, socket }) {
-    if (!isOpenNewTable) {
-        return false
-    }
+export default function ModalNewTable({ isOpenNewTableGame, newTable, setNewTable, socket }) {
+
 
     const handleCancelNewTable = () => {
         setNewTable(prevValue => ({
             ...prevValue,
-            isOpenNewTable: false,
+            isOpenNewTableGame: false,
             newTableName: "",
             newTableMin: 0,
             newTableMax: 0
@@ -30,12 +28,13 @@ function ModalNewTable({ isOpenNewTable, newTable, setNewTable, socket }) {
                 const updateTable = await getColorGameTable()
                 socket.send(JSON.stringify({
                     type: "update_tableInfo",
+                    room: "table_list",
                     response: updateTable,
                 }))
 
                 setNewTable(prevNewTable => ({
                     ...prevNewTable,
-                    isOpenNewTable: false,
+                    isOpenNewTableGame: false,
                     newTableName: "",
                     newTableMin: 0,
                     newTableMax: 0,
@@ -75,6 +74,10 @@ function ModalNewTable({ isOpenNewTable, newTable, setNewTable, socket }) {
 
     const { handleSubmit, register, formState: { errors }, setError } = useForm();
 
+    if (!isOpenNewTableGame) {
+        return false
+    }
+
     return (
         <div className='flex-col font-rubik inset-0 absolute h-screen z-20 justify-center flex items-center bg-black bg-opacity-50'>
             <div className='text-center bg-zinc-700 p-6 rounded-xl'>
@@ -103,13 +106,11 @@ function ModalNewTable({ isOpenNewTable, newTable, setNewTable, socket }) {
                         </div>
                     </div>
                     <div className='text-right space-x-4'>
-                        <button onClick={handleCancelNewTable} className='bg-white text-black px-4  py-2 rounded-md font-bold ' type='submit'>Cancel</button>
-                        <button className='bg-black text-white px-4  py-2 rounded-md font-bold ' type='submit'>Submit</button>
+                        <button type="button" onClick={handleCancelNewTable} className='bg-white text-black px-4  py-2 rounded-md font-bold '>Cancel</button>
+                        <button type="submit" className='bg-black text-white px-4  py-2 rounded-md font-bold'>Submit</button>
                     </div>
                 </form>
             </div>
         </div>
     )
 }
-
-export default ModalNewTable

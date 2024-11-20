@@ -17,7 +17,7 @@ function TableList() {
 
 
   const [newTable, setNewTable] = useState({
-    isOpenNewTable: false,
+    isOpenNewTableGame: false,
     newTableName: "",
     newTableMin: 0,
     newTableMax: 0,
@@ -121,7 +121,7 @@ function TableList() {
 
   const handleOpenNewTable = () => {
     setNewTable(prevValue => ({
-      ...prevValue, isOpenNewTable: true,
+      ...prevValue, isOpenNewTableGame: true,
     }));
   }
 
@@ -155,7 +155,7 @@ function TableList() {
           Select Table
         </p>
       </div>
-      <div className="w-[60%]">
+      <div className="w-[100%] px-[120px]">
         {adminAccess ? (
           <div className=" text-white text-right my-2">
             <button onClick={handleOpenNewTable} className="text-white text-drop-shadow font-black bg-zinc-700 py-2 px-4 rounded-md">New Table</button>
@@ -175,7 +175,6 @@ function TableList() {
                 <th className=" bg-zinc-700 border-black text-white px-6">
                   MAX
                 </th>
-                <th className=" bg-zinc-700 border-black text-white  px-6">Current Round</th>
                 {adminAccess ?
                   (<th className=" bg-zinc-700 border-black text-white px-20">
                     Modify
@@ -203,9 +202,6 @@ function TableList() {
                         <td className="text-center font-bold border-r border-black text-white">
                           <input type="number" autoComplete="off" className="w-[130px] bg-zinc-600 text-amber-300 font-bold text-center outline-none" value={editTable.tableMax} name="tableMax" onChange={handleOnChangeTable} />
                         </td>
-                        <td className="text-center font-bold border-r border-black text-white">
-                          {c.current_round}
-                        </td>
                         <td className="text-center font-bold border-r border-black text-white space-x-4">
                           <button className="px-4 bg-zinc-300 text-black rounded-md" onClick={() => handleCancelEditTable()}>Cancel</button>
                           <button className="px-4 bg-black text-white rounded-md" onClick={() => handleSaveUpdatedTableInfo(editTable.tableName, editTable.tableMin, editTable.tableMax, editTable.getTableId)}>Save</button>
@@ -221,9 +217,7 @@ function TableList() {
                         <td className="text-center font-bold border-r border-black px-14 text-white">
                           {c.table_max}
                         </td>
-                        <td className="text-center font-bold border-r border-black text-white">
-                          {c.current_round}
-                        </td>
+
                         {adminAccess ?
                           (
                             <td className="text-center font-bold border-r border-black text-white px-12">
@@ -232,7 +226,7 @@ function TableList() {
                           ) :
                           null}
                       </>)}
-                    <td  className="text-center font-bold border-r border-black text-white">
+                    <td className="text-center font-bold border-r border-black text-white">
                       <button
                         onClick={() => handleJoinTable(c.table_name, c.table_id, c.game_count, c.table_min, c.table_max)}
                         className={`font-bold bg-black text-slate-200 px-4 rounded-lg mx-10`}
@@ -240,12 +234,12 @@ function TableList() {
                         Open
                       </button>
                     </td>
-                    <td  className="text-center font-bold border-r border-black text-white">
+                    <td className="text-center font-bold border-r border-black text-white">
                       <button
                         onClick={() => handleRouteTableHistory(c.table_id)}
                         className={`font-bold bg-black text-slate-200 px-4 rounded-lg mx-10`}
                       >
-                        View Details
+                        View History
                       </button>
                     </td>
                   </tr>
@@ -255,7 +249,7 @@ function TableList() {
           </table>
         </div>
       </div>
-      <ModalNewTable isOpenNewTable={newTable.isOpenNewTable} setNewTable={setNewTable} socket={socket} />
+      <ModalNewTable isOpenNewTableGame={newTable.isOpenNewTableGame} setNewTable={setNewTable} socket={socket} />
     </div>
   );
 }
